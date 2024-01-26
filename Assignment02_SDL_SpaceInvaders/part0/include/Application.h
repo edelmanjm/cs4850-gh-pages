@@ -287,7 +287,7 @@ public:
         }
         // Create our window
         mWindow = SDL_CreateWindow("An SDL3 Window", 640, 480,
-                                               SDL_WINDOW_OPENGL);
+                                               SDL_WINDOW_METAL);
         mRenderer = SDL_CreateRenderer(mWindow, nullptr, SDL_RENDERER_ACCELERATED);
         if (nullptr == mRenderer) {
             SDL_Log("Error creating renderer");
