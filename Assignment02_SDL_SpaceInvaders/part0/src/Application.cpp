@@ -4,8 +4,9 @@ Application::Application(int argc, char *argv[]) {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
         SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
     }
+
     // Create our window
-    m_Window = SDL_CreateWindow("An SDL3 Window", 640, 480,
+    m_Window = SDL_CreateWindow("An SDL3 Window", m_Width, m_Height,
                                 SDL_WINDOW_METAL);
     m_Renderer = SDL_CreateRenderer(m_Window, nullptr, SDL_RENDERER_ACCELERATED);
     if (nullptr == m_Renderer) {
@@ -32,7 +33,8 @@ Application::Application(int argc, char *argv[]) {
     Sprite characterSprite;
     characterSprite.CreateSprite(m_Renderer, "../assets/hero.bmp");
     characterSprite.Move(640.0 / 2 - (32.0 / 2), 440);
-    m_MainCharacter = std::make_unique<PlayerGameEntity>(m_Renderer, characterSprite);
+    m_MainCharacter = std::make_unique<PlayerGameEntity>(m_Renderer, characterSprite, 0, static_cast<float>(m_Width) -
+                                                                                         characterSprite.GetRectangle().w);
 }
 
 Application::~Application() {
@@ -62,7 +64,7 @@ void Application::Input(float deltaTime) {
 
 void Application::Update(float deltaTime) {
     // Updating all of our m_Enemies
-    for (const auto & enemy : m_Enemies) {
+    for (const auto &enemy: m_Enemies) {
         enemy->Update(deltaTime);
 
         bool enemyIsHit = enemy->Intersects(m_MainCharacter->GetProjectile());
@@ -91,7 +93,7 @@ void Application::Render() {
     SDL_SetRenderDrawColor(m_Renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
 
     // Render our m_Enemies
-    for (const auto & enemy : m_Enemies) {
+    for (const auto &enemy: m_Enemies) {
         enemy->Render(m_Renderer);
     }
     // Render our main character

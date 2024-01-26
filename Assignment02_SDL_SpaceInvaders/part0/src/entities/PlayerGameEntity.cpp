@@ -1,6 +1,9 @@
 #include <entities/PlayerGameEntity.h>
 
-PlayerGameEntity::PlayerGameEntity(SDL_Renderer *renderer, Sprite sprite) : GameEntity(sprite) {
+#include <algorithm>
+
+PlayerGameEntity::PlayerGameEntity(SDL_Renderer *renderer, Sprite sprite, float xMin, float xMax) : GameEntity
+(sprite), m_XMin(xMin), m_XMax(xMax) {
     Sprite sp;
     sp.CreateSprite(renderer, "../assets/rocket.bmp");
     sp.SetW(24.0f);
@@ -10,9 +13,9 @@ PlayerGameEntity::PlayerGameEntity(SDL_Renderer *renderer, Sprite sprite) : Game
 void PlayerGameEntity::Input(float deltaTime)  {
     const Uint8 *state = SDL_GetKeyboardState(nullptr);
     if (state[SDL_SCANCODE_LEFT]) {
-        m_Sprite.SetX(m_Sprite.GetX() - m_Speed * deltaTime);
+        m_Sprite.SetX(std::max(m_Sprite.GetX() - m_Speed * deltaTime, m_XMin));
     } else if (state[SDL_SCANCODE_RIGHT]) {
-        m_Sprite.SetX(m_Sprite.GetX() + m_Speed * deltaTime);
+        m_Sprite.SetX(std::min(m_Sprite.GetX() + m_Speed * deltaTime, m_XMax));
     }
 
     if (state[SDL_SCANCODE_UP]) {
