@@ -9,21 +9,21 @@
 class Sprite {
 
 private:
-    SDL_FRect mRectangle{20.0f, 20.0f, 32.0f, 32.0f};
-    SDL_Texture *mTexture;
+    SDL_FRect m_Rectangle{20.0f, 20.0f, 32.0f, 32.0f};
+    SDL_Texture* m_Texture;
 
 public:
     Sprite() = default;
     ~Sprite() = default;
 //        TODO: We'll want a resource manager to handle this.
-//        SDL_DestroyTexture(mTexture);
+//        SDL_DestroyTexture(m_Texture);
 
     void CreateSprite(SDL_Renderer *renderer, const char *filepath) {
         SDL_Surface *pixels = SDL_LoadBMP(filepath);
         SDL_SetSurfaceColorKey(pixels, SDL_TRUE, SDL_MapRGB(pixels->format, 0xFF, 0, 0xFF));
 
-        mTexture = SDL_CreateTextureFromSurface(renderer, pixels);
-        if (nullptr == mTexture) {
+        m_Texture = SDL_CreateTextureFromSurface(renderer, pixels);
+        if (nullptr == m_Texture) {
             SDL_Log("Could not load texture from surface");
         }
 
@@ -34,40 +34,40 @@ public:
     }
 
     void Render(SDL_Renderer *renderer) {
-        if (nullptr == mTexture) {
-            SDL_RenderRect(renderer, &mRectangle);
+        if (nullptr == m_Texture) {
+            SDL_RenderRect(renderer, &m_Rectangle);
         } else {
-            SDL_RenderTexture(renderer, mTexture, nullptr, &mRectangle);
+            SDL_RenderTexture(renderer, m_Texture, nullptr, &m_Rectangle);
         }
     }
 
     void SetW(float w) {
-        mRectangle.w = w;
+        m_Rectangle.w = w;
     }
 
     void SetX(float x) {
-        mRectangle.x = x;
+        m_Rectangle.x = x;
     }
 
     void SetY(float y) {
-        mRectangle.y = y;
+        m_Rectangle.y = y;
     }
 
     [[nodiscard]] float GetX() const {
-        return mRectangle.x;
+        return m_Rectangle.x;
     }
 
     [[nodiscard]] float GetY() const {
-        return mRectangle.y;
+        return m_Rectangle.y;
     }
 
     void Move(float x, float y) {
-        mRectangle.x = x;
-        mRectangle.y = y;
+        m_Rectangle.x = x;
+        m_Rectangle.y = y;
     }
 
     [[nodiscard]] SDL_FRect GetRectangle() const {
-        return mRectangle;
+        return m_Rectangle;
     }
 };
 
@@ -75,12 +75,12 @@ public:
 class GameEntity {
 
 protected:
-    Sprite mSprite;
-    bool mRenderable{true};
+    Sprite m_Sprite;
+    bool m_Renderable{true};
 
 public:
     explicit GameEntity(Sprite sprite) {
-        mSprite = sprite;
+        m_Sprite = sprite;
     }
 
     virtual ~GameEntity() = default;
@@ -95,66 +95,66 @@ public:
     }
 
     void SetRenderable(bool value) {
-        mRenderable = value;
+        m_Renderable = value;
     }
 
     [[nodiscard]] bool IsRenderable() const;
 
     bool Intersects(const std::shared_ptr<GameEntity>& e) {
-        SDL_FRect source = e->mSprite.GetRectangle();
-        SDL_FRect us = mSprite.GetRectangle();
+        SDL_FRect source = e->m_Sprite.GetRectangle();
+        SDL_FRect us = m_Sprite.GetRectangle();
         SDL_FRect result;
         return SDL_GetRectIntersectionFloat(&source, &us, &result);
     }
 };
 
 bool GameEntity::IsRenderable() const {
-    return mRenderable;
+    return m_Renderable;
 }
 
 class Projectile : public GameEntity {
 
 private:
-    float mSpeed{200.0f};
-    bool mIsFiring{false};
-    bool mYDirectionUp{true};
+    float m_Speed{200.0f};
+    bool m_IsFiring{false};
+    bool m_YDirectionUp{true};
     uint64_t timeSinceLastLaunch;
 
 public:
     explicit Projectile(Sprite sprite) : GameEntity(sprite) {
         timeSinceLastLaunch = SDL_GetTicks();
-        mRenderable = false;
+        m_Renderable = false;
     }
 
     void Launch(float x, float y, bool yDirectionIsUp, uint64_t minLaunchTime = 3000) {
         if (SDL_GetTicks() - timeSinceLastLaunch > minLaunchTime) {
             timeSinceLastLaunch = SDL_GetTicks();
-            mIsFiring = true;
-            mYDirectionUp = yDirectionIsUp;
-            mSprite.Move(x, y);
+            m_IsFiring = true;
+            m_YDirectionUp = yDirectionIsUp;
+            m_Sprite.Move(x, y);
         }
     }
 
     void Update(float deltaTime) override {
-        if (mIsFiring) {
-            mRenderable = true;
-            if (mYDirectionUp) {
-                mSprite.SetY(mSprite.GetY() - mSpeed * deltaTime);
+        if (m_IsFiring) {
+            m_Renderable = true;
+            if (m_YDirectionUp) {
+                m_Sprite.SetY(m_Sprite.GetY() - m_Speed * deltaTime);
             } else {
-                mSprite.SetY(mSprite.GetY() + mSpeed * deltaTime);
+                m_Sprite.SetY(m_Sprite.GetY() + m_Speed * deltaTime);
             }
         } else {
-            mRenderable = false;
+            m_Renderable = false;
         }
 
-        if (mSprite.GetY() < 0.0f || mSpeed > 480.0f) {
-            mIsFiring = false;
+        if (m_Sprite.GetY() < 0.0f || m_Speed > 480.0f) {
+            m_IsFiring = false;
         }
     }
 
     void Render(SDL_Renderer *renderer) override {
-        if (mRenderable) {
-            mSprite.Render(renderer);
+        if (m_Renderable) {
+            m_Sprite.Render(renderer);
         } else {
             // Do nothing;
         }
@@ -164,21 +164,21 @@ public:
 class EnemyGameEntity : public GameEntity {
 
 private:
-    std::shared_ptr<Projectile> mProjectile;
-    bool xPositiveDirection{true};
-    float offset{0.0f};
-    float mSpeed{100.0f};
-    uint64_t mMinLaunchTime{5000};
+    std::shared_ptr<Projectile> m_Projectile;
+    bool m_XPositiveDirection{true};
+    float m_Offset{0.0f};
+    float m_Speed{100.0f};
+    uint64_t m_MinLaunchTime{5000};
 
 public:
     EnemyGameEntity(SDL_Renderer *renderer, Sprite sprite) : GameEntity(sprite) {
         Sprite sp;
         sp.CreateSprite(renderer, "../assets/rocket.bmp");
         sp.SetW(24.0f);
-        mProjectile = std::make_shared<Projectile>(sp);
+        m_Projectile = std::make_shared<Projectile>(sp);
 
-        // Set a random launch time for the enemies
-        mMinLaunchTime += std::rand() % 10000;
+        // Set a random launch time for the m_Enemies
+        m_MinLaunchTime += std::rand() % 10000;
     }
 
     ~EnemyGameEntity() override = default;
@@ -187,38 +187,38 @@ public:
     }
 
     void Update(float deltaTime) override {
-        mProjectile->Update(deltaTime);
-        if (offset > 80) {
-            xPositiveDirection = false;
+        m_Projectile->Update(deltaTime);
+        if (m_Offset > 80) {
+            m_XPositiveDirection = false;
         }
-        if (offset < -80) {
-            xPositiveDirection = true;
+        if (m_Offset < -80) {
+            m_XPositiveDirection = true;
         }
 
-        if (xPositiveDirection) {
-            mSprite.SetX(mSprite.GetX() + mSpeed * deltaTime);
-            offset += mSpeed * deltaTime;
+        if (m_XPositiveDirection) {
+            m_Sprite.SetX(m_Sprite.GetX() + m_Speed * deltaTime);
+            m_Offset += m_Speed * deltaTime;
         } else {
-            mSprite.SetX(mSprite.GetX() - mSpeed * deltaTime);
-            offset -= mSpeed * deltaTime;
+            m_Sprite.SetX(m_Sprite.GetX() - m_Speed * deltaTime);
+            m_Offset -= m_Speed * deltaTime;
         }
 
-        if (mRenderable) {
-            mProjectile->Launch(mSprite.GetX(), mSprite.GetY(), false, mMinLaunchTime);
+        if (m_Renderable) {
+            m_Projectile->Launch(m_Sprite.GetX(), m_Sprite.GetY(), false, m_MinLaunchTime);
         }
     }
 
     void Render(SDL_Renderer *renderer) override {
-        if (mRenderable) {
-            mProjectile->Render(renderer);
-            mSprite.Render(renderer);
+        if (m_Renderable) {
+            m_Projectile->Render(renderer);
+            m_Sprite.Render(renderer);
         } else {
             // Do nothing;
         }
     }
 
     [[nodiscard]] virtual std::shared_ptr<Projectile> GetProjectile() const {
-        return mProjectile;
+        return m_Projectile;
     }
 };
 
@@ -226,15 +226,15 @@ public:
 class PlayerGameEntity : public GameEntity {
 
 private:
-    float mSpeed{150.0f};
-    std::shared_ptr<Projectile> mProjectile;
+    float m_Speed{150.0f};
+    std::shared_ptr<Projectile> m_Projectile;
 
 public:
     PlayerGameEntity(SDL_Renderer *renderer, Sprite sprite) : GameEntity(sprite) {
         Sprite sp;
         sp.CreateSprite(renderer, "../assets/rocket.bmp");
         sp.SetW(24.0f);
-        mProjectile = std::make_shared<Projectile>(sp);
+        m_Projectile = std::make_shared<Projectile>(sp);
     }
 
     ~PlayerGameEntity() override = default;
@@ -242,28 +242,28 @@ public:
     void Input(float deltaTime) override {
         const Uint8 *state = SDL_GetKeyboardState(nullptr);
         if (state[SDL_SCANCODE_LEFT]) {
-            mSprite.SetX(mSprite.GetX() - mSpeed * deltaTime);
+            m_Sprite.SetX(m_Sprite.GetX() - m_Speed * deltaTime);
         } else if (state[SDL_SCANCODE_RIGHT]) {
-            mSprite.SetX(mSprite.GetX() + mSpeed * deltaTime);
+            m_Sprite.SetX(m_Sprite.GetX() + m_Speed * deltaTime);
         }
 
         if (state[SDL_SCANCODE_UP]) {
             SDL_Log("Launching!");
-            mProjectile->Launch(mSprite.GetX(), mSprite.GetY(), true);
+            m_Projectile->Launch(m_Sprite.GetX(), m_Sprite.GetY(), true);
         }
     }
 
     void Update(float deltaTime) override {
-        mProjectile->Update(deltaTime);
+        m_Projectile->Update(deltaTime);
     }
 
     void Render(SDL_Renderer *renderer) override {
-        mProjectile->Render(renderer);
-        mSprite.Render(renderer);
+        m_Projectile->Render(renderer);
+        m_Sprite.Render(renderer);
     }
 
     [[nodiscard]] virtual std::shared_ptr<Projectile> GetProjectile() const {
-        return mProjectile;
+        return m_Projectile;
     }
 };
 
@@ -271,14 +271,14 @@ class Application {
 
 private:
     // Enemy sprites
-    std::vector<std::unique_ptr<EnemyGameEntity>> enemies;
+    std::vector<std::unique_ptr<EnemyGameEntity>> m_Enemies;
     // Main Character
-    std::unique_ptr<PlayerGameEntity> mainCharacter;
+    std::unique_ptr<PlayerGameEntity> m_MainCharacter;
 
-    bool mRun{true};
-    float mPoints{0.0f};
-    SDL_Window *mWindow;
-    SDL_Renderer *mRenderer;
+    bool m_Run{true};
+    float m_Points{0.0f};
+    SDL_Window* m_Window;
+    SDL_Renderer *m_Renderer;
 
 public:
     Application(int argc, char *argv[]) {
@@ -286,19 +286,19 @@ public:
             SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
         }
         // Create our window
-        mWindow = SDL_CreateWindow("An SDL3 Window", 640, 480,
-                                               SDL_WINDOW_METAL);
-        mRenderer = SDL_CreateRenderer(mWindow, nullptr, SDL_RENDERER_ACCELERATED);
-        if (nullptr == mRenderer) {
+        m_Window = SDL_CreateWindow("An SDL3 Window", 640, 480,
+                                    SDL_WINDOW_METAL);
+        m_Renderer = SDL_CreateRenderer(m_Window, nullptr, SDL_RENDERER_ACCELERATED);
+        if (nullptr == m_Renderer) {
             SDL_Log("Error creating renderer");
         }
 
-        // Initialize all the enemies
+        // Initialize all the m_Enemies
         uint32_t row = 1;
         uint32_t column = 1;
         for (int i = 0; i < 36; i++) {
             Sprite sp;
-            sp.CreateSprite(mRenderer, "../assets/enemy.bmp");
+            sp.CreateSprite(m_Renderer, "../assets/enemy.bmp");
 
             if (i % 12 == 0) {
                 ++row;
@@ -306,18 +306,18 @@ public:
             }
             sp.Move(static_cast<float>(column * 40 + 80), static_cast<float>(row * 40));
             column++;
-            std::unique_ptr<EnemyGameEntity> e = std::make_unique<EnemyGameEntity>(mRenderer, sp);
-            enemies.push_back(std::move(e));
+            std::unique_ptr<EnemyGameEntity> e = std::make_unique<EnemyGameEntity>(m_Renderer, sp);
+            m_Enemies.push_back(std::move(e));
         }
 
         Sprite characterSprite;
-        characterSprite.CreateSprite(mRenderer, "../assets/hero.bmp");
+        characterSprite.CreateSprite(m_Renderer, "../assets/hero.bmp");
         characterSprite.Move(640.0 / 2 - (32.0 / 2), 440);
-        mainCharacter = std::make_unique<PlayerGameEntity>(mRenderer, characterSprite);
+        m_MainCharacter = std::make_unique<PlayerGameEntity>(m_Renderer, characterSprite);
     }
 
     ~Application() {
-        SDL_DestroyWindow(mWindow);
+        SDL_DestroyWindow(m_Window);
         SDL_Quit();
     }
 
@@ -327,7 +327,7 @@ public:
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_EVENT_QUIT) {
                 SDL_Log("Program quit %llu", event.quit.timestamp);
-                mRun = false;
+                m_Run = false;
             } else if (event.type == SDL_EVENT_KEY_DOWN) {
 //                SDL_Log("Some key was pressed down");
 //                SDL_Log("%u",event.key.keysym.sym);
@@ -338,49 +338,49 @@ public:
         }
 
         // Handle SDL_GetKeyboardState after -- your SDL_PollEvent
-        mainCharacter->Input(deltaTime);
+        m_MainCharacter->Input(deltaTime);
     }
 
     void Update(float deltaTime) {
-        // Updating all of our enemies
-        for (const auto & enemy : enemies) {
+        // Updating all of our m_Enemies
+        for (const auto & enemy : m_Enemies) {
             enemy->Update(deltaTime);
 
-            bool enemyIsHit = enemy->Intersects(mainCharacter->GetProjectile());
+            bool enemyIsHit = enemy->Intersects(m_MainCharacter->GetProjectile());
 
-            bool GameOver = mainCharacter->Intersects(enemy->GetProjectile());
+            bool GameOver = m_MainCharacter->Intersects(enemy->GetProjectile());
             if (enemyIsHit && enemy->IsRenderable()) {
                 enemy->SetRenderable(false);
-                mPoints += 10.0f;
-                SDL_Log("Your score is %f", mPoints);
+                m_Points += 10.0f;
+                SDL_Log("Your score is %f", m_Points);
             }
 
             if (GameOver) {
                 SDL_Log("YOU LOOOOOOOOOSE!");
-                SDL_Log("Your score is %f", mPoints);
-                mRun = false;
+                SDL_Log("Your score is %f", m_Points);
+                m_Run = false;
             }
         }
         // Update our main character
-        mainCharacter->Update(deltaTime);
+        m_MainCharacter->Update(deltaTime);
 
 
     }
 
     void Render() {
-        SDL_SetRenderDrawColor(mRenderer, 0, 64, 255, SDL_ALPHA_OPAQUE);
-        SDL_RenderClear(mRenderer);
+        SDL_SetRenderDrawColor(m_Renderer, 0, 64, 255, SDL_ALPHA_OPAQUE);
+        SDL_RenderClear(m_Renderer);
 
-        SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+        SDL_SetRenderDrawColor(m_Renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
 
-        // Render our enemies
-        for (const auto & enemy : enemies) {
-            enemy->Render(mRenderer);
+        // Render our m_Enemies
+        for (const auto & enemy : m_Enemies) {
+            enemy->Render(m_Renderer);
         }
         // Render our main character
-        mainCharacter->Render(mRenderer);
+        m_MainCharacter->Render(m_Renderer);
 
-        SDL_RenderPresent(mRenderer);
+        SDL_RenderPresent(m_Renderer);
     }
 
     void Loop(float targetFPS) {
@@ -392,7 +392,7 @@ public:
         lastTime = SDL_GetTicks();
         uint32_t framesElapsed = 0;
         float deltaTime = 1.0f / targetFPS;
-        while (mRun) {
+        while (m_Run) {
             uint64_t startOfFrame = SDL_GetTicks();
             // We want, input/update/render to take 16ms
             Input(deltaTime);
@@ -411,7 +411,7 @@ public:
 //                SDL_Log("elaspedTime: %li",elapsedTime);
 //                SDL_Log("delaying by: %li",delay);
             }
-            // If 1 second passes,              enemies[i]->report how many frames
+            // If 1 second passes,              m_Enemies[i]->report how many frames
             // have been executed.
             if (currentTime > lastTime + 1000) {
                 SDL_Log("1 second has elapsed");
