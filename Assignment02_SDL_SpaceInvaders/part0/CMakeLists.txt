@@ -16,4 +16,10 @@ link_libraries(SDL3::SDL3)
 
 add_executable(assignment2-part0
         include/Application.h
-        src/main.cpp)
+        src/main.cpp
+        src/Sprite.cpp
+        src/entities/EnemyEntity.cpp
+        src/entities/GameEntity.cpp
+        src/entities/PlayerGameEntity.cpp
+        src/entities/ProjectileEntity.cpp
+        src/Application.cpp)
