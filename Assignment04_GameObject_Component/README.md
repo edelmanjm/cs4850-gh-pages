@@ -2,14 +2,15 @@
 
 *TODO*: Please edit the following information in your assignment
 
-* Name: 
-* How many hours did it take you to complete this assignment? 
-* Did you collaborate or share ideas with any other students/TAs/Professors? 
-* Did you use any external resources? 
-  * (tbd if any)
-  * (tbd if any)
-  * (tbd if any)
+* Name: Jonathan Edelman
+* How many hours did it take you to complete this assignment? Maybe 2
+* Did you collaborate or share ideas with any other students/TAs/Professors? No 
+* Did you use any external resources?
+  * Only the Unity documentation for ideas about possible components.
 * (Optional) What was the most interesting part of the assignment? How would you improve this assignment?
+  * I really don't like using dynamic casts unless strictly necessary, so I opted to retain the m_Sprite field for 
+    now (however temporarily that ends up being.) I'd like to see an alternative method that doesn't rely on dynamic 
+    casts. 
 
 # Assignment
 
