@@ -2,23 +2,23 @@
 
 #include <SDL3/SDL.h>
 
-class Sprite {
+#include <memory>
+#include <string>
 
+class Sprite {
 private:
     SDL_FRect m_Rectangle{20.0f, 20.0f, 32.0f, 32.0f};
-    SDL_Texture* m_Texture;
+    std::shared_ptr<SDL_Texture> m_Texture;
 
 public:
     Sprite() = default;
     ~Sprite() = default;
-//        TODO: We'll want a resource manager to handle this.
-//        SDL_DestroyTexture(m_Texture);
 
-    void CreateSprite(SDL_Renderer *renderer, const char *filepath);
+    void CreateSprite(SDL_Renderer* renderer, std::string filepath);
 
     void Update(float deltaTime);
 
-    void Render(SDL_Renderer *renderer);
+    void Render(SDL_Renderer* renderer);
 
     void SetW(float w);
 

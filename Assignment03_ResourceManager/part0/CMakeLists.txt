@@ -22,4 +22,5 @@ add_executable(assignment3-part0
         src/entities/GameEntity.cpp
         src/entities/PlayerGameEntity.cpp
         src/entities/ProjectileEntity.cpp
-        src/Application.cpp)
+        src/Application.cpp
+        src/ResourceManager.cpp)
