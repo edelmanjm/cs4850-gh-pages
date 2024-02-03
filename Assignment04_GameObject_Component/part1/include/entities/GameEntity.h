@@ -1,24 +1,28 @@
 #pragma once
 
 #include <memory>
+
+#include <Component.h>
 #include <Sprite.h>
 
-class GameEntity {
+class GameEntity : Component {
 
 protected:
-    Sprite m_Sprite;
-    bool m_Renderable{true};
+    // I refuse to use dynamic casting as the lookup query for the sprite in the components lol.
+    // We can revisit having this as a separate field after the next assignment.
+    const std::shared_ptr<Sprite> m_Sprite;
+    std::vector<std::shared_ptr<Component>> m_Components;
 
 public:
-    explicit GameEntity(Sprite sprite);
+    explicit GameEntity(std::shared_ptr<Sprite> sprite);
 
     virtual ~GameEntity() = default;
 
-    virtual void Input(float deltaTime);
+    void Input(float deltaTime) override;
 
-    virtual void Update(float deltaTime);
+    void Update(float deltaTime) override;
 
-    virtual void Render(SDL_Renderer *renderer);
+    void Render(SDL_Renderer *renderer) override;
 
     void SetRenderable(bool value);
 

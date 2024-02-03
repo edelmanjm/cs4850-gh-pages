@@ -13,15 +13,13 @@ private:
     uint64_t m_MinLaunchTime{5000};
 
 public:
-    EnemyEntity(SDL_Renderer *renderer, Sprite sprite);
+    EnemyEntity(SDL_Renderer *renderer, std::shared_ptr<Sprite> sprite);
 
     ~EnemyEntity() override = default;
 
     void Input(float deltaTime) override;
 
     void Update(float deltaTime) override;
-
-    void Render(SDL_Renderer *renderer) override;
 
     [[nodiscard]] virtual std::shared_ptr<ProjectileEntity> GetProjectile() const;
 };

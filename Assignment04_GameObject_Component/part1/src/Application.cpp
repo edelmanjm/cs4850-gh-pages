@@ -17,24 +17,24 @@ Application::Application(int argc, char *argv[]) {
     uint32_t row = 1;
     uint32_t column = 1;
     for (int i = 0; i < 36; i++) {
-        Sprite sp;
-        sp.CreateSprite(m_Renderer, "../assets/enemy.bmp");
+        std::shared_ptr<Sprite> sp = std::make_shared<Sprite>();
+        sp->CreateSprite(m_Renderer, "../assets/enemy.bmp");
 
         if (i % 12 == 0) {
             ++row;
             column = 0;
         }
-        sp.Move(static_cast<float>(column * 40 + 80), static_cast<float>(row * 40));
+        sp->Move(static_cast<float>(column * 40 + 80), static_cast<float>(row * 40));
         column++;
         std::unique_ptr<EnemyEntity> e = std::make_unique<EnemyEntity>(m_Renderer, sp);
         m_Enemies.push_back(std::move(e));
     }
 
-    Sprite characterSprite;
-    characterSprite.CreateSprite(m_Renderer, "../assets/hero.bmp");
-    characterSprite.Move(640.0 / 2 - (32.0 / 2), 440);
-    m_MainCharacter = std::make_unique<PlayerGameEntity>(m_Renderer, characterSprite, 0, static_cast<float>(m_Width) -
-                                                                                         characterSprite.GetRectangle().w);
+    std::shared_ptr<Sprite> characterSprite = std::make_shared<Sprite>();
+    characterSprite->CreateSprite(m_Renderer, "../assets/hero.bmp");
+    characterSprite->Move(640.0 / 2 - (32.0 / 2), 440);
+    m_MainCharacter = std::make_unique<PlayerGameEntity>(
+        m_Renderer, characterSprite, 0, static_cast<float>(m_Width) - characterSprite->GetRectangle().w);
 }
 
 Application::~Application() {

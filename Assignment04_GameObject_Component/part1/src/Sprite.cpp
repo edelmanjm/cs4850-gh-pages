@@ -5,15 +5,21 @@ void Sprite::CreateSprite(SDL_Renderer* renderer, std::string filepath) {
     m_Texture = ResourceManager::Instance().LoadTexture(renderer, filepath);
 }
 
+void Sprite::Input(float deltaTime) {
+    // TODO
+}
+
 void Sprite::Update(float deltaTime) {
     // TODO
 }
 
 void Sprite::Render(SDL_Renderer* renderer) {
-    if (nullptr == m_Texture) {
-        SDL_RenderRect(renderer, &m_Rectangle);
-    } else {
-        SDL_RenderTexture(renderer, m_Texture.get(), nullptr, &m_Rectangle);
+    if (m_Renderable) {
+        if (nullptr == m_Texture) {
+            SDL_RenderRect(renderer, &m_Rectangle);
+        } else {
+            SDL_RenderTexture(renderer, m_Texture.get(), nullptr, &m_Rectangle);
+        }
     }
 }
 

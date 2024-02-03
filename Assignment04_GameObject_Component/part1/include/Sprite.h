@@ -2,10 +2,15 @@
 
 #include <SDL3/SDL.h>
 
+#include <Component.h>
+
 #include <memory>
 #include <string>
 
-class Sprite {
+class Sprite : public Component {
+public:
+    bool m_Renderable{true};
+
 private:
     SDL_FRect m_Rectangle{20.0f, 20.0f, 32.0f, 32.0f};
     std::shared_ptr<SDL_Texture> m_Texture;
@@ -16,9 +21,11 @@ public:
 
     void CreateSprite(SDL_Renderer* renderer, std::string filepath);
 
-    void Update(float deltaTime);
+    void Input(float deltaTime) override;
 
-    void Render(SDL_Renderer* renderer);
+    void Update(float deltaTime) override;
+
+    void Render(SDL_Renderer* renderer) override;
 
     void SetW(float w);
 

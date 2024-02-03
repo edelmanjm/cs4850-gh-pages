@@ -14,7 +14,7 @@ include_directories(include)
 
 link_libraries(SDL3::SDL3)
 
-add_executable(assignment3-part0
+add_executable(assignment4-part1
         include/Application.h
         src/main.cpp
         src/Sprite.cpp
@@ -23,4 +23,5 @@ add_executable(assignment3-part0
         src/entities/PlayerGameEntity.cpp
         src/entities/ProjectileEntity.cpp
         src/Application.cpp
-        src/ResourceManager.cpp)
+        src/ResourceManager.cpp
+        src/Component.cpp)

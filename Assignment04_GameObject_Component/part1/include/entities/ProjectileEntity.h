@@ -11,11 +11,9 @@ private:
     uint64_t timeSinceLastLaunch;
 
 public:
-    explicit ProjectileEntity(Sprite sprite);
+    explicit ProjectileEntity(std::shared_ptr<Sprite> sprite);
 
     void Launch(float x, float y, bool yDirectionIsUp, uint64_t minLaunchTime = 3000);
 
     void Update(float deltaTime) override;
-
-    void Render(SDL_Renderer *renderer) override;
 };

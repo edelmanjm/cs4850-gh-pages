@@ -13,15 +13,13 @@ private:
     std::shared_ptr<ProjectileEntity> m_Projectile;
 
 public:
-    PlayerGameEntity(SDL_Renderer *renderer, Sprite sprite, float xMin, float xMax);
+    PlayerGameEntity(SDL_Renderer *renderer, std::shared_ptr<Sprite> sprite, float xMin, float xMax);
 
     ~PlayerGameEntity() override = default;
 
     void Input(float deltaTime) override;
 
     void Update(float deltaTime) override;
-
-    void Render(SDL_Renderer *renderer) override;
 
     [[nodiscard]] virtual std::shared_ptr<ProjectileEntity> GetProjectile() const;
 };
