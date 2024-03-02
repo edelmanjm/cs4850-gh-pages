@@ -8,7 +8,7 @@
 
 class InputComponent : public Component {
 public:
-    InputComponent();
+    InputComponent(float xMin, float xMax);
 
     ~InputComponent() override;
 
@@ -21,5 +21,7 @@ public:
     void Render(SDL_Renderer* renderer) override;
 
 private:
-    float mSpeed{150.0f};
+    const float m_Speed{150};
+    const float m_XMin;
+    const float m_XMax;
 };

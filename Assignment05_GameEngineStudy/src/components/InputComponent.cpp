@@ -2,7 +2,7 @@
 #include <components/TransformComponent.h>
 #include <entities/GameEntity.h>
 
-InputComponent::InputComponent() = default;
+InputComponent::InputComponent(float xMin, float xMax) : m_XMin(xMin), m_XMax(xMax) {}
 
 InputComponent::~InputComponent() = default;
 
@@ -15,10 +15,9 @@ void InputComponent::Input(float deltaTime) {
     auto transform = ge->GetComponent<TransformComponent>(ComponentType::TransformComponent).value();
 
     if (state[SDL_SCANCODE_LEFT]) {
-        transform->SetX(transform->GetX() - mSpeed * deltaTime);
-        SDL_Log("Did something");
+        transform->SetX(std::max(m_XMin, transform->GetX() - m_Speed * deltaTime));
     } else if (state[SDL_SCANCODE_RIGHT]) {
-        transform->SetX(transform->GetX() + mSpeed * deltaTime);
+        transform->SetX(std::min(m_XMax, transform->GetX() + m_Speed * deltaTime));
     }
 
     if (state[SDL_SCANCODE_UP]) {

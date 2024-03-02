@@ -36,7 +36,7 @@ Application::Application(int argc, char* argv[]) {
     }
 
     m_MainCharacter = std::make_shared<PlayerGameEntity>(m_Renderer);
-    m_MainCharacter->AddRequiredComponents(m_Renderer);
+    m_MainCharacter->AddRequiredComponents(m_Renderer, m_Width);
     m_MainCharacter->GetTransform()->SetXY(640.0 / 2 - (32.0 / 2), 440);
 }
 
