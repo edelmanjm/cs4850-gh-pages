@@ -19,12 +19,6 @@ EnemyEntity::EnemyEntity(SDL_Renderer* renderer) {
     m_MinLaunchTime += std::rand() % 10000;
 }
 
-void EnemyEntity::Input(float deltaTime) {
-    for (auto& [key, value] : m_Components) {
-        m_Components[key]->Input(deltaTime);
-    }
-}
-
 void EnemyEntity::Update(float deltaTime) {
     m_Projectile->Update(deltaTime);
     if (m_Offset > 80) {

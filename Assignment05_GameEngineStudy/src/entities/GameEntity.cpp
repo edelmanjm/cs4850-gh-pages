@@ -22,8 +22,10 @@ void GameEntity::Update(float deltaTime) {
 }
 
 void GameEntity::Render(SDL_Renderer* renderer) {
-    for (auto& [key, value] : m_Components) {
-        m_Components[key]->Render(renderer);
+    if (IsRenderable()) {
+        for (auto& [key, value] : m_Components) {
+            m_Components[key]->Render(renderer);
+        }
     }
 }
 

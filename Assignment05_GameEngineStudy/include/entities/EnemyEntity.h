@@ -17,8 +17,6 @@ public:
 
     ~EnemyEntity() override = default;
 
-    void Input(float deltaTime) override;
-
     void Update(float deltaTime) override;
 
     [[nodiscard]] virtual std::shared_ptr<ProjectileEntity> GetProjectile() const;

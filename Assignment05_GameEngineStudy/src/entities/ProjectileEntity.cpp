@@ -16,17 +16,21 @@ void ProjectileEntity::Launch(float x, float y, bool yDirectionIsUp, uint64_t mi
         timeSinceLastLaunch = SDL_GetTicks();
         m_IsFiring = true;
         m_YDirectionUp = yDirectionIsUp;
+
+        SetRenderable(true);
     }
 }
 
 void ProjectileEntity::Input(float deltaTime) {
-    for (auto& [key, value] : m_Components) {
+    for (auto &[key, value]: m_Components) {
         m_Components[key]->Input(deltaTime);
     }
 }
 
 void ProjectileEntity::Update(float deltaTime) {
     auto transform = GetComponent<TransformComponent>(ComponentType::TransformComponent).value();
+//    SetRenderable(true);
+//    transform->SetXY(200, 200);
 
     if (m_IsFiring) {
         SetRenderable(true);
@@ -43,7 +47,7 @@ void ProjectileEntity::Update(float deltaTime) {
         m_IsFiring = false;
     }
 
-    for (auto& [key, value] : m_Components) {
+    for (auto &[key, value]: m_Components) {
         m_Components[key]->Update(deltaTime);
     }
 }

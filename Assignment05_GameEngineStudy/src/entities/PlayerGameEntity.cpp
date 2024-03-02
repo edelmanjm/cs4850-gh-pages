@@ -5,6 +5,8 @@
 
 #include <algorithm>
 
+#include <iostream>
+
 //PlayerGameEntity::PlayerGameEntity(SDL_Renderer* renderer, float xMin, float xMax)
 PlayerGameEntity::PlayerGameEntity(SDL_Renderer* renderer) {
 //    , m_XMin(xMin)
@@ -19,12 +21,7 @@ PlayerGameEntity::PlayerGameEntity(SDL_Renderer* renderer) {
 
     m_Projectile->AddComponent(texture);
     m_Projectile->AddComponent(col);
-}
 
-void PlayerGameEntity::Input(float deltaTime) {
-    for (auto& [key, value] : m_Components) {
-        m_Components[key]->Input(deltaTime);
-    }
 }
 
 void PlayerGameEntity::Update(float deltaTime) {
@@ -32,6 +29,12 @@ void PlayerGameEntity::Update(float deltaTime) {
     for (auto& [key, value] : m_Components) {
         m_Components[key]->Update(deltaTime);
     }
+    std::cout << m_Projectile->GetTransform()->GetRectangle().y << std::endl;
+}
+
+void PlayerGameEntity::Render(SDL_Renderer* renderer){
+    m_Projectile->Render(renderer);
+    GameEntity::Render(renderer);
 }
 
 [[nodiscard]] std::shared_ptr<ProjectileEntity> PlayerGameEntity::GetProjectile() const { return m_Projectile; }

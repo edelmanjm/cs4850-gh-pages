@@ -3,13 +3,15 @@
 #include <components/TransformComponent.h>
 #include <entities/GameEntity.h>
 
-TextureComponent::TextureComponent() {}
+#include <utility>
+
+TextureComponent::TextureComponent() = default;
 
 void TextureComponent::CreateTextureComponent(SDL_Renderer* renderer, std::string filepath) {
-    m_Texture = ResourceManager::Instance().LoadTexture(renderer, filepath);
+    m_Texture = ResourceManager::Instance().LoadTexture(renderer, std::move(filepath));
 }
 
-TextureComponent::~TextureComponent() {}
+TextureComponent::~TextureComponent() = default;
 
 ComponentType TextureComponent::GetType() { return ComponentType::TextureComponent; }
 

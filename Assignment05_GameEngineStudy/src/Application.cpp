@@ -20,26 +20,26 @@ Application::Application(int argc, char* argv[]) {
     uint32_t row = 1;
     uint32_t column = 1;
     for (int i = 0; i < 36; i++) {
-        std::shared_ptr<EnemyEntity> e = std::make_shared<EnemyEntity>(m_Renderer);
-
-        // Add a texture component to our enemy
-        std::shared_ptr<TextureComponent> tex = std::make_shared<TextureComponent>();
-        tex->CreateTextureComponent(m_Renderer, "../assets/enemy.bmp");
-        e->AddComponent(tex);
-
-        std::shared_ptr<Collision2DComponent> col = std::make_shared<Collision2DComponent>();
-        e->AddComponent(col);
-
-        // Calculate position for our enemy
-        if (i % 12 == 0) {
-            ++row;
-            column = 0;
-        }
-        column++;
-
-        e->GetTransform()->SetXY(column * 40 + 80, row * 40);
-
-        m_Enemies.push_back(std::move(e));
+//        std::shared_ptr<EnemyEntity> e = std::make_shared<EnemyEntity>(m_Renderer);
+//
+//        // Add a texture component to our enemy
+//        std::shared_ptr<TextureComponent> tex = std::make_shared<TextureComponent>();
+//        tex->CreateTextureComponent(m_Renderer, "../assets/enemy.bmp");
+//        e->AddComponent(tex);
+//
+//        std::shared_ptr<Collision2DComponent> col = std::make_shared<Collision2DComponent>();
+//        e->AddComponent(col);
+//
+//        // Calculate position for our enemy
+//        if (i % 12 == 0) {
+//            ++row;
+//            column = 0;
+//        }
+//        column++;
+//
+//        e->GetTransform()->SetXY(column * 40 + 80, row * 40);
+//
+//        m_Enemies.push_back(std::move(e));
     }
 
     m_MainCharacter = std::make_shared<PlayerGameEntity>(m_Renderer);
@@ -48,7 +48,7 @@ Application::Application(int argc, char* argv[]) {
     characterTexture->CreateTextureComponent(m_Renderer, "../assets/hero.bmp");
     m_MainCharacter->AddComponent(characterTexture);
 
-    m_MainCharacter->GetTransform()->SetXY(640 / 2 - (32 / 2), 440);
+    m_MainCharacter->GetTransform()->SetXY(640.0 / 2 - (32.0 / 2), 440);
 
     std::shared_ptr<InputComponent> inputController = std::make_shared<InputComponent>();
     m_MainCharacter->AddComponent(inputController);
@@ -97,9 +97,9 @@ void Application::Update(float deltaTime) {
         }
 
         if (GameOver) {
-            SDL_Log("YOU LOOOOOOOOOSE!");
-            SDL_Log("Your score is %f", m_Points);
-            m_Run = false;
+//            SDL_Log("YOU LOOOOOOOOOSE!");
+//            SDL_Log("Your score is %f", m_Points);
+//            m_Run = false;
         }
     }
     // Update our main character
