@@ -12,6 +12,7 @@ private:
 
 public:
     explicit ProjectileEntity();
+    void AddRequiredComponents(SDL_Renderer* renderer);
 
     void Launch(float x, float y, bool yDirectionIsUp, uint64_t minLaunchTime = 3000);
     void Input(float deltaTime) override;

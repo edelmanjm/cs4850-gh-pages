@@ -1,9 +1,21 @@
 #include <components/Collision2DComponent.h>
+#include <components/TextureComponent.h>
 #include <entities/ProjectileEntity.h>
 
 ProjectileEntity::ProjectileEntity() {
     timeSinceLastLaunch = SDL_GetTicks();
     SetRenderable(false);
+}
+
+void ProjectileEntity::AddRequiredComponents(SDL_Renderer* renderer) {
+    GameEntity::AddRequiredComponents();
+
+    std::shared_ptr<TextureComponent> texture = std::make_shared<TextureComponent>();
+    texture->CreateTextureComponent(renderer, "../assets/rocket.bmp");
+    AddComponent(texture);
+
+    std::shared_ptr<Collision2DComponent> col = std::make_shared<Collision2DComponent>();
+    AddComponent(col);
 }
 
 void ProjectileEntity::Launch(float x, float y, bool yDirectionIsUp, uint64_t minLaunchTime) {
@@ -29,8 +41,6 @@ void ProjectileEntity::Input(float deltaTime) {
 
 void ProjectileEntity::Update(float deltaTime) {
     auto transform = GetComponent<TransformComponent>(ComponentType::TransformComponent).value();
-//    SetRenderable(true);
-//    transform->SetXY(200, 200);
 
     if (m_IsFiring) {
         SetRenderable(true);

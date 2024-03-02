@@ -14,15 +14,20 @@ private:
 protected:
     std::map<ComponentType, std::shared_ptr<Component>> m_Components;
 
+    /**
+     * Adds the components that are required for this entity to itself. This is basically an initialization function;
+     * the reason this isn't in the constructor is because AddComponent() relies on shared_from_this(), which requires
+     * that the object already be initialized. Derived classes should implement a public-facing version of this
+     * method which takes the required arguments.
+     */
+    virtual void AddRequiredComponents();
+
 public:
     GameEntity();
-
     virtual ~GameEntity();
 
     virtual void Input(float deltaTime);
-
     virtual void Update(float deltaTime);
-
     virtual void Render(SDL_Renderer *renderer);
 
     // Not feeling like creating a .tpp file right now, and I don't like explicit template instantiations

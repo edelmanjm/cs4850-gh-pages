@@ -3,20 +3,24 @@
 #include <entities/EnemyEntity.h>
 
 EnemyEntity::EnemyEntity(SDL_Renderer* renderer) {
-    // Create a texture
-    std::shared_ptr<TextureComponent> texture = std::make_shared<TextureComponent>();
-    texture->CreateTextureComponent(renderer, "../assets/rocket.bmp");
-    // Create a collider for our projectile
-    std::shared_ptr<Collision2DComponent> col = std::make_shared<Collision2DComponent>();
-
     m_Projectile = std::make_shared<ProjectileEntity>();
+    m_Projectile->AddRequiredComponents(renderer);
     m_Projectile->GetTransform()->SetW(24.0f);
-
-    m_Projectile->AddComponent(texture);
-    m_Projectile->AddComponent(col);
 
     // Set a random launch time for the enemies
     m_MinLaunchTime += std::rand() % 10000;
+}
+
+void EnemyEntity::AddRequiredComponents(SDL_Renderer* renderer) {
+    GameEntity::AddRequiredComponents();
+
+    // Add a texture component to our enemy
+    std::shared_ptr<TextureComponent> tex = std::make_shared<TextureComponent>();
+    tex->CreateTextureComponent(renderer, "../assets/enemy.bmp");
+    AddComponent(tex);
+
+    std::shared_ptr<Collision2DComponent> col = std::make_shared<Collision2DComponent>();
+    AddComponent(col);
 }
 
 void EnemyEntity::Update(float deltaTime) {

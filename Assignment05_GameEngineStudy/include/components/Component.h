@@ -4,7 +4,7 @@
 
 #include <components/ComponentType.h>
 
-// Forward declaration of GameEntity which is included in our Component
+// Forward declaration of GameEntity, since GameEntity also relies on Component and we don't want a circular dependency
 struct GameEntity;
 
 /// Components, must know about the gameEntity that they are associated with

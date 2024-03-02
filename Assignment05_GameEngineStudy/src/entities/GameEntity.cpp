@@ -1,13 +1,14 @@
 #include <components/Collision2DComponent.h>
 #include <entities/GameEntity.h>
 
-GameEntity::GameEntity() {
-    // TODO this errors, but...
-//    std::shared_ptr<TransformComponent> t = std::make_shared<TransformComponent>();
-//    AddComponent<TransformComponent>(t);
-};
+GameEntity::GameEntity() = default;
 
 GameEntity::~GameEntity() = default;
+
+void GameEntity::AddRequiredComponents() {
+    std::shared_ptr<TransformComponent> t = std::make_shared<TransformComponent>();
+    AddComponent<TransformComponent>(t);
+}
 
 void GameEntity::Input(float deltaTime) {
     for (auto& [key, value] : m_Components) {
@@ -41,15 +42,7 @@ bool GameEntity::Intersects(const std::shared_ptr<GameEntity>& e) {
 }
 
 std::shared_ptr<TransformComponent> GameEntity::GetTransform(){
-    // TODO ...this seems to have other issues?
-    auto maybe = GetComponent<TransformComponent>(ComponentType::TransformComponent);
-    if (maybe) {
-        return maybe.value();
-    } else {
-        std::shared_ptr<TransformComponent> t = std::make_shared<TransformComponent>();
-        AddComponent<TransformComponent>(t);
-        return t;
-    }
+    return GetComponent<TransformComponent>(ComponentType::TransformComponent).value();
 }
 
 bool GameEntity::IsRenderable() const { return m_Renderable; }

@@ -14,11 +14,10 @@ private:
 
 public:
     EnemyEntity(SDL_Renderer *renderer);
-
     ~EnemyEntity() override = default;
+    void AddRequiredComponents(SDL_Renderer* renderer);
 
     void Update(float deltaTime) override;
-
     void Render(SDL_Renderer* renderer) override;
 
     [[nodiscard]] virtual std::shared_ptr<ProjectileEntity> GetProjectile() const;
