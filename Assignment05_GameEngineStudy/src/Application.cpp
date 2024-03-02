@@ -20,26 +20,26 @@ Application::Application(int argc, char* argv[]) {
     uint32_t row = 1;
     uint32_t column = 1;
     for (int i = 0; i < 36; i++) {
-//        std::shared_ptr<EnemyEntity> e = std::make_shared<EnemyEntity>(m_Renderer);
-//
-//        // Add a texture component to our enemy
-//        std::shared_ptr<TextureComponent> tex = std::make_shared<TextureComponent>();
-//        tex->CreateTextureComponent(m_Renderer, "../assets/enemy.bmp");
-//        e->AddComponent(tex);
-//
-//        std::shared_ptr<Collision2DComponent> col = std::make_shared<Collision2DComponent>();
-//        e->AddComponent(col);
-//
-//        // Calculate position for our enemy
-//        if (i % 12 == 0) {
-//            ++row;
-//            column = 0;
-//        }
-//        column++;
-//
-//        e->GetTransform()->SetXY(column * 40 + 80, row * 40);
-//
-//        m_Enemies.push_back(std::move(e));
+        std::shared_ptr<EnemyEntity> e = std::make_shared<EnemyEntity>(m_Renderer);
+
+        // Add a texture component to our enemy
+        std::shared_ptr<TextureComponent> tex = std::make_shared<TextureComponent>();
+        tex->CreateTextureComponent(m_Renderer, "../assets/enemy.bmp");
+        e->AddComponent(tex);
+
+        std::shared_ptr<Collision2DComponent> col = std::make_shared<Collision2DComponent>();
+        e->AddComponent(col);
+
+        // Calculate position for our enemy
+        if (i % 12 == 0) {
+            ++row;
+            column = 0;
+        }
+        column++;
+
+        e->GetTransform()->SetXY(column * 40 + 80, row * 40);
+
+        m_Enemies.push_back(std::move(e));
     }
 
     m_MainCharacter = std::make_shared<PlayerGameEntity>(m_Renderer);

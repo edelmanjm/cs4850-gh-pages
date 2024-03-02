@@ -19,5 +19,7 @@ public:
 
     void Update(float deltaTime) override;
 
+    void Render(SDL_Renderer* renderer) override;
+
     [[nodiscard]] virtual std::shared_ptr<ProjectileEntity> GetProjectile() const;
 };

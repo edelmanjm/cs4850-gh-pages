@@ -40,7 +40,7 @@ void ProjectileEntity::Update(float deltaTime) {
             transform->SetY(transform->GetY() + m_Speed * deltaTime);
         }
     } else {
-        SetRenderable(false);
+        SetRenderable(true);
     }
 
     if (transform->GetY() < 0.0f || transform->GetY() > 480.0f) {

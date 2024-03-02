@@ -48,4 +48,15 @@ void EnemyEntity::Update(float deltaTime) {
     }
 }
 
+void EnemyEntity::Render(SDL_Renderer* renderer) {
+    if (IsRenderable()) {
+        m_Projectile->Render(renderer);
+    } else {
+        // Do nothing;
+        m_Projectile->SetRenderable(false);
+        return;
+    }
+    GameEntity::Render(renderer);
+}
+
 [[nodiscard]] std::shared_ptr<ProjectileEntity> EnemyEntity::GetProjectile() const { return m_Projectile; }
