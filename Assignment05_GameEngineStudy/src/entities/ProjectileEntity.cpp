@@ -27,7 +27,6 @@ void ProjectileEntity::Launch(float x, float y, bool yDirectionIsUp, uint64_t mi
 
         timeSinceLastLaunch = SDL_GetTicks();
         m_IsFiring = true;
-        m_YDirectionUp = yDirectionIsUp;
 
         SetRenderable(true);
     }
@@ -44,11 +43,7 @@ void ProjectileEntity::Update(float deltaTime) {
 
     if (m_IsFiring) {
         SetRenderable(true);
-        if (m_YDirectionUp) {
-            transform->SetY(transform->GetY() - m_Speed * deltaTime);
-        } else {
-            transform->SetY(transform->GetY() + m_Speed * deltaTime);
-        }
+        transform->SetY(transform->GetY() + m_Speed * deltaTime);
     } else {
         SetRenderable(true);
     }
