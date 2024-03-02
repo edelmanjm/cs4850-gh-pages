@@ -10,9 +10,25 @@ CPMAddPackage(
         GITHUB_REPOSITORY libsdl-org/SDL
         GIT_TAG main)
 
+#CPMAddPackage(
+#        NAME units
+#        VERSION 2.3.3
+#        URL https://github.com/nholthaus/units/archive/refs/tags/v2.3.3.tar.gz
+#)
+
+#CPMAddPackage(
+#        NAME Boost
+#        GITHUB_REPOSITORY boostorg/boost
+#        GIT_TAG boost-1.84.0
+#)
+
 include_directories(include)
 
-link_libraries(SDL3::SDL3)
+link_libraries(SDL3::SDL3
+#        units
+#        Boost::algorithm
+#        Boost::geometry
+)
 
 add_executable(assignment5-part1
         src/main.cpp
