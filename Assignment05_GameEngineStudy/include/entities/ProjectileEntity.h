@@ -11,9 +11,9 @@ private:
     uint64_t timeSinceLastLaunch;
 
 public:
-    explicit ProjectileEntity(std::shared_ptr<Sprite> sprite);
+    explicit ProjectileEntity();
 
     void Launch(float x, float y, bool yDirectionIsUp, uint64_t minLaunchTime = 3000);
-
+    void Input(float deltaTime) override;
     void Update(float deltaTime) override;
 };

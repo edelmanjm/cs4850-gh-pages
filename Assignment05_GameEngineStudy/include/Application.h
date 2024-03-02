@@ -9,15 +9,12 @@
 #include <entities/GameEntity.h>
 #include <entities/PlayerGameEntity.h>
 #include <entities/ProjectileEntity.h>
-#include <Sprite.h>
 
 class Application {
 
 private:
-    // Enemy sprites
-    std::vector<std::unique_ptr<EnemyEntity>> m_Enemies;
-    // Main Character
-    std::unique_ptr<PlayerGameEntity> m_MainCharacter;
+    std::vector<std::shared_ptr<EnemyEntity>> m_Enemies;
+    std::shared_ptr<PlayerGameEntity> m_MainCharacter;
 
     bool m_Run{true};
     float m_Points{0.0f};

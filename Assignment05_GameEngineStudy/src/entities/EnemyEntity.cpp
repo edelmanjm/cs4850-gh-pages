@@ -1,18 +1,28 @@
+#include <components/Collision2DComponent.h>
+#include <components/TextureComponent.h>
 #include <entities/EnemyEntity.h>
 
-EnemyEntity::EnemyEntity(SDL_Renderer *renderer, std::shared_ptr<Sprite> sprite) : GameEntity(sprite) {
-    std::shared_ptr<Sprite> sp = std::make_shared<Sprite>();
-    sp->CreateSprite(renderer, "../assets/rocket.bmp");
-    sp->SetW(24.0f);
-    m_Projectile = std::make_shared<ProjectileEntity>(sp);
+EnemyEntity::EnemyEntity(SDL_Renderer* renderer) {
+    // Create a texture
+    std::shared_ptr<TextureComponent> texture = std::make_shared<TextureComponent>();
+    texture->CreateTextureComponent(renderer, "../assets/rocket.bmp");
+    // Create a collider for our projectile
+    std::shared_ptr<Collision2DComponent> col = std::make_shared<Collision2DComponent>();
 
-    // Set a random launch time for the m_Enemies
+    m_Projectile = std::make_shared<ProjectileEntity>();
+    m_Projectile->GetTransform()->SetW(24.0f);
+
+    m_Projectile->AddComponent(texture);
+    m_Projectile->AddComponent(col);
+
+    // Set a random launch time for the enemies
     m_MinLaunchTime += std::rand() % 10000;
-
-    m_Components.push_back(sp);
 }
 
 void EnemyEntity::Input(float deltaTime) {
+    for (auto& [key, value] : m_Components) {
+        m_Components[key]->Input(deltaTime);
+    }
 }
 
 void EnemyEntity::Update(float deltaTime) {
@@ -24,19 +34,24 @@ void EnemyEntity::Update(float deltaTime) {
         m_XPositiveDirection = true;
     }
 
+    // Keeping track of our projectile game logic
+    auto transform = GetComponent<TransformComponent>(ComponentType::TransformComponent).value();
+
     if (m_XPositiveDirection) {
-        m_Sprite->SetX(m_Sprite->GetX() + m_Speed * deltaTime);
+        transform->SetX(transform->GetX() + m_Speed * deltaTime);
         m_Offset += m_Speed * deltaTime;
     } else {
-        m_Sprite->SetX(m_Sprite->GetX() - m_Speed * deltaTime);
+        transform->SetX(transform->GetX() - m_Speed * deltaTime);
         m_Offset -= m_Speed * deltaTime;
     }
 
-    if (m_Sprite->m_Renderable) {
-        m_Projectile->Launch(m_Sprite->GetX(), m_Sprite->GetY(), false, m_MinLaunchTime);
+    if (IsRenderable()) {
+        m_Projectile->Launch(transform->GetX(), transform->GetY(), false, m_MinLaunchTime);
+    }
+
+    for (auto& [key, value] : m_Components) {
+        m_Components[key]->Update(deltaTime);
     }
 }
 
-[[nodiscard]] std::shared_ptr<ProjectileEntity> EnemyEntity::GetProjectile() const {
-    return m_Projectile;
-}
+[[nodiscard]] std::shared_ptr<ProjectileEntity> EnemyEntity::GetProjectile() const { return m_Projectile; }

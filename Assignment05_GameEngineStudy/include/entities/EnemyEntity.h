@@ -13,7 +13,7 @@ private:
     uint64_t m_MinLaunchTime{5000};
 
 public:
-    EnemyEntity(SDL_Renderer *renderer, std::shared_ptr<Sprite> sprite);
+    EnemyEntity(SDL_Renderer *renderer);
 
     ~EnemyEntity() override = default;
 

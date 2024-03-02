@@ -15,13 +15,15 @@ include_directories(include)
 link_libraries(SDL3::SDL3)
 
 add_executable(assignment5-part1
-        include/Application.h
         src/main.cpp
-        src/Sprite.cpp
+        src/Application.cpp
+        src/ResourceManager.cpp
+        src/components/Component.cpp
+        src/components/Collision2DComponent.cpp
+        src/components/InputComponent.cpp
+        src/components/TextureComponent.cpp
+        src/components/TransformComponent.cpp
         src/entities/EnemyEntity.cpp
         src/entities/GameEntity.cpp
         src/entities/PlayerGameEntity.cpp
-        src/entities/ProjectileEntity.cpp
-        src/Application.cpp
-        src/ResourceManager.cpp
-        src/Component.cpp)
+        src/entities/ProjectileEntity.cpp)

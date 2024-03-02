@@ -1,32 +1,53 @@
 #pragma once
 
 #include <memory>
+#include <map>
 
-#include <Component.h>
-#include <Sprite.h>
+#include <components/Component.h>
+#include <components/TransformComponent.h>
 
-class GameEntity : Component {
+class GameEntity : public std::enable_shared_from_this<GameEntity> {
+
+private:
+    bool m_Renderable = true;
 
 protected:
-    // I refuse to use dynamic casting as the lookup query for the sprite in the components lol.
-    // We can revisit having this as a separate field after the next assignment.
-    const std::shared_ptr<Sprite> m_Sprite;
-    std::vector<std::shared_ptr<Component>> m_Components;
+    std::map<ComponentType, std::shared_ptr<Component>> m_Components;
 
 public:
-    explicit GameEntity(std::shared_ptr<Sprite> sprite);
+    GameEntity();
 
-    virtual ~GameEntity() = default;
+    virtual ~GameEntity();
 
-    void Input(float deltaTime) override;
+    virtual void Input(float deltaTime);
 
-    void Update(float deltaTime) override;
+    virtual void Update(float deltaTime);
 
-    void Render(SDL_Renderer *renderer) override;
+    virtual void Render(SDL_Renderer *renderer);
 
-    void SetRenderable(bool value);
+    // Not feeling like creating a .tpp file right now, and I don't like explicit template instantiations
 
-    [[nodiscard]] bool IsRenderable() const;
+    template <typename T>
+    void AddComponent(std::shared_ptr<T> c) {
+        // NOTE: You could use the template information to get
+        //       the exact component type
+        m_Components[c->GetType()] = c;
+        c->SetGameEntity(shared_from_this());
+    }
+
+    template <typename T>
+    std::optional<std::shared_ptr<T>> GetComponent(ComponentType type) {
+        auto found = m_Components.find(type);
+        if (found != m_Components.end()) {
+            return dynamic_pointer_cast<T>(found->second);
+        } else {
+            return {};
+        }
+    }
+
+    std::shared_ptr<TransformComponent> GetTransform();
+    bool IsRenderable() const;
+    void SetRenderable(bool mRenderable);
 
     bool Intersects(const std::shared_ptr<GameEntity>& e);
 };

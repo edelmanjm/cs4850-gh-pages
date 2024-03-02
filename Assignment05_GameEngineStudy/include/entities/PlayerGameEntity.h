@@ -5,15 +5,15 @@
 #include <entities/ProjectileEntity.h>
 
 class PlayerGameEntity : public GameEntity {
-
 private:
-    float m_Speed{150.0f};
-    const float m_XMin;
-    const float m_XMax;
+//    float m_Speed{150.0f};
+//    const float m_XMin;
+//    const float m_XMax;
     std::shared_ptr<ProjectileEntity> m_Projectile;
 
 public:
-    PlayerGameEntity(SDL_Renderer *renderer, std::shared_ptr<Sprite> sprite, float xMin, float xMax);
+//    PlayerGameEntity(SDL_Renderer* renderer, float xMin, float xMax);
+    PlayerGameEntity(SDL_Renderer* renderer);
 
     ~PlayerGameEntity() override = default;
 
