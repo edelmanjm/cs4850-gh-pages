@@ -30,7 +30,7 @@ void Application::Input(float deltaTime) {
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_EVENT_QUIT) {
             SDL_Log("Program quit %llu", event.quit.timestamp);
-            m_Run = false;
+            m_Scene->SetSceneActiveStatus(false);
         } else if (event.type == SDL_EVENT_KEY_DOWN) {
             //                SDL_Log("Some key was pressed down");
             //                SDL_Log("%u",event.key.keysym.sym);
