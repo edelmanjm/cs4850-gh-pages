@@ -1,6 +1,6 @@
 #include <components/InputComponent.h>
 #include <components/TransformComponent.h>
-#include <entities/GameEntity.h>
+#include <entities/ProjectileEntity.h>
 
 InputComponent::InputComponent(float xMin, float xMax) : m_XMin(xMin), m_XMax(xMax) {}
 
@@ -22,7 +22,10 @@ void InputComponent::Input(float deltaTime) {
 
     if (state[SDL_SCANCODE_UP]) {
         SDL_Log("Launching!");
-        //        mProjectile->Launch(ref->GetX(),ref->GetY(),true);
+        // Don't like dynamic casts, but we'll do this for now until we either implement CRTP for entities or go another
+        // route; don't want to jump ahead in the course and have to redo a ton of work
+        std::shared_ptr<ProjectileEntity> projectile = dynamic_pointer_cast<ProjectileEntity>(ge->GetChildAtIndex(0));
+        projectile->Launch(transform->GetX(), transform->GetY(), -200);
     }
 }
 

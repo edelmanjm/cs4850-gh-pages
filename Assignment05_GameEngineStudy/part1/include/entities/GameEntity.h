@@ -13,14 +13,15 @@ private:
 
 protected:
     std::map<ComponentType, std::shared_ptr<Component>> m_Components;
+    std::vector<std::shared_ptr<GameEntity>> m_Children;
 
     /**
-     * Adds the components that are required for this entity to itself. This is basically an initialization function;
-     * the reason this isn't in the constructor is because AddComponent() relies on shared_from_this(), which requires
-     * that the object already be initialized. Derived classes should implement a public-facing version of this
-     * method which takes the required arguments.
+     * Adds the required components and child entities for this entity to itself. This is basically an initialization
+     * function; the reason this isn't in the constructor is because AddComponent() relies on shared_from_this(),
+     * which requires that the object already be initialized. Derived classes should implement a public-facing
+     * version of this method which takes the required arguments.
      */
-    virtual void AddRequiredComponents();
+    virtual void AddRequired();
 
 public:
     GameEntity();
@@ -39,6 +40,9 @@ public:
         m_Components[c->GetType()] = c;
         c->SetGameEntity(shared_from_this());
     }
+
+    void AddChild(std::shared_ptr<GameEntity>);
+    std::shared_ptr<GameEntity> GetChildAtIndex(size_t i);
 
     template <typename T>
     std::optional<std::shared_ptr<T>> GetComponent(ComponentType type) {

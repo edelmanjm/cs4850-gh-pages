@@ -5,7 +5,7 @@ GameEntity::GameEntity() = default;
 
 GameEntity::~GameEntity() = default;
 
-void GameEntity::AddRequiredComponents() {
+void GameEntity::AddRequired() {
     std::shared_ptr<TransformComponent> t = std::make_shared<TransformComponent>();
     AddComponent<TransformComponent>(t);
 }
@@ -14,11 +14,19 @@ void GameEntity::Input(float deltaTime) {
     for (auto& [key, value] : m_Components) {
         m_Components[key]->Input(deltaTime);
     }
+
+    for (auto& child : m_Children) {
+        child->Input(deltaTime);
+    }
 }
 
 void GameEntity::Update(float deltaTime) {
     for (auto& [key, value] : m_Components) {
         m_Components[key]->Update(deltaTime);
+    }
+
+    for (auto& child : m_Children) {
+        child->Update(deltaTime);
     }
 }
 
@@ -27,6 +35,10 @@ void GameEntity::Render(SDL_Renderer* renderer) {
         for (auto& [key, value] : m_Components) {
             m_Components[key]->Render(renderer);
         }
+    }
+
+    for (auto& child : m_Children) {
+        child->Render(renderer);
     }
 }
 
@@ -39,6 +51,14 @@ bool GameEntity::Intersects(const std::shared_ptr<GameEntity>& e) {
     */
     SDL_FRect result;
     return SDL_GetRectIntersectionFloat(&source, &us, &result);
+}
+
+void GameEntity::AddChild(std::shared_ptr<GameEntity> child) {
+    m_Children.push_back(child);
+}
+
+std::shared_ptr<GameEntity> GameEntity::GetChildAtIndex(size_t i) {
+    return m_Children.at(i);
 }
 
 std::shared_ptr<TransformComponent> GameEntity::GetTransform(){

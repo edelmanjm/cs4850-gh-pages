@@ -2,17 +2,13 @@
 #include <components/TextureComponent.h>
 #include <entities/EnemyEntity.h>
 
-EnemyEntity::EnemyEntity(SDL_Renderer* renderer) {
-    m_Projectile = std::make_shared<ProjectileEntity>();
-    m_Projectile->AddRequiredComponents(renderer);
-    m_Projectile->GetTransform()->SetW(24.0f);
-
+EnemyEntity::EnemyEntity() {
     // Set a random launch time for the enemies
     m_MinLaunchTime += std::rand() % 10000;
 }
 
-void EnemyEntity::AddRequiredComponents(SDL_Renderer* renderer) {
-    GameEntity::AddRequiredComponents();
+void EnemyEntity::AddRequired(SDL_Renderer* renderer) {
+    GameEntity::AddRequired();
 
     // Add a texture component to our enemy
     std::shared_ptr<TextureComponent> tex = std::make_shared<TextureComponent>();
@@ -21,10 +17,16 @@ void EnemyEntity::AddRequiredComponents(SDL_Renderer* renderer) {
 
     std::shared_ptr<Collision2DComponent> col = std::make_shared<Collision2DComponent>();
     AddComponent(col);
+
+    std::shared_ptr<ProjectileEntity> projectile = std::make_shared<ProjectileEntity>();
+    projectile->AddRequired(renderer);
+    projectile->GetTransform()->SetW(24.0f);
+    AddChild(projectile);
 }
 
 void EnemyEntity::Update(float deltaTime) {
-    m_Projectile->Update(deltaTime);
+    GameEntity::Update(deltaTime);
+
     if (m_Offset > 80) {
         m_XPositiveDirection = false;
     }
@@ -44,7 +46,7 @@ void EnemyEntity::Update(float deltaTime) {
     }
 
     if (IsRenderable()) {
-        m_Projectile->Launch(transform->GetX(), transform->GetY(), false, m_MinLaunchTime);
+        GetProjectile()->Launch(transform->GetX(), transform->GetY(), 200, m_MinLaunchTime);
     }
 
     for (auto& [key, value] : m_Components) {
@@ -53,14 +55,19 @@ void EnemyEntity::Update(float deltaTime) {
 }
 
 void EnemyEntity::Render(SDL_Renderer* renderer) {
+    GameEntity::Render(renderer);
+
     if (IsRenderable()) {
-        m_Projectile->Render(renderer);
+        GetProjectile()->Render(renderer);
     } else {
         // Do nothing;
-        m_Projectile->SetRenderable(false);
+        GetProjectile()->SetRenderable(false);
         return;
     }
-    GameEntity::Render(renderer);
 }
 
-[[nodiscard]] std::shared_ptr<ProjectileEntity> EnemyEntity::GetProjectile() const { return m_Projectile; }
+[[nodiscard]] std::shared_ptr<ProjectileEntity> EnemyEntity::GetProjectile() const {
+    // Don't like dynamic casts, but we'll do this for now until we either implement CRTP for entities or go another
+    // route; don't want to jump ahead in the course and have to redo a ton of work
+    return dynamic_pointer_cast<ProjectileEntity>(m_Children[0]);
+}

@@ -6,16 +6,15 @@
 class EnemyEntity : public GameEntity {
 
 private:
-    std::shared_ptr<ProjectileEntity> m_Projectile;
     bool m_XPositiveDirection{true};
     float m_Offset{0.0f};
     float m_Speed{100.0f};
     uint64_t m_MinLaunchTime{5000};
 
 public:
-    explicit EnemyEntity(SDL_Renderer *renderer);
+    explicit EnemyEntity();
     ~EnemyEntity() override = default;
-    void AddRequiredComponents(SDL_Renderer* renderer);
+    void AddRequired(SDL_Renderer* renderer);
 
     void Update(float deltaTime) override;
     void Render(SDL_Renderer* renderer) override;

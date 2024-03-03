@@ -6,14 +6,10 @@
 
 #include <algorithm>
 
-PlayerGameEntity::PlayerGameEntity(SDL_Renderer* renderer) {
-    m_Projectile = std::make_shared<ProjectileEntity>();
-    m_Projectile->AddRequiredComponents(renderer);
-    m_Projectile->GetTransform()->SetW(24.0f);
-}
+PlayerGameEntity::PlayerGameEntity() = default;
 
-void PlayerGameEntity::AddRequiredComponents(SDL_Renderer* renderer, uint32_t screenWidth) {
-    GameEntity::AddRequiredComponents();
+void PlayerGameEntity::AddRequired(SDL_Renderer* renderer, uint32_t screenWidth) {
+    GameEntity::AddRequired();
 
     std::shared_ptr<TextureComponent> characterTexture = std::make_shared<TextureComponent>();
     characterTexture->CreateTextureComponent(renderer, "../assets/hero.bmp");
@@ -25,16 +21,15 @@ void PlayerGameEntity::AddRequiredComponents(SDL_Renderer* renderer, uint32_t sc
 
     std::shared_ptr<Collision2DComponent> col = std::make_shared<Collision2DComponent>();
     AddComponent(col);
+
+    std::shared_ptr<ProjectileEntity> projectile = std::make_shared<ProjectileEntity>();
+    projectile->AddRequired(renderer);
+    projectile->GetTransform()->SetW(24.0f);
+    AddChild(projectile);
 }
 
-void PlayerGameEntity::Update(float deltaTime) {
-    m_Projectile->Update(deltaTime);
-    GameEntity::Update(deltaTime);
+[[nodiscard]] std::shared_ptr<ProjectileEntity> PlayerGameEntity::GetProjectile() const {
+    // Don't like dynamic casts, but we'll do this for now until we either implement CRTP for entities or go another
+    // route; don't want to jump ahead in the course and have to redo a ton of work
+    return dynamic_pointer_cast<ProjectileEntity>(m_Children[0]);
 }
-
-void PlayerGameEntity::Render(SDL_Renderer* renderer) {
-    m_Projectile->Render(renderer);
-    GameEntity::Render(renderer);
-}
-
-[[nodiscard]] std::shared_ptr<ProjectileEntity> PlayerGameEntity::GetProjectile() const { return m_Projectile; }

@@ -18,7 +18,7 @@ void Collision2DComponent::Update(float deltaTime) {
 
 void Collision2DComponent::Render(SDL_Renderer* renderer) {
     // Useful for debugging purposes
-    SDL_RenderRect(renderer, &m_Rectangle);
+//    SDL_RenderRect(renderer, &m_Rectangle);
 }
 
 ComponentType Collision2DComponent::GetType() { return ComponentType::Collision2DComponent; }
