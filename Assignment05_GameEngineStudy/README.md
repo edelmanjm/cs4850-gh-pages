@@ -6,9 +6,12 @@ the command line, you're welcome to do so. I personally use ninja + clang for my
 use whatever you want (make, gcc, something else). The following commands are what I use; they should be run from 
 the root of the repository.
 
-`cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=ninja -G Ninja -S Assignment05_GameEngineStudy -B Assignment05_GameEngineStudy/cmake-build-debug`
+`cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=ninja -G Ninja -S Assignment05_GameEngineStudy/part1 -B 
+Assignment05_GameEngineStudy/part1/cmake-build-debug`
 
-`cmake --build Assignment05_GameEngineStudy/cmake-build-debug --target assignment5-part1 -j 14`
+`cmake --build Assignment05_GameEngineStudy/part1/cmake-build-debug --target assignment5-part1 -j 14`
+
+Once built, the executables can be run from the `cmake-build-debug` directory.
 
 * Name: 
 * How many hours did it take you to complete this assignment? 
