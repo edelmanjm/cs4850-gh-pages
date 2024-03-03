@@ -34,6 +34,7 @@ add_executable(assignment5-part1
         src/main.cpp
         src/Application.cpp
         src/ResourceManager.cpp
+        src/Scene.cpp
         src/components/Component.cpp
         src/components/Collision2DComponent.cpp
         src/components/InputComponent.cpp

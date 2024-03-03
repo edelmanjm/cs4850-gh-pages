@@ -5,6 +5,7 @@
 
 #include <SDL3/SDL.h>
 
+#include <Scene.h>
 #include <entities/EnemyEntity.h>
 #include <entities/GameEntity.h>
 #include <entities/PlayerGameEntity.h>
@@ -13,11 +14,8 @@
 class Application {
 
 private:
-    std::vector<std::shared_ptr<EnemyEntity>> m_Enemies;
-    std::shared_ptr<PlayerGameEntity> m_MainCharacter;
-
-    bool m_Run{true};
-    float m_Points{0.0f};
+    std::unique_ptr<Scene> m_Scene;
+    bool m_Run = true;
     SDL_Window* m_Window;
     const uint32_t m_Width = 640;
     const uint32_t m_Height = 480;

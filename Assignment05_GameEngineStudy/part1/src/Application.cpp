@@ -12,32 +12,11 @@ Application::Application(int argc, char* argv[]) {
     // Create our window
     m_Window = SDL_CreateWindow("An SDL3 Window", m_Width, m_Height, SDL_WINDOW_OPENGL);
     m_Renderer = SDL_CreateRenderer(m_Window, nullptr, SDL_RENDERER_ACCELERATED);
+    m_Scene = std::make_unique<Scene>(m_Renderer, m_Width);
+    m_Scene->SetSceneActiveStatus(true);
     if (nullptr == m_Renderer) {
         SDL_Log("Error creating renderer");
     }
-
-    // Initialize all the m_Enemies
-    uint32_t row = 1;
-    uint32_t column = 1;
-    for (int i = 0; i < 36; i++) {
-        std::shared_ptr<EnemyEntity> e = std::make_shared<EnemyEntity>(m_Renderer);
-        e->AddRequiredComponents(m_Renderer);
-
-        // Calculate position for our enemy
-        if (i % 12 == 0) {
-            ++row;
-            column = 0;
-        }
-        column++;
-
-        e->GetTransform()->SetXY(column * 40 + 80, row * 40);
-
-        m_Enemies.push_back(std::move(e));
-    }
-
-    m_MainCharacter = std::make_shared<PlayerGameEntity>(m_Renderer);
-    m_MainCharacter->AddRequiredComponents(m_Renderer, m_Width);
-    m_MainCharacter->GetTransform()->SetXY(640.0 / 2 - (32.0 / 2), 440);
 }
 
 Application::~Application() {
@@ -62,47 +41,15 @@ void Application::Input(float deltaTime) {
     }
 
     // Handle SDL_GetKeyboardState after -- your SDL_PollEvent
-    m_MainCharacter->Input(deltaTime);
+    m_Scene->Input(deltaTime);
 }
 
 void Application::Update(float deltaTime) {
-    // Updating all of our m_Enemies
-    for (const auto& enemy : m_Enemies) {
-        enemy->Update(deltaTime);
-
-        bool enemyIsHit = enemy->Intersects(m_MainCharacter->GetProjectile());
-
-        bool GameOver = m_MainCharacter->Intersects(enemy->GetProjectile());
-        if (enemyIsHit && enemy->IsRenderable()) {
-            enemy->SetRenderable(false);
-            m_Points += 10.0f;
-            SDL_Log("Your score is %f", m_Points);
-        }
-
-        if (GameOver) {
-//            SDL_Log("YOU LOOOOOOOOOSE!");
-//            SDL_Log("Your score is %f", m_Points);
-//            m_Run = false;
-        }
-    }
-    // Update our main character
-    m_MainCharacter->Update(deltaTime);
+    m_Scene->Update(deltaTime);
 }
 
 void Application::Render() {
-    SDL_SetRenderDrawColor(m_Renderer, 0, 64, 255, SDL_ALPHA_OPAQUE);
-    SDL_RenderClear(m_Renderer);
-
-    SDL_SetRenderDrawColor(m_Renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-
-    // Render our m_Enemies
-    for (const auto& enemy : m_Enemies) {
-        enemy->Render(m_Renderer);
-    }
-    // Render our main character
-    m_MainCharacter->Render(m_Renderer);
-
-    SDL_RenderPresent(m_Renderer);
+    m_Scene->Render();
 }
 
 void Application::Loop(float targetFPS) {
@@ -114,7 +61,7 @@ void Application::Loop(float targetFPS) {
     lastTime = SDL_GetTicks();
     uint32_t framesElapsed = 0;
     float deltaTime = 1.0f / targetFPS;
-    while (m_Run) {
+    while (m_Scene->IsSceneActive()) {
         uint64_t startOfFrame = SDL_GetTicks();
         // We want, input/update/render to take 16ms
         Input(deltaTime);
