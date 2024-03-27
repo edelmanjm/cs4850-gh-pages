@@ -3,7 +3,7 @@
 
 int main(int argc, char* argv[]){
 
-    Application app(argc, argv);
+    Application app(640, 480);
     app.Loop(120.0f);
 
     return 0;

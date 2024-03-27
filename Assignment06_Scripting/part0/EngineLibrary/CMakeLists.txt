@@ -38,10 +38,7 @@ link_libraries(SDL3::SDL3
 #        Boost::geometry
 )
 
-pybind11_add_module(cs4850 src/bindings.cpp)
-
-add_executable(assignment6-part0
-        src/main.cpp
+add_library(rose-lib
         src/Application.cpp
         src/ResourceManager.cpp
         src/Scene.cpp
@@ -54,3 +51,11 @@ add_executable(assignment6-part0
         src/entities/GameEntity.cpp
         src/entities/PlayerGameEntity.cpp
         src/entities/ProjectileEntity.cpp)
+
+pybind11_add_module(rose
+        src/Bindings.cpp)
+target_link_libraries(rose PRIVATE rose-lib)
+
+add_executable(space-invaders
+        src/main.cpp)
+target_link_libraries(space-invaders PRIVATE rose-lib)

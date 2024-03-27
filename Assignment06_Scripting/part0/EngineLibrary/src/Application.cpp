@@ -4,15 +4,15 @@
 #include <components/TextureComponent.h>
 #include <entities/EnemyEntity.h>
 
-Application::Application(int argc, char* argv[]) {
+Application::Application(int w, int h) {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
         SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
     }
 
     // Create our window
-    m_Window = SDL_CreateWindow("An SDL3 Window", m_Width, m_Height, SDL_WINDOW_OPENGL);
+    m_Window = SDL_CreateWindow("An SDL3 Window", w, h, SDL_WINDOW_OPENGL);
     m_Renderer = SDL_CreateRenderer(m_Window, nullptr, SDL_RENDERER_ACCELERATED);
-    m_Scene = std::make_unique<Scene>(m_Renderer, m_Width);
+    m_Scene = std::make_unique<Scene>(m_Renderer, w);
     m_Scene->SetSceneActiveStatus(true);
     if (nullptr == m_Renderer) {
         SDL_Log("Error creating renderer");

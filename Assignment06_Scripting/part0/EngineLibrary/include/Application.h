@@ -17,12 +17,10 @@ private:
     std::unique_ptr<Scene> m_Scene;
     bool m_Run = true;
     SDL_Window* m_Window;
-    const uint32_t m_Width = 640;
-    const uint32_t m_Height = 480;
     SDL_Renderer *m_Renderer;
 
 public:
-    Application(int argc, char *argv[]);
+    Application(int w, int h);
 
     ~Application();
 
