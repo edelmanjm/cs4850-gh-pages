@@ -1,8 +1,8 @@
-#include <Scene.h>
+#include <scenes/SpaceInvaders.h>
 #include <components/InputComponent.h>
 #include <entities/PlayerGameEntity.h>
 
-Scene::Scene(SDL_Renderer* renderer, uint32_t width) : m_Renderer(renderer) {
+SpaceInvaders::SpaceInvaders(SDL_Renderer* renderer, uint32_t width) : Scene(renderer) {
     // Initialize all the enemies
     int row = 1;
     int column = 1;
@@ -27,14 +27,14 @@ Scene::Scene(SDL_Renderer* renderer, uint32_t width) : m_Renderer(renderer) {
     m_MainCharacter->GetTransform()->SetXY(640.0 / 2 - (32.0 / 2), 440);
 }
 
-Scene::~Scene() = default;
+SpaceInvaders::~SpaceInvaders() = default;
 
-void Scene::Input(float deltaTime) {
+void SpaceInvaders::Input(float deltaTime) {
     // Handle SDL_GetKeyboardState after -- your SDL_PollEvent
     m_MainCharacter->Input(deltaTime);
 }
 
-void Scene::Update(float deltaTime) {
+void SpaceInvaders::Update(float deltaTime) {
     // Update our main character
     m_MainCharacter->Update(deltaTime);
 
@@ -72,7 +72,7 @@ void Scene::Update(float deltaTime) {
     }
 }
 
-void Scene::Render() {
+void SpaceInvaders::Render() {
     SDL_SetRenderDrawColor(m_Renderer, 32, 32, 64, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(m_Renderer);
 
@@ -87,7 +87,3 @@ void Scene::Render() {
 
     SDL_RenderPresent(m_Renderer);
 }
-
-void Scene::SetSceneActiveStatus(bool status) { m_SceneIsActive = status; }
-
-bool Scene::IsSceneActive() const { return m_SceneIsActive; }

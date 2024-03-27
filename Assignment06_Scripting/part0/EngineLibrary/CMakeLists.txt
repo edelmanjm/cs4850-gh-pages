@@ -41,7 +41,6 @@ link_libraries(SDL3::SDL3
 add_library(rose-lib
         src/Application.cpp
         src/ResourceManager.cpp
-        src/Scene.cpp
         src/components/Component.cpp
         src/components/Collision2DComponent.cpp
         src/components/InputComponent.cpp
@@ -50,7 +49,9 @@ add_library(rose-lib
         src/entities/EnemyEntity.cpp
         src/entities/GameEntity.cpp
         src/entities/PlayerGameEntity.cpp
-        src/entities/ProjectileEntity.cpp)
+        src/entities/ProjectileEntity.cpp
+        src/scenes/SpaceInvaders.cpp
+        src/scenes/Scene.cpp)
 
 pybind11_add_module(rose
         src/Bindings.cpp)

@@ -5,7 +5,7 @@
 
 #include <SDL3/SDL.h>
 
-#include <Scene.h>
+#include <scenes/Scene.h>
 #include <entities/EnemyEntity.h>
 #include <entities/GameEntity.h>
 #include <entities/PlayerGameEntity.h>
