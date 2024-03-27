@@ -2,33 +2,25 @@
 #include <components/Collision2DComponent.h>
 #include <scenes/SpaceInvaders.h>
 
-Application::Application(int w, int h) {
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
-        SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
-    }
-
-    // Create our window
-    m_Window = SDL_CreateWindow("An SDL3 Window", w, h, SDL_WINDOW_OPENGL);
-    m_Renderer = SDL_CreateRenderer(m_Window, nullptr, SDL_RENDERER_ACCELERATED);
-    m_Scene = std::make_unique<SpaceInvaders>(m_Renderer, w);
-    m_Scene->m_SceneIsActive = true;
-    if (nullptr == m_Renderer) {
-        SDL_Log("Error creating renderer");
-    }
-}
+Application::Application(SDL_Renderer* renderer) : m_Renderer(renderer) {}
 
 Application::~Application() {
-    SDL_DestroyWindow(m_Window);
+    SDL_DestroyWindow(SDL_GetRenderWindow(m_Renderer));
     SDL_Quit();
 }
 
 void Application::Input(float deltaTime) {
+    if (!m_Scene) {
+        SDL_Log("No scene is set for the application");
+        return;
+    }
+
     SDL_Event event;
     // Processing input
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_EVENT_QUIT) {
             SDL_Log("Program quit %llu", event.quit.timestamp);
-            m_Scene->m_SceneIsActive = false;
+            m_Scene.value()->m_SceneIsActive = false;
         } else if (event.type == SDL_EVENT_KEY_DOWN) {
             //                SDL_Log("Some key was pressed down");
             //                SDL_Log("%u",event.key.keysym.sym);
@@ -39,15 +31,25 @@ void Application::Input(float deltaTime) {
     }
 
     // Handle SDL_GetKeyboardState after -- your SDL_PollEvent
-    m_Scene->Input(deltaTime);
+    m_Scene.value()->Input(deltaTime);
 }
 
 void Application::Update(float deltaTime) {
-    m_Scene->Update(deltaTime);
+    if (!m_Scene) {
+        SDL_Log("No scene is set for the application");
+        return;
+    }
+
+    m_Scene.value()->Update(deltaTime);
 }
 
 void Application::Render() {
-    m_Scene->Render();
+    if (!m_Scene) {
+        SDL_Log("No scene is set for the application");
+        return;
+    }
+
+    m_Scene.value()->Render();
 }
 
 void Application::Loop(float targetFPS) {
@@ -59,7 +61,8 @@ void Application::Loop(float targetFPS) {
     lastTime = SDL_GetTicks();
     uint32_t framesElapsed = 0;
     float deltaTime = 1.0f / targetFPS;
-    while (m_Scene->m_SceneIsActive) {
+    // Loop until the scene is set and the scene has ended
+    while (!m_Scene || m_Scene.value()->m_SceneIsActive) {
         uint64_t startOfFrame = SDL_GetTicks();
         // We want, input/update/render to take 16ms
         Input(deltaTime);
@@ -88,4 +91,25 @@ void Application::Loop(float targetFPS) {
             lastTime = SDL_GetTicks();
         }
     }
+}
+
+
+SDL_Renderer* Application::createRenderer(int w, int h) {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
+        SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
+    }
+
+    // Create our window
+    auto* window = SDL_CreateWindow("An SDL3 Window", w, h, SDL_WINDOW_OPENGL);
+    auto* renderer = SDL_CreateRenderer(window, nullptr, SDL_RENDERER_ACCELERATED);
+    if (nullptr == renderer) {
+        SDL_Log("Error creating renderer");
+    }
+
+    return renderer;
+}
+
+void Application::setScene(const std::shared_ptr<Scene>& scene) {
+    m_Scene = scene;
+    m_Scene->get()->m_SceneIsActive = true;
 }

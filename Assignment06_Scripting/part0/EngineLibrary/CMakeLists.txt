@@ -51,7 +51,8 @@ add_library(rose-lib
         src/entities/PlayerGameEntity.cpp
         src/entities/ProjectileEntity.cpp
         src/scenes/SpaceInvaders.cpp
-        src/scenes/Scene.cpp)
+        src/scenes/Scene.cpp
+        src/scenes/PythonScene.cpp)
 
 pybind11_add_module(rose
         src/Bindings.cpp)

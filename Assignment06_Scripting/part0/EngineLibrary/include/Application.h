@@ -14,20 +14,20 @@
 class Application {
 
 private:
-    std::unique_ptr<Scene> m_Scene;
-    bool m_Run = true;
-    SDL_Window* m_Window;
+    std::optional<std::shared_ptr<Scene>> m_Scene;
+
+private:
     SDL_Renderer *m_Renderer;
 
 public:
-    Application(int w, int h);
-
+    Application(SDL_Renderer* renderer);
     ~Application();
 
+    static SDL_Renderer* createRenderer(int w, int h);
+    void setScene(const std::shared_ptr<Scene>& scene);
+
     void Input(float deltaTime);
-
     void Update(float deltaTime);
-
     void Render();
 
     void Loop(float targetFPS);
