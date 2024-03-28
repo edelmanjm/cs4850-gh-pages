@@ -5,7 +5,7 @@
 class CollidingRectangleEntity : public GameEntity {
 public:
     CollidingRectangleEntity();
-    void AddRequired();
+    void AddRequired(SDL_FRect transform) override;
 
     void SetVelocity(float x, float y);
     void Update(float deltaTime) override;

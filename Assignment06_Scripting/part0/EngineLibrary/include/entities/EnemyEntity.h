@@ -14,7 +14,7 @@ private:
 public:
     explicit EnemyEntity();
     ~EnemyEntity() override = default;
-    void AddRequired(SDL_Renderer* renderer);
+    void AddRequired(SDL_FRect transform, SDL_Renderer* renderer);
 
     void Update(float deltaTime) override;
     void Render(SDL_Renderer* renderer) override;

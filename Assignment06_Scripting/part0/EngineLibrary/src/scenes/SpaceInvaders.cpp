@@ -8,7 +8,7 @@ SpaceInvaders::SpaceInvaders(SDL_Renderer* renderer, uint32_t width) : Scene(ren
     int column = 1;
     for (int i = 0; i < 36; i++) {
         std::shared_ptr<EnemyEntity> e = std::make_shared<EnemyEntity>();
-        e->AddRequired(m_Renderer);
+        e->AddRequired({20.0f, 20.0f, 32.0f, 32.0f}, m_Renderer);
 
         // Calculate position for our enemy
         if (i % 12 == 0) {
@@ -17,14 +17,16 @@ SpaceInvaders::SpaceInvaders(SDL_Renderer* renderer, uint32_t width) : Scene(ren
         }
         column++;
 
-        e->GetTransform()->SetXY(column * 40 + 80, row * 40);
+        e->GetTransform()->m_Rectangle.x = column * 40 + 80;
+        e->GetTransform()->m_Rectangle.y = row * 40;
 
         m_Enemies.push_back(std::move(e));
     }
 
     m_MainCharacter = std::make_shared<PlayerGameEntity>();
-    m_MainCharacter->AddRequired(m_Renderer, width);
-    m_MainCharacter->GetTransform()->SetXY(640.0 / 2 - (32.0 / 2), 440);
+    m_MainCharacter->AddRequired({20.0f, 20.0f, 32.0f, 32.0f}, m_Renderer, width);
+    m_MainCharacter->GetTransform()->m_Rectangle.x = 640.0 / 2 - (32.0 / 2);
+    m_MainCharacter->GetTransform()->m_Rectangle.y = 440;
 }
 
 SpaceInvaders::~SpaceInvaders() = default;

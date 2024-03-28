@@ -19,23 +19,12 @@ public:
 
     void Render(SDL_Renderer* renderer) override;
 
-    void SetW(float w);
-    void SetH(float h);
-    void SetWH(float w, float h);
-
-    [[nodiscard]] float GetW() const;
-    [[nodiscard]] float GetH() const;
-
-    void SetX(float x);
-    void SetY(float y);
-    void SetXY(float x, float y);
-
-    [[nodiscard]] float GetX() const;
-    [[nodiscard]] float GetY() const;
-
-    [[nodiscard]] SDL_FRect GetRectangle() const;
+    static bool Intersects(std::shared_ptr<Collision2DComponent> foo, std::shared_ptr<Collision2DComponent> bar);
 
 private:
-    SDL_FRect m_Rectangle{20.0f, 20.0f, 32.0f, 32.0f};
+    SDL_FRect& getCollisionBox();
+
+private:
+//    SDL_FRect m_Rectangle;
     bool m_ShowBoundingBox;
 };

@@ -21,7 +21,7 @@ protected:
      * which requires that the object already be initialized. Derived classes should implement a public-facing
      * version of this method which takes the required arguments.
      */
-    virtual void AddRequired();
+    virtual void AddRequired(SDL_FRect transform);
 
 public:
     GameEntity();

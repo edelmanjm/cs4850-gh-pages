@@ -8,7 +8,7 @@ class PlayerGameEntity : public GameEntity {
 public:
     PlayerGameEntity();
     ~PlayerGameEntity() override = default;
-    void AddRequired(SDL_Renderer* renderer, uint32_t screenWidth);
+    void AddRequired(SDL_FRect transform, SDL_Renderer* renderer, uint32_t screenWidth);
 
     [[nodiscard]] virtual std::shared_ptr<ProjectileEntity> GetProjectile() const;
 };

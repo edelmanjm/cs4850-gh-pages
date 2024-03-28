@@ -5,8 +5,8 @@ GameEntity::GameEntity() = default;
 
 GameEntity::~GameEntity() = default;
 
-void GameEntity::AddRequired() {
-    std::shared_ptr<TransformComponent> t = std::make_shared<TransformComponent>();
+void GameEntity::AddRequired(SDL_FRect transform) {
+    std::shared_ptr<TransformComponent> t = std::make_shared<TransformComponent>(transform);
     AddComponent<TransformComponent>(t);
 }
 
@@ -43,14 +43,9 @@ void GameEntity::Render(SDL_Renderer* renderer) {
 }
 
 bool GameEntity::Intersects(const std::shared_ptr<GameEntity>& e) {
-    auto source = e->GetComponent<Collision2DComponent>(ComponentType::Collision2DComponent).value()->GetRectangle();
-    auto us = GetComponent<Collision2DComponent>(ComponentType::Collision2DComponent).value()->GetRectangle();
-    /*
-    SDL_FRect source = e->mSprite.GetRectangle();
-    SDL_FRect us     = mSprite.GetRectangle();
-    */
-    SDL_FRect result;
-    return SDL_GetRectIntersectionFloat(&source, &us, &result);
+    auto source = e->GetComponent<Collision2DComponent>(ComponentType::Collision2DComponent).value();
+    auto us = GetComponent<Collision2DComponent>(ComponentType::Collision2DComponent).value();
+    return Collision2DComponent::Intersects(us, source);
 }
 
 void GameEntity::AddChild(std::shared_ptr<GameEntity> child) {

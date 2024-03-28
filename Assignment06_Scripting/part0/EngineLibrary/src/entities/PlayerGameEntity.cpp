@@ -8,23 +8,23 @@
 
 PlayerGameEntity::PlayerGameEntity() = default;
 
-void PlayerGameEntity::AddRequired(SDL_Renderer* renderer, uint32_t screenWidth) {
-    GameEntity::AddRequired();
+void PlayerGameEntity::AddRequired(SDL_FRect transform, SDL_Renderer* renderer, uint32_t screenWidth) {
+    GameEntity::AddRequired(transform);
 
     std::shared_ptr<TextureComponent> characterTexture = std::make_shared<TextureComponent>();
     characterTexture->CreateTextureComponent(renderer, "../assets/hero.bmp");
     AddComponent(characterTexture);
 
     std::shared_ptr<InputComponent> inputController =
-        std::make_shared<InputComponent>(0, static_cast<float>(screenWidth) - GetTransform()->GetRectangle().w);
+        std::make_shared<InputComponent>(0, static_cast<float>(screenWidth) - GetTransform()->m_Rectangle.w);
     AddComponent(inputController);
 
     std::shared_ptr<Collision2DComponent> col = std::make_shared<Collision2DComponent>();
     AddComponent(col);
 
     std::shared_ptr<ProjectileEntity> projectile = std::make_shared<ProjectileEntity>();
-    projectile->AddRequired(renderer);
-    projectile->GetTransform()->SetW(24.0f);
+    projectile->AddRequired(transform, renderer);
+    projectile->GetTransform()->m_Rectangle.w = 24.0f;
     AddChild(projectile);
 }
 

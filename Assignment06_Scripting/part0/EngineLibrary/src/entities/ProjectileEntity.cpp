@@ -7,8 +7,8 @@ ProjectileEntity::ProjectileEntity() {
     SetRenderable(false);
 }
 
-void ProjectileEntity::AddRequired(SDL_Renderer* renderer) {
-    GameEntity::AddRequired();
+void ProjectileEntity::AddRequired(SDL_FRect transform, SDL_Renderer* renderer) {
+    GameEntity::AddRequired(transform);
 
     std::shared_ptr<TextureComponent> texture = std::make_shared<TextureComponent>();
     texture->CreateTextureComponent(renderer, "../assets/rocket.bmp");
@@ -23,8 +23,8 @@ void ProjectileEntity::Launch(float x, float y, float speed, uint64_t minLaunchT
     if (SDL_GetTicks() - timeSinceLastLaunch > minLaunchTime) {
         auto transform = GetComponent<TransformComponent>(ComponentType::TransformComponent).value();
         auto col = GetComponent<Collision2DComponent>(ComponentType::Collision2DComponent).value();
-        transform->SetXY(x, y);
-        col->SetXY(x, y);
+        transform->m_Rectangle.x = x;
+        transform->m_Rectangle.y = y;
 
         timeSinceLastLaunch = SDL_GetTicks();
         m_IsFiring = true;
@@ -44,12 +44,12 @@ void ProjectileEntity::Update(float deltaTime) {
 
     if (m_IsFiring) {
         SetRenderable(true);
-        transform->SetY(transform->GetY() + m_Speed * deltaTime);
+        transform->m_Rectangle.y = transform->m_Rectangle.y + m_Speed * deltaTime;
     } else {
         SetRenderable(false);
     }
 
-    if (transform->GetY() < 0.0f || transform->GetY() > 480.0f) {
+    if (transform->m_Rectangle.y < 0.0f || transform->m_Rectangle.y > 480.0f) {
         m_IsFiring = false;
     }
 

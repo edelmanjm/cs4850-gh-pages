@@ -11,7 +11,7 @@ private:
 
 public:
     explicit ProjectileEntity();
-    void AddRequired(SDL_Renderer* renderer);
+    void AddRequired(SDL_FRect transform, SDL_Renderer* renderer);
 
     void Launch(float x, float y, float speed, uint64_t minLaunchTime = 3000);
     void Input(float deltaTime) override;

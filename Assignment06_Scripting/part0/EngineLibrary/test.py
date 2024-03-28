@@ -5,7 +5,7 @@ import rose
 renderer = rose.Renderer(640, 480)
 
 ball = rose.CollidingRectangleEntity()
-ball.add_required()
+ball.add_required(rose.SDL_FRect(32, 32, 32, 32))
 ball.set_velocity(1, 0)
 
 scene = rose.PythonScene(renderer)

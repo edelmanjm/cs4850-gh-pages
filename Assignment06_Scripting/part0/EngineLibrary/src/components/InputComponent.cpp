@@ -15,9 +15,9 @@ void InputComponent::Input(float deltaTime) {
     auto transform = ge->GetComponent<TransformComponent>(ComponentType::TransformComponent).value();
 
     if (state[SDL_SCANCODE_LEFT]) {
-        transform->SetX(std::max(m_XMin, transform->GetX() - m_Speed * deltaTime));
+        transform->m_Rectangle.x = std::max(m_XMin, transform->m_Rectangle.x - m_Speed * deltaTime);
     } else if (state[SDL_SCANCODE_RIGHT]) {
-        transform->SetX(std::min(m_XMax, transform->GetX() + m_Speed * deltaTime));
+        transform->m_Rectangle.x = std::min(m_XMax, transform->m_Rectangle.x + m_Speed * deltaTime);
     }
 
     if (state[SDL_SCANCODE_UP]) {
@@ -25,7 +25,7 @@ void InputComponent::Input(float deltaTime) {
         // Don't like dynamic casts, but we'll do this for now until we either implement CRTP for entities or go another
         // route; don't want to jump ahead in the course and have to redo a ton of work
         std::shared_ptr<ProjectileEntity> projectile = dynamic_pointer_cast<ProjectileEntity>(ge->GetChildAtIndex(0));
-        projectile->Launch(transform->GetX(), transform->GetY(), -200);
+        projectile->Launch(transform->m_Rectangle.x, transform->m_Rectangle.y, -200);
     }
 }
 

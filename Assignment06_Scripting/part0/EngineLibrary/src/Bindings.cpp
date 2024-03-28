@@ -17,6 +17,9 @@ PYBIND11_MODULE(rose, m) {
     m.doc() = "ROSE: Really Open Simple Engine";
     // Could do whyengine or something else punny, but eh
 
+    py::class_<SDL_FRect>(m, "SDL_FRect")
+        .def(py::init<float, float, float, float>());
+
     py::class_<Renderer, PYBIND11_SH_DEF(Renderer)>(m, "Renderer")
         .def(py::init<int, int>());
 

@@ -20,11 +20,11 @@ void TextureComponent::Update(float deltaTime) {}
 void TextureComponent::Render(SDL_Renderer* renderer) {
     if (nullptr == m_Texture) {
         auto ge = GetGameEntity();
-        auto transform = ge->GetTransform()->GetRectangle();
+        auto transform = ge->GetTransform()->m_Rectangle;
         SDL_RenderRect(renderer, &transform);
     } else {
         auto ge = GetGameEntity();
-        auto transform = ge->GetTransform()->GetRectangle();
+        auto transform = ge->GetTransform()->m_Rectangle;
 
         SDL_RenderTexture(renderer, m_Texture.get(), nullptr, &transform);
     }
