@@ -1,56 +1,82 @@
+from typing import NamedTuple
+
 import sys
+
 sys.path.append('./cmake-build-debug')
 import rose
 
-scaling = 2
 
-w = 375 * scaling
-h = 246 * scaling
+class Pong:
+    class Score(NamedTuple):
+        l: int
+        r: int
 
-speed = 100
+    def __init__(self):
+        scaling = 2
 
-renderer = rose.Renderer(w, h)
+        self.w = 375 * scaling
+        self.h = 246 * scaling
 
-ball = rose.CollidingRectangleEntity()
-ball_size = 4 * scaling
-ball.add_required(rose.SDL_FRect(w / 2 - ball_size / 2, h / 2 - ball_size / 2, ball_size, ball_size))
-ball.set_velocity(speed, 0)
+        self.speed = 100
 
-paddle_w = 4 * scaling
-paddle_h = 16 * scaling
-paddle_x = 48 * scaling
-paddle_y = h / 2 - paddle_h / 2
+        renderer = rose.Renderer(self.w, self.h)
 
-paddle_l = rose.CollidingRectangleEntity()
-paddle_l.add_required(rose.SDL_FRect(paddle_x, paddle_y, paddle_w, paddle_h))
+        self.ball = rose.CollidingRectangleEntity()
+        self.ball_size = 4 * scaling
+        self.ball.add_required(rose.SDL_FRect(0, 0, 0, 0))
 
-paddle_r = rose.CollidingRectangleEntity()
-paddle_r.add_required(rose.SDL_FRect(w - paddle_x - paddle_w, paddle_y, paddle_w, paddle_h))
+        self.paddle_w = 4 * scaling
+        self.paddle_h = 16 * scaling
+        self.paddle_x = 48 * scaling
+        self.paddle_y = self.h / 2 - self.paddle_h / 2
 
-scene = rose.PythonScene(renderer)
-scene.add_entity(ball)
-scene.add_entity(paddle_l)
-scene.add_entity(paddle_r)
+        self.paddle_l = rose.CollidingRectangleEntity()
+        self.paddle_l.add_required(rose.SDL_FRect(0, 0, 0, 0))
 
-left = rose.SDL_FRect(-1, 0, 1, h)
-right = rose.SDL_FRect(w + 1, 0, 1, h)
-top = rose.SDL_FRect(0, -1, w, 1)
-bottom = rose.SDL_FRect(0, h + 1, w, 1)
+        self.paddle_r = rose.CollidingRectangleEntity()
+        self.paddle_r.add_required(rose.SDL_FRect(0, 0, 0, 0))
+
+        self.scene = rose.PythonScene(renderer)
+        self.scene.add_entity(self.ball)
+        self.scene.add_entity(self.paddle_l)
+        self.scene.add_entity(self.paddle_r)
+
+        self.left = rose.SDL_FRect(-1, 0, 1, self.h)
+        self.right = rose.SDL_FRect(self.w + 1, 0, 1, self.h)
+        self.top = rose.SDL_FRect(0, -1, self.w, 1)
+        self.bottom = rose.SDL_FRect(0, self.h + 1, self.w, 1)
+
+        self.reset()
+
+        self.score = Pong.Score(0, 0)
+
+        self.scene.set_on_update(lambda delta_time: self.on_update(delta_time))
+
+        self.application = rose.Application(renderer)
+        self.application.set_scene(self.scene)
+
+    def reset(self):
+        self.ball.set_position(rose.SDL_FRect(self.w / 2 - self.ball_size / 2, self.h / 2 - self.ball_size / 2,
+                                              self.ball_size, self.ball_size))
+        self.ball.set_velocity(self.speed, 0)
+
+        self.paddle_l.set_position(rose.SDL_FRect(self.paddle_x, self.paddle_y, self.paddle_w, self.paddle_h))
+        self.paddle_r.set_position(rose.SDL_FRect(self.w - self.paddle_x - self.paddle_w, self.paddle_y,
+                                                  self.paddle_w, self.paddle_h))
+
+    def on_update(self, delta_time: float):
+        if rose.SDL_FRect.intersects(self.ball.get_transform(), self.left):
+            self.score = Pong.Score(self.score.l + 1, self.score.r)
+            self.reset()
+        elif rose.SDL_FRect.intersects(self.ball.get_transform(), self.right):
+            self.score = Pong.Score(self.score.l, self.score.r + 1)
+            self.reset()
+        elif rose.CollidingRectangleEntity.intersects(self.ball, self.paddle_l):
+            # ball.set_velocity(speed * 2, 0)
+            pass
+        elif rose.CollidingRectangleEntity.intersects(self.ball, self.paddle_r):
+            self.ball.set_velocity(-self.speed * 2, 0)
 
 
-def on_update(delta_time: float):
-    if rose.SDL_FRect.intersects(ball.get_transform(), left):
-        ball.set_velocity(speed, 0)
-    elif rose.SDL_FRect.intersects(ball.get_transform(), right):
-        ball.set_velocity(-speed, 0)
-    elif rose.CollidingRectangleEntity.intersects(ball, paddle_l):
-        ball.set_velocity(speed * 2, 0)
-    elif rose.CollidingRectangleEntity.intersects(ball, paddle_r):
-        ball.set_velocity(-speed * 2, 0)
-
-
-scene.set_on_update(on_update)
-
-application = rose.Application(renderer)
-application.set_scene(scene)
-application.loop(120)
+pong = Pong()
+pong.application.loop(120)

@@ -7,6 +7,7 @@ public:
     CollidingRectangleEntity();
     void AddRequired(SDL_FRect transform) override;
 
+    void SetPosition(SDL_FRect transform);
     void SetVelocity(float x, float y);
     void Update(float deltaTime) override;
 

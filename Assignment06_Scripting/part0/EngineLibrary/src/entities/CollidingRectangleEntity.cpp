@@ -11,6 +11,10 @@ void CollidingRectangleEntity::AddRequired(SDL_FRect transform) {
     AddComponent<Collision2DComponent>(c);
 }
 
+void CollidingRectangleEntity::SetPosition(SDL_FRect transform) {
+    GetTransform()->m_Rectangle = transform;
+}
+
 void CollidingRectangleEntity::SetVelocity(float x, float y) {
     m_VelocityX = x;
     m_VelocityY = y;

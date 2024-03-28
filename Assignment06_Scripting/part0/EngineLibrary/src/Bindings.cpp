@@ -43,6 +43,7 @@ PYBIND11_MODULE(rose, m) {
                GameEntity, PYBIND11_SH_DEF(CollidingRectangleEntity)>(m, "CollidingRectangleEntity")
         .def(py::init<>())
         .def("add_required", &CollidingRectangleEntity::AddRequired)
+        .def("set_position", &CollidingRectangleEntity::SetPosition)
         .def("set_velocity", &CollidingRectangleEntity::SetVelocity)
         .def_static("intersects", &CollidingRectangleEntity::Intersects);
 
