@@ -1,6 +1,6 @@
+from enum import Enum
 import math
 from typing import List, NamedTuple
-
 import sys
 
 sys.path.append('./cmake-build-debug')
@@ -12,6 +12,10 @@ class Pong:
         l: int
         r: int
 
+    class Direction(Enum):
+        UP = 0
+        DOWN = 1
+
     def __init__(self):
         scaling = 2
 
@@ -19,7 +23,7 @@ class Pong:
         self.h = 246 * scaling
 
         self.ball_speed = 350
-        self.paddle_speed = 250
+        self.paddle_speed = 225
         self.max_bounce_angle = math.radians(75)
 
         renderer = rose.Renderer(self.w, self.h)
@@ -70,16 +74,27 @@ class Pong:
 
     def on_input(self, delta_time: float, keys: List[int]):
         # TODO either import the SDL_Scancode enum, or find an equivalent in python
-        transform = self.paddle_r.get_transform()
         if keys[81]:
-            new_y = min(transform.y + self.paddle_speed * delta_time, self.h - self.paddle_h)
-            self.paddle_r.set_position(rose.SDL_FRect(transform.x, new_y, transform.w, transform.h))
+            self.move_paddle(delta_time, self.paddle_r, self.Direction.UP)
         elif keys[82]:
-            new_y = max(transform.y - self.paddle_speed * delta_time, 0)
-            self.paddle_r.set_position(rose.SDL_FRect(transform.x, new_y, transform.w, transform.h))
+            self.move_paddle(delta_time, self.paddle_r, self.Direction.DOWN)
 
-    def ai(self, paddle):
-        transform = self.paddle_r.get_transform()
+    def ai(self, delta_time: float):
+        paddle = self.paddle_l
+        difference = self.ball.get_transform().y - paddle.get_transform().y
+        if difference > 4:
+            self.move_paddle(delta_time, paddle, self.Direction.UP)
+        elif difference < -4:
+            self.move_paddle(delta_time, paddle, self.Direction.DOWN)
+
+    def move_paddle(self, delta_time: float, paddle, direction: Direction):
+        transform = paddle.get_transform()
+        if direction == self.Direction.UP:
+            new_y = min(transform.y + self.paddle_speed * delta_time, self.h - self.paddle_h)
+            paddle.set_position(rose.SDL_FRect(transform.x, new_y, transform.w, transform.h))
+        else:
+            new_y = max(transform.y - self.paddle_speed * delta_time, 0)
+            paddle.set_position(rose.SDL_FRect(transform.x, new_y, transform.w, transform.h))
 
     def bounce(self, paddle, horizontal_multiplier: float):
         ball_y = self.ball.get_transform().y
@@ -111,6 +126,8 @@ class Pong:
             self.bounce(self.paddle_l, 1.0)
         elif rose.CollidingRectangleEntity.intersects(self.ball, self.paddle_r):
             self.bounce(self.paddle_r, -1.0)
+
+        self.ai(delta_time)
 
 
 pong = Pong()
