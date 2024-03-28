@@ -20,6 +20,9 @@ PYBIND11_MODULE(rose, m) {
     py::class_<Renderer, PYBIND11_SH_DEF(Renderer)>(m, "Renderer")
         .def(py::init<int, int>());
 
+    // Using the first method of automatic downcasting
+    // See https://pybind11.readthedocs.io/en/stable/classes.html#inheritance-and-automatic-downcasting
+
     py::class_<Scene, PYBIND11_SH_DEF(Scene)> scene(m, "Scene");
 
     py::class_<PythonScene, Scene, PYBIND11_SH_DEF(PythonScene)>(m, "PythonScene")
