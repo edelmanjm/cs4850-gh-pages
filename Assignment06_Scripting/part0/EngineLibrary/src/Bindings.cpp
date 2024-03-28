@@ -44,7 +44,13 @@ PYBIND11_MODULE(rose, m) {
         .def(py::init<>())
         .def("add_required", &CollidingRectangleEntity::AddRequired)
         .def("set_position", &CollidingRectangleEntity::SetPosition)
-        .def("set_velocity", &CollidingRectangleEntity::SetVelocity)
+        .def("set_velocity", [](CollidingRectangleEntity& cre, float x, float y) {
+            cre.m_VelocityX = x;
+            cre.m_VelocityY = y;
+        })
+        .def("get_velocity", [](CollidingRectangleEntity& cre) {
+            return py::make_tuple(cre.m_VelocityX, cre.m_VelocityY);
+        })
         .def_static("intersects", &CollidingRectangleEntity::Intersects);
 
     py::class_<Scene, PYBIND11_SH_DEF(Scene)> scene(m, "Scene");
