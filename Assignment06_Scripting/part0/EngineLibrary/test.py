@@ -78,6 +78,21 @@ class Pong:
             self.paddle_r.set_position(rose.SDL_FRect(transform.x, transform.y - self.paddle_speed * delta_time,
                                                       transform.w, transform.h))
 
+    def bounce(self, paddle, horizontal_multiplier: float):
+        ball_y = self.ball.get_transform().y
+        paddle_y = paddle.get_transform().y
+
+        # The distance, in pixels, from the center of the paddle to the center of the ball
+        relative_intersect = ball_y - paddle_y - self.paddle_h / 2 + self.ball_size / 2
+        # [-1.0, 1.0] from the top to the bottom of the paddle
+        normalized_intersect = relative_intersect / ((self.paddle_h + self.ball_size) / 2)
+        bounce_angle = normalized_intersect * self.max_bounce_angle
+
+        # self.ball.set_velocity(-self.ball_speed * math.cos(bounce_angle),
+        #                        self.ball_speed * math.sin(bounce_angle))
+        # Seems like Pong generally maintains horizontal velocity
+        self.ball.set_velocity(self.ball_speed * horizontal_multiplier, self.ball_speed * math.sin(bounce_angle))
+
     def on_update(self, delta_time: float):
         if rose.SDL_FRect.intersects(self.ball.get_transform(), self.left):
             self.score = Pong.Score(self.score.l + 1, self.score.r)
@@ -90,22 +105,9 @@ class Pong:
             prev_velocity = self.ball.get_velocity()
             self.ball.set_velocity(prev_velocity[0], -prev_velocity[1])
         elif rose.CollidingRectangleEntity.intersects(self.ball, self.paddle_l):
-            # ball.set_velocity(speed * 2, 0)
-            pass
+            self.bounce(self.paddle_l, 1.0)
         elif rose.CollidingRectangleEntity.intersects(self.ball, self.paddle_r):
-            ball_y = self.ball.get_transform().y
-            paddle_y = self.paddle_r.get_transform().y
-
-            # The distance, in pixels, from the center of the paddle to the center of the ball
-            relative_intersect = ball_y - paddle_y - self.paddle_h / 2 + self.ball_size / 2
-            # [-1.0, 1.0] from the top to the bottom of the paddle
-            normalized_intersect = relative_intersect / ((self.paddle_h + self.ball_size) / 2)
-            bounce_angle = normalized_intersect * self.max_bounce_angle
-
-            # self.ball.set_velocity(-self.ball_speed * math.cos(bounce_angle),
-            #                        self.ball_speed * math.sin(bounce_angle))
-            # Seems like Pong generally maintains horizontal velocity
-            self.ball.set_velocity(-self.ball_speed, self.ball_speed * math.sin(bounce_angle))
+            self.bounce(self.paddle_r, -1.0)
 
 
 pong = Pong()
