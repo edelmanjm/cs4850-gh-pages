@@ -27,26 +27,26 @@ void PlayerGameEntity::AddRequired(SDL_FRect transform, SDL_Renderer* renderer, 
 
     std::shared_ptr<InputComponent> inputController =
         std::make_shared<InputComponent>();
-    std::function<void(float, const Uint8*)> test =
-        [inputController, projectile, this](float deltaTime, const Uint8* state) {
+    std::function<void(float, const std::vector<uint8_t> keys)> inputHandler =
+        [inputController, projectile, this](float deltaTime, const std::vector<uint8_t> keys) {
         // For now -- keep a reference to our first sprite
         auto ge = inputController->GetGameEntity();
         auto transform = ge->GetComponent<TransformComponent>(ComponentType::TransformComponent).value();
 
-        if (state[SDL_SCANCODE_LEFT]) {
+        if (keys[SDL_SCANCODE_LEFT]) {
             transform->m_Rectangle.x = std::max(m_XMin, transform->m_Rectangle.x - m_Speed * deltaTime);
-        } else if (state[SDL_SCANCODE_RIGHT]) {
+        } else if (keys[SDL_SCANCODE_RIGHT]) {
             transform->m_Rectangle.x = std::min(m_XMax, transform->m_Rectangle.x + m_Speed * deltaTime);
         }
 
-        if (state[SDL_SCANCODE_UP]) {
+        if (keys[SDL_SCANCODE_UP]) {
             SDL_Log("Launching!");
             // Don't like dynamic casts, but we'll do this for now until we either implement CRTP for entities or go another
             // route; don't want to jump ahead in the course and have to redo a ton of work
             projectile->Launch(transform->m_Rectangle.x, transform->m_Rectangle.y, -200);
         }
     };
-    inputController->SetOnKeypress(test);
+    inputController->SetOnKeypress(inputHandler);
     AddComponent(inputController);
 }
 

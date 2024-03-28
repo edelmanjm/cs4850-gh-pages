@@ -20,8 +20,8 @@ public:
 
     void Render(SDL_Renderer* renderer) override;
 
-    void SetOnKeypress(std::function<void(float deltaTime, const Uint8* keypress)>& onKeypress);
+    void SetOnKeypress(std::function<void(float deltaTime, const std::vector<uint8_t> keys)>& onKeypress);
 
 private:
-    std::function<void(float deltaTime, const Uint8*)> m_OnKeypress;
+    std::function<void(float deltaTime, const std::vector<uint8_t> keys)> m_OnKeypress;
 };

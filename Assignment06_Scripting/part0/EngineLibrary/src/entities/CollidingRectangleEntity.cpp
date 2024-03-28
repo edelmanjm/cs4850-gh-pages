@@ -12,15 +12,14 @@ void CollidingRectangleEntity::AddRequired(SDL_FRect transform) {
     AddComponent<Collision2DComponent>(c);
 }
 
-void CollidingRectangleEntity::AddInputHandler(std::function<void(float deltaTime, const Uint8* keypress)>& onKeypress) {
+void CollidingRectangleEntity::AddInputHandler(
+    std::function<void(float deltaTime, const std::vector<uint8_t> keys)>& onKeypress) {
     auto i = std::make_shared<InputComponent>();
     i->SetOnKeypress(onKeypress);
     AddComponent<InputComponent>(i);
 }
 
-void CollidingRectangleEntity::SetPosition(SDL_FRect transform) {
-    GetTransform()->m_Rectangle = transform;
-}
+void CollidingRectangleEntity::SetPosition(SDL_FRect transform) { GetTransform()->m_Rectangle = transform; }
 
 void CollidingRectangleEntity::Update(float deltaTime) {
     auto transform = GetComponent<TransformComponent>(ComponentType::TransformComponent).value();
