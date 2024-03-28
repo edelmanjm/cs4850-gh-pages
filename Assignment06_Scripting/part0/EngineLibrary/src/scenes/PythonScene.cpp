@@ -13,9 +13,8 @@ void PythonScene::Update(float deltaTime) {
         e->Update(deltaTime);
     }
 
+    // Typically calls Python code
     m_OnUpdate(deltaTime);
-    // TODO Call a Python onUpdate() function; onUpdate() function will then ask about collisions, and update
-    //  velocities accordingly. If the ball is out of bounds, the Python function will also increment the score
 }
 
 void PythonScene::Render() {
