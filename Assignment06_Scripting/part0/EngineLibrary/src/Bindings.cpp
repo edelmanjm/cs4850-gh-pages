@@ -6,22 +6,23 @@
 
 namespace py = pybind11;
 
-// Using conservative mode for now to avoid the need for additional build args
+// Using progressive mode to reduce verbosity.
 // See https://github.com/pybind/pybind11/blob/smart_holder/README_smart_holder.rst
-PYBIND11_SMART_HOLDER_TYPE_CASTERS(Renderer)
-PYBIND11_SMART_HOLDER_TYPE_CASTERS(Scene)
-PYBIND11_SMART_HOLDER_TYPE_CASTERS(PythonScene)
+// Example of what we'd need to have otherwise:
+// PYBIND11_SMART_HOLDER_TYPE_CASTERS(Renderer)
+// ...
+// py::class_<Bar, PYBIND11_SH_AVL(Bar)>(m, "Bar"); <-- notice that instead of PYBIND11_SH_DEF it's PYBIND11_SH_AVL
 
 PYBIND11_MODULE(rose, m) {
     m.doc() = "ROSE: Really Open Simple Engine";
     // Could do whyengine or something else punny, but eh
 
-    py::class_<Renderer, PYBIND11_SH_AVL(Renderer)>(m, "Renderer")
+    py::class_<Renderer, PYBIND11_SH_DEF(Renderer)>(m, "Renderer")
         .def(py::init<int, int>());
 
-    py::class_<Scene, PYBIND11_SH_AVL(Scene)> scene(m, "Scene");
+    py::class_<Scene, PYBIND11_SH_DEF(Scene)> scene(m, "Scene");
 
-    py::class_<PythonScene, Scene, PYBIND11_SH_AVL(PythonScene)>(m, "PythonScene")
+    py::class_<PythonScene, Scene, PYBIND11_SH_DEF(PythonScene)>(m, "PythonScene")
         .def(py::init<std::shared_ptr<Renderer>>());
 
     py::class_<Application>(m, "Application")

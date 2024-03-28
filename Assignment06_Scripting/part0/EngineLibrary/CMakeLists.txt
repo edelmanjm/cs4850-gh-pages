@@ -30,6 +30,8 @@ CPMAddPackage(
 #        GIT_TAG boost-1.84.0
 #)
 
+set(PYBIND11_USE_SMART_HOLDER_AS_DEFAULT ON)
+
 include_directories(include)
 
 link_libraries(SDL3::SDL3
