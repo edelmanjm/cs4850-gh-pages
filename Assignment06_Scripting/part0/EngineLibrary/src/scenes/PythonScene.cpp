@@ -1,19 +1,21 @@
 #include <scenes/PythonScene.h>
 
+#include <utility>
+
 PythonScene::PythonScene(std::shared_ptr<Renderer> renderer) : Scene(renderer->m_Wrapped) {}
 
 void PythonScene::Input(float deltaTime) {
-    // TODO
+    // TODO Call a Python function to handle the input
 }
 
 void PythonScene::Update(float deltaTime) {
     for (const auto& e : m_Entities) {
         e->Update(deltaTime);
     }
-}
 
-void PythonScene::AddEntity(const std::shared_ptr<CollidingRectangleEntity>& entity) {
-    m_Entities.push_back(entity);
+    m_OnUpdate(deltaTime);
+    // TODO Call a Python onUpdate() function; onUpdate() function will then ask about collisions, and update
+    //  velocities accordingly. If the ball is out of bounds, the Python function will also increment the score
 }
 
 void PythonScene::Render() {
@@ -27,4 +29,12 @@ void PythonScene::Render() {
     }
 
     SDL_RenderPresent(m_Renderer);
+}
+
+void PythonScene::SetOnUpdate(std::function<void(float deltaTime)> onUpdate) {
+    m_OnUpdate = std::move(onUpdate);
+}
+
+void PythonScene::AddEntity(const std::shared_ptr<CollidingRectangleEntity>& entity) {
+    m_Entities.push_back(entity);
 }
