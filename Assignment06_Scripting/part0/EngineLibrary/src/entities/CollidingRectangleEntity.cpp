@@ -1,4 +1,5 @@
 #include <components/Collision2DComponent.h>
+#include <components/InputComponent.h>
 #include <entities/CollidingRectangleEntity.h>
 
 
@@ -9,6 +10,12 @@ void CollidingRectangleEntity::AddRequired(SDL_FRect transform) {
 
     auto c = std::make_shared<Collision2DComponent>(true);
     AddComponent<Collision2DComponent>(c);
+}
+
+void CollidingRectangleEntity::AddInputHandler(std::function<void(float deltaTime, const Uint8* keypress)>& onKeypress) {
+    auto i = std::make_shared<InputComponent>();
+    i->SetOnKeypress(onKeypress);
+    AddComponent<InputComponent>(i);
 }
 
 void CollidingRectangleEntity::SetPosition(SDL_FRect transform) {

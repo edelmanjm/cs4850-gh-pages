@@ -29,6 +29,9 @@ PYBIND11_MODULE(rose, m) {
             return SDL_GetRectIntersectionFloat(&foo, &bar, &result);
         });
 
+    py::enum_<SDL_Scancode>(m, "SDL_Scancode")
+        .export_values();
+
     py::class_<Renderer, PYBIND11_SH_DEF(Renderer)>(m, "Renderer")
         .def(py::init<int, int>());
 

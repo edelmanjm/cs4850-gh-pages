@@ -8,7 +8,7 @@
 
 class InputComponent : public Component {
 public:
-    InputComponent(float xMin, float xMax);
+    InputComponent();
 
     ~InputComponent() override;
 
@@ -20,8 +20,8 @@ public:
 
     void Render(SDL_Renderer* renderer) override;
 
+    void SetOnKeypress(std::function<void(float deltaTime, const Uint8* keypress)>& onKeypress);
+
 private:
-    const float m_Speed{150};
-    const float m_XMin;
-    const float m_XMax;
+    std::function<void(float deltaTime, const Uint8*)> m_OnKeypress;
 };
