@@ -24,13 +24,16 @@ scene.add_entity(ball)
 # scene.add_entity(player)
 # scene.add_entity(bot)
 
-# TODO add borders for collision
+left = rose.SDL_FRect(-1, 0, 1, h)
+right = rose.SDL_FRect(w + 1, 0, 1, h)
+top = rose.SDL_FRect(0, -1, w, 1)
+bottom = rose.SDL_FRect(0, h + 1, w, 1)
 
 
 def on_update(delta_time: float):
-    if ball.get_transform().x < 0:
+    if rose.SDL_FRect.intersects(ball.get_transform(), left):
         ball.set_velocity(speed, 0)
-    elif ball.get_transform().x > w:
+    elif rose.SDL_FRect.intersects(ball.get_transform(), right):
         ball.set_velocity(-speed, 0)
 
 

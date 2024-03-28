@@ -23,7 +23,11 @@ PYBIND11_MODULE(rose, m) {
         .def_readwrite("x", &SDL_FRect::x)
         .def_readwrite("y", &SDL_FRect::y)
         .def_readwrite("w", &SDL_FRect::w)
-        .def_readwrite("h", &SDL_FRect::h);
+        .def_readwrite("h", &SDL_FRect::h)
+        .def_static("intersects", [](SDL_FRect& foo, SDL_FRect& bar) {
+            SDL_FRect result;
+            return SDL_GetRectIntersectionFloat(&foo, &bar, &result);
+        });
 
     py::class_<Renderer, PYBIND11_SH_DEF(Renderer)>(m, "Renderer")
         .def(py::init<int, int>());
@@ -39,7 +43,8 @@ PYBIND11_MODULE(rose, m) {
                GameEntity, PYBIND11_SH_DEF(CollidingRectangleEntity)>(m, "CollidingRectangleEntity")
         .def(py::init<>())
         .def("add_required", &CollidingRectangleEntity::AddRequired)
-        .def("set_velocity", &CollidingRectangleEntity::SetVelocity);
+        .def("set_velocity", &CollidingRectangleEntity::SetVelocity)
+        .def_static("intersects", &CollidingRectangleEntity::Intersects);
 
     py::class_<Scene, PYBIND11_SH_DEF(Scene)> scene(m, "Scene");
     py::class_<PythonScene, Scene, PYBIND11_SH_DEF(PythonScene)>(m, "PythonScene")
