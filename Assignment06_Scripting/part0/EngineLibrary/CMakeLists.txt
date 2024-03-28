@@ -48,6 +48,7 @@ add_library(rose-lib
         src/components/InputComponent.cpp
         src/components/TextureComponent.cpp
         src/components/TransformComponent.cpp
+        src/entities/CollidingRectangleEntity.cpp
         src/entities/EnemyEntity.cpp
         src/entities/GameEntity.cpp
         src/entities/PlayerGameEntity.cpp

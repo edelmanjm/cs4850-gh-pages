@@ -7,7 +7,13 @@ void PythonScene::Input(float deltaTime) {
 }
 
 void PythonScene::Update(float deltaTime) {
-    // TODO
+    for (const auto& e : m_Entities) {
+        e->Update(deltaTime);
+    }
+}
+
+void PythonScene::AddEntity(const std::shared_ptr<CollidingRectangleEntity>& entity) {
+    m_Entities.push_back(entity);
 }
 
 void PythonScene::Render() {
@@ -15,6 +21,10 @@ void PythonScene::Render() {
     SDL_RenderClear(m_Renderer);
 
     SDL_SetRenderDrawColor(m_Renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+
+    for (const auto& e : m_Entities) {
+        e->Render(m_Renderer);
+    }
 
     SDL_RenderPresent(m_Renderer);
 }

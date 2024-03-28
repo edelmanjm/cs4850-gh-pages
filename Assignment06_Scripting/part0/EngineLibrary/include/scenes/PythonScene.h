@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Renderer.h>
+#include <entities/CollidingRectangleEntity.h>
 #include <scenes/Scene.h>
 
 class PythonScene : public Scene {
@@ -11,5 +12,8 @@ public:
     void Update(float deltaTime) override;
     void Render() override;
 
+    void AddEntity(const std::shared_ptr<CollidingRectangleEntity>& entity);
+
 private:
+    std::vector<std::shared_ptr<CollidingRectangleEntity>> m_Entities;
 };

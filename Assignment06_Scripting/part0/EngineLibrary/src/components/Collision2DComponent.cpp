@@ -1,7 +1,7 @@
 #include <components/Collision2DComponent.h>
 #include <entities/GameEntity.h>
 
-Collision2DComponent::Collision2DComponent() {}
+Collision2DComponent::Collision2DComponent(bool showBoundingBox) : m_ShowBoundingBox(showBoundingBox) {}
 
 Collision2DComponent::~Collision2DComponent() {}
 
@@ -17,8 +17,9 @@ void Collision2DComponent::Update(float deltaTime) {
 }
 
 void Collision2DComponent::Render(SDL_Renderer* renderer) {
-    // Useful for debugging purposes
-//    SDL_RenderRect(renderer, &m_Rectangle);
+    if (m_ShowBoundingBox) {
+        SDL_RenderFillRect(renderer, &m_Rectangle);
+    }
 }
 
 ComponentType Collision2DComponent::GetType() { return ComponentType::Collision2DComponent; }

@@ -7,7 +7,7 @@
 
 class Collision2DComponent : public Component {
 public:
-    Collision2DComponent();
+    Collision2DComponent(bool showBoundingBox = false);
 
     ~Collision2DComponent() override;
 
@@ -37,4 +37,5 @@ public:
 
 private:
     SDL_FRect m_Rectangle{20.0f, 20.0f, 32.0f, 32.0f};
+    bool m_ShowBoundingBox;
 };

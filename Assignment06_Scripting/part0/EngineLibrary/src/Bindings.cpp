@@ -23,14 +23,21 @@ PYBIND11_MODULE(rose, m) {
     // Using the first method of automatic downcasting
     // See https://pybind11.readthedocs.io/en/stable/classes.html#inheritance-and-automatic-downcasting
 
-    py::class_<Scene, PYBIND11_SH_DEF(Scene)> scene(m, "Scene");
+    py::class_<GameEntity, PYBIND11_SH_DEF(GameEntity)> gameEntity(m, "GameEntity");
+    py::class_<CollidingRectangleEntity,
+               GameEntity, PYBIND11_SH_DEF(CollidingRectangleEntity)>(m, "CollidingRectangleEntity")
+        .def(py::init<>())
+        .def("add_required", &CollidingRectangleEntity::AddRequired)
+        .def("set_velocity", &CollidingRectangleEntity::SetVelocity);
 
+    py::class_<Scene, PYBIND11_SH_DEF(Scene)> scene(m, "Scene");
     py::class_<PythonScene, Scene, PYBIND11_SH_DEF(PythonScene)>(m, "PythonScene")
-        .def(py::init<std::shared_ptr<Renderer>>());
+        .def(py::init<std::shared_ptr<Renderer>>())
+        .def("add_entity", &PythonScene::AddEntity);
 
     py::class_<Application>(m, "Application")
         .def(py::init<std::shared_ptr<Renderer>>())
-        .def("setScene", &Application::setScene)
+        .def("set_scene", &Application::setScene)
         .def("loop", &Application::Loop);
     //        .def("clear", &SDLGraphicsProgram::clear) // Expose member methods
     //        .def("delay", &SDLGraphicsProgram::delay)
