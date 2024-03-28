@@ -5,6 +5,7 @@
 
 #include <SDL3/SDL.h>
 
+#include <Renderer.h>
 #include <scenes/Scene.h>
 #include <entities/EnemyEntity.h>
 #include <entities/GameEntity.h>
@@ -17,13 +18,12 @@ private:
     std::optional<std::shared_ptr<Scene>> m_Scene;
 
 private:
-    SDL_Renderer *m_Renderer;
+    std::shared_ptr<Renderer> m_Renderer;
 
 public:
-    Application(SDL_Renderer* renderer);
+    Application(std::shared_ptr<Renderer> renderer);
     ~Application();
 
-    static SDL_Renderer* createRenderer(int w, int h);
     void setScene(const std::shared_ptr<Scene>& scene);
 
     void Input(float deltaTime);

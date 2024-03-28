@@ -14,8 +14,8 @@ CPMAddPackage(
 
 CPMAddPackage(
         NAME pybind11
-        VERSION v2.11.1
-        URL https://github.com/pybind/pybind11/archive/refs/tags/v2.11.1.tar.gz
+        GITHUB_REPOSITORY pybind/pybind11
+        GIT_TAG smart_holder
 )
 
 #CPMAddPackage(
@@ -52,7 +52,8 @@ add_library(rose-lib
         src/entities/ProjectileEntity.cpp
         src/scenes/SpaceInvaders.cpp
         src/scenes/Scene.cpp
-        src/scenes/PythonScene.cpp)
+        src/scenes/PythonScene.cpp
+        src/Renderer.cpp)
 
 pybind11_add_module(rose
         src/Bindings.cpp)

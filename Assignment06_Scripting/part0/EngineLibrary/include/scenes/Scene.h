@@ -12,7 +12,7 @@
 class Scene {
 public:
     explicit Scene(SDL_Renderer* renderer);
-    virtual ~Scene();
+    virtual ~Scene() = default;
 
     virtual void Input(float deltaTime) = 0;
     virtual void Update(float deltaTime) = 0;

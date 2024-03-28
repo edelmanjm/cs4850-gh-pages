@@ -1,15 +1,33 @@
-#include <pybind11/pybind11.h>
+#include <pybind11/smart_holder.h>
 
 #include <Application.h>
+#include <Renderer.h>
+#include <scenes/PythonScene.h>
 
 namespace py = pybind11;
+
+// Using conservative mode for now to avoid the need for additional build args
+// See https://github.com/pybind/pybind11/blob/smart_holder/README_smart_holder.rst
+PYBIND11_SMART_HOLDER_TYPE_CASTERS(Renderer)
+PYBIND11_SMART_HOLDER_TYPE_CASTERS(Scene)
+PYBIND11_SMART_HOLDER_TYPE_CASTERS(PythonScene)
 
 PYBIND11_MODULE(rose, m) {
     m.doc() = "ROSE: Really Open Simple Engine";
     // Could do whyengine or something else punny, but eh
 
-    py::class_<Application>(m, "Application").def(
-        py::init<int, int>(), py::arg("w"), py::arg("h")); // Constructor
+    py::class_<Renderer, PYBIND11_SH_AVL(Renderer)>(m, "Renderer")
+        .def(py::init<int, int>());
+
+    py::class_<Scene, PYBIND11_SH_AVL(Scene)> scene(m, "Scene");
+
+    py::class_<PythonScene, Scene, PYBIND11_SH_AVL(PythonScene)>(m, "PythonScene")
+        .def(py::init<std::shared_ptr<Renderer>>());
+
+    py::class_<Application>(m, "Application")
+        .def(py::init<std::shared_ptr<Renderer>>())
+        .def("setScene", &Application::setScene)
+        .def("loop", &Application::Loop);
     //        .def("clear", &SDLGraphicsProgram::clear) // Expose member methods
     //        .def("delay", &SDLGraphicsProgram::delay)
     //        .def("flip", &SDLGraphicsProgram::flip)

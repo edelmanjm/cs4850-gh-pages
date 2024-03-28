@@ -1,5 +1,7 @@
 #include <scenes/PythonScene.h>
 
+PythonScene::PythonScene(std::shared_ptr<Renderer> renderer) : Scene(renderer->m_Wrapped) {}
+
 void PythonScene::Input(float deltaTime) {
     // TODO
 }

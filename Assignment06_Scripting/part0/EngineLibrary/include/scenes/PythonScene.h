@@ -1,11 +1,11 @@
 #pragma once
 
+#include <Renderer.h>
 #include <scenes/Scene.h>
 
 class PythonScene : public Scene {
 public:
-    PythonScene(SDL_Renderer* renderer);
-    ~PythonScene() override;
+    PythonScene(std::shared_ptr<Renderer> renderer);
 
     void Input(float deltaTime) override;
     void Update(float deltaTime) override;

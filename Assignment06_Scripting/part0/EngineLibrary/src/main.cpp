@@ -7,8 +7,8 @@ int main(int argc, char* argv[]){
 
     int w = 640;
     int h = 480;
-    auto* renderer = Application::createRenderer(w, h);
-    auto scene = std::make_shared<SpaceInvaders>(renderer, w);
+    auto renderer = std::make_shared<Renderer>(w, h);
+    auto scene = std::make_shared<SpaceInvaders>(renderer->m_Wrapped, w);
     Application app(renderer);
     app.setScene(scene);
     app.Loop(120.0f);

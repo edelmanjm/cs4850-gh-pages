@@ -2,10 +2,12 @@
 #include <components/Collision2DComponent.h>
 #include <scenes/SpaceInvaders.h>
 
-Application::Application(SDL_Renderer* renderer) : m_Renderer(renderer) {}
+#include <utility>
+
+Application::Application(std::shared_ptr<Renderer> renderer) : m_Renderer(std::move(renderer)) {}
 
 Application::~Application() {
-    SDL_DestroyWindow(SDL_GetRenderWindow(m_Renderer));
+    SDL_DestroyWindow(SDL_GetRenderWindow(m_Renderer->m_Wrapped));
     SDL_Quit();
 }
 
@@ -91,22 +93,6 @@ void Application::Loop(float targetFPS) {
             lastTime = SDL_GetTicks();
         }
     }
-}
-
-
-SDL_Renderer* Application::createRenderer(int w, int h) {
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
-        SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
-    }
-
-    // Create our window
-    auto* window = SDL_CreateWindow("An SDL3 Window", w, h, SDL_WINDOW_OPENGL);
-    auto* renderer = SDL_CreateRenderer(window, nullptr, SDL_RENDERER_ACCELERATED);
-    if (nullptr == renderer) {
-        SDL_Log("Error creating renderer");
-    }
-
-    return renderer;
 }
 
 void Application::setScene(const std::shared_ptr<Scene>& scene) {
