@@ -1,5 +1,5 @@
 import math
-from typing import NamedTuple
+from typing import List, NamedTuple
 
 import sys
 
@@ -18,7 +18,8 @@ class Pong:
         self.w = 375 * scaling
         self.h = 246 * scaling
 
-        self.speed = 250
+        self.ball_speed = 350
+        self.paddle_speed = 250
         self.max_bounce_angle = math.radians(75)
 
         renderer = rose.Renderer(self.w, self.h)
@@ -37,6 +38,7 @@ class Pong:
 
         self.paddle_r = rose.CollidingRectangleEntity()
         self.paddle_r.add_required(rose.SDL_FRect(0, 0, 0, 0))
+        self.paddle_r.add_input_handler(lambda delta_time, keys: self.on_input(delta_time, keys))
 
         self.scene = rose.PythonScene(renderer)
         self.scene.add_entity(self.ball)
@@ -60,11 +62,21 @@ class Pong:
     def reset(self):
         self.ball.set_position(rose.SDL_FRect(self.w / 2 - self.ball_size / 2, self.h / 2 - self.ball_size / 2,
                                               self.ball_size, self.ball_size))
-        self.ball.set_velocity(self.speed, 0)
+        self.ball.set_velocity(self.ball_speed, 0)
 
         self.paddle_l.set_position(rose.SDL_FRect(self.paddle_x, self.paddle_y, self.paddle_w, self.paddle_h))
         self.paddle_r.set_position(rose.SDL_FRect(self.w - self.paddle_x - self.paddle_w, self.paddle_y,
                                                   self.paddle_w, self.paddle_h))
+
+    def on_input(self, delta_time: float, keys: List[int]):
+        # TODO either import the SDL_Scancode enum, or find an equivalent in python
+        transform = self.paddle_r.get_transform()
+        if keys[81]:
+            self.paddle_r.set_position(rose.SDL_FRect(transform.x, transform.y + self.paddle_speed * delta_time,
+                                                      transform.w, transform.h))
+        elif keys[82]:
+            self.paddle_r.set_position(rose.SDL_FRect(transform.x, transform.y - self.paddle_speed * delta_time,
+                                                      transform.w, transform.h))
 
     def on_update(self, delta_time: float):
         if rose.SDL_FRect.intersects(self.ball.get_transform(), self.left):
@@ -90,8 +102,10 @@ class Pong:
             normalized_intersect = relative_intersect / ((self.paddle_h + self.ball_size) / 2)
             bounce_angle = normalized_intersect * self.max_bounce_angle
 
-            self.ball.set_velocity(-self.speed * math.cos(bounce_angle), self.speed * math.sin(bounce_angle))
-            pass
+            # self.ball.set_velocity(-self.ball_speed * math.cos(bounce_angle),
+            #                        self.ball_speed * math.sin(bounce_angle))
+            # Seems like Pong generally maintains horizontal velocity
+            self.ball.set_velocity(-self.ball_speed, self.ball_speed * math.sin(bounce_angle))
 
 
 pong = Pong()

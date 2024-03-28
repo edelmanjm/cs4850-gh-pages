@@ -5,7 +5,9 @@
 PythonScene::PythonScene(std::shared_ptr<Renderer> renderer) : Scene(renderer->m_Wrapped) {}
 
 void PythonScene::Input(float deltaTime) {
-    // TODO Call a Python function to handle the input
+    for (const auto& e : m_Entities) {
+        e->Input(deltaTime);
+    }
 }
 
 void PythonScene::Update(float deltaTime) {

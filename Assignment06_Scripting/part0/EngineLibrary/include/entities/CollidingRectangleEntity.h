@@ -9,6 +9,7 @@ public:
     void AddInputHandler(std::function<void(float deltaTime, const std::vector<uint8_t> keys)>& onKeypress);
 
     void SetPosition(SDL_FRect transform);
+
     void Update(float deltaTime) override;
 
     static bool Intersects(std::shared_ptr<CollidingRectangleEntity> foo, std::shared_ptr<CollidingRectangleEntity> bar);

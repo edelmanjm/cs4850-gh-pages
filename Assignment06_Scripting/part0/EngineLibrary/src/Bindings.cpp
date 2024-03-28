@@ -1,8 +1,10 @@
 #include <pybind11/functional.h>
 #include <pybind11/smart_holder.h>
+#include <pybind11/stl.h>
 
 #include <Application.h>
 #include <Renderer.h>
+#include <components/InputComponent.h>
 #include <scenes/PythonScene.h>
 
 namespace py = pybind11;
@@ -54,6 +56,7 @@ PYBIND11_MODULE(rose, m) {
         .def("get_velocity", [](CollidingRectangleEntity& cre) {
             return py::make_tuple(cre.m_VelocityX, cre.m_VelocityY);
         })
+        .def("add_input_handler", &CollidingRectangleEntity::AddInputHandler)
         .def_static("intersects", &CollidingRectangleEntity::Intersects);
 
     py::class_<Scene, PYBIND11_SH_DEF(Scene)> scene(m, "Scene");
