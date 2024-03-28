@@ -72,11 +72,14 @@ class Pong:
         # TODO either import the SDL_Scancode enum, or find an equivalent in python
         transform = self.paddle_r.get_transform()
         if keys[81]:
-            self.paddle_r.set_position(rose.SDL_FRect(transform.x, transform.y + self.paddle_speed * delta_time,
-                                                      transform.w, transform.h))
+            new_y = min(transform.y + self.paddle_speed * delta_time, self.h - self.paddle_h)
+            self.paddle_r.set_position(rose.SDL_FRect(transform.x, new_y, transform.w, transform.h))
         elif keys[82]:
-            self.paddle_r.set_position(rose.SDL_FRect(transform.x, transform.y - self.paddle_speed * delta_time,
-                                                      transform.w, transform.h))
+            new_y = max(transform.y - self.paddle_speed * delta_time, 0)
+            self.paddle_r.set_position(rose.SDL_FRect(transform.x, new_y, transform.w, transform.h))
+
+    def ai(self, paddle):
+        transform = self.paddle_r.get_transform()
 
     def bounce(self, paddle, horizontal_multiplier: float):
         ball_y = self.ball.get_transform().y
