@@ -80,14 +80,8 @@ void Application::Loop(float targetFPS) {
         if (float(elapsedTime) < (1000 / targetFPS)) {
             uint32_t delay = static_cast<uint32_t>(1000 / targetFPS) - elapsedTime;
             SDL_Delay(delay);
-            //                SDL_Log("elaspedTime: %li",elapsedTime);
-            //                SDL_Log("delaying by: %li",delay);
         }
-        // If 1 second passes,              m_Enemies[i]->report how many frames
-        // have been executed.
         if (currentTime > lastTime + 1000) {
-            SDL_Log("1 second has elapsed");
-            SDL_Log("%u", framesElapsed);
             deltaTime = 1.0f / float(framesElapsed);
             framesElapsed = 0;
             lastTime = SDL_GetTicks();
