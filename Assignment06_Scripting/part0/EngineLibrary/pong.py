@@ -54,10 +54,11 @@ class Pong:
         self.scene.add_entity(self.paddle_l)
         self.scene.add_entity(self.paddle_r)
 
-        self.left = rose.SDL_FRect(-1, 0, 1, self.h)
-        self.right = rose.SDL_FRect(self.w + 1, 0, 1, self.h)
-        self.top = rose.SDL_FRect(0, -1, self.w, 1)
-        self.bottom = rose.SDL_FRect(0, self.h + 1, self.w, 1)
+        wall_thickness = 16
+        self.left = rose.SDL_FRect(-wall_thickness, 0, wall_thickness, self.h)
+        self.right = rose.SDL_FRect(self.w + 1, 0, wall_thickness, self.h)
+        self.top = rose.SDL_FRect(0, -wall_thickness, self.w, wall_thickness)
+        self.bottom = rose.SDL_FRect(0, self.h + 1, self.w, wall_thickness)
 
         self.score = Pong.Score(0, 0)
         self.score_display_l = rose.TextEntity("assets/bit5x3.ttf", 32 * scaling, rose.SDL_Color(255, 255, 255, 255))
