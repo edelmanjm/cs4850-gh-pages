@@ -5,6 +5,7 @@
 #include <Application.h>
 #include <Renderer.h>
 #include <components/InputComponent.h>
+#include <entities/TextEntity.h>
 #include <scenes/PythonScene.h>
 
 namespace py = pybind11;
@@ -58,6 +59,8 @@ PYBIND11_MODULE(rose, m) {
         })
         .def("add_input_handler", &CollidingRectangleEntity::AddInputHandler)
         .def_static("intersects", &CollidingRectangleEntity::Intersects);
+    py::class_<TextEntity, GameEntity, PYBIND11_SH_DEF(TextEntity)>(m, "TextEntity")
+        .def(py::init<>());
 
     py::class_<Scene, PYBIND11_SH_DEF(Scene)> scene(m, "Scene");
     py::class_<PythonScene, Scene, PYBIND11_SH_DEF(PythonScene)>(m, "PythonScene")

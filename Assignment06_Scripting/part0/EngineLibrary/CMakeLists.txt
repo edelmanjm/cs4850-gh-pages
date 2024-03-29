@@ -11,7 +11,20 @@ set(PYBIND11_PYTHON_VERSION 3.12 CACHE STRING "")
 CPMAddPackage(
         NAME SDL
         GITHUB_REPOSITORY libsdl-org/SDL
-        GIT_TAG main)
+        GIT_TAG main
+)
+
+CPMAddPackage(
+        NAME SDL_ttf
+        GITHUB_REPOSITORY libsdl-org/SDL_ttf
+        GIT_TAG main
+)
+
+CPMAddPackage(
+        NAME SDL_FontCache
+        GITHUB_REPOSITORY edelmanjm/SDL_FontCache
+        GIT_TAG master
+)
 
 CPMAddPackage(
         NAME pybind11
@@ -35,7 +48,10 @@ set(PYBIND11_USE_SMART_HOLDER_AS_DEFAULT ON)
 
 include_directories(include)
 
-link_libraries(SDL3::SDL3
+link_libraries(
+        SDL3::SDL3
+        SDL3_ttf::SDL3_ttf
+        SDL_FontCache::SDL_FontCache
 #        units
 #        Boost::algorithm
 #        Boost::geometry
@@ -57,7 +73,8 @@ add_library(rose-lib
         src/scenes/SpaceInvaders.cpp
         src/scenes/Scene.cpp
         src/scenes/PythonScene.cpp
-        src/Renderer.cpp)
+        src/Renderer.cpp
+        src/entities/TextEntity.cpp)
 
 pybind11_add_module(rose
         src/Bindings.cpp)

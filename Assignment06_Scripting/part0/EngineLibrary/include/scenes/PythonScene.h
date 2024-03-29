@@ -13,10 +13,10 @@ public:
     void Render() override;
     void SetOnUpdate(std::function<void(float deltaTime)> onUpdate);
 
-    void AddEntity(const std::shared_ptr<CollidingRectangleEntity>& entity);
+    void AddEntity(const std::shared_ptr<GameEntity>& entity);
 
 private:
-    std::vector<std::shared_ptr<CollidingRectangleEntity>> m_Entities;
+    std::vector<std::shared_ptr<GameEntity>> m_Entities;
     /**
      * This function is called on every Update(). The intended use is that per-tick game logic will be written in
      * Python, with C++ calling the Python code each tick.

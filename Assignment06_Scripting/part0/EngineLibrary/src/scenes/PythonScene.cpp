@@ -36,6 +36,6 @@ void PythonScene::SetOnUpdate(std::function<void(float deltaTime)> onUpdate) {
     m_OnUpdate = std::move(onUpdate);
 }
 
-void PythonScene::AddEntity(const std::shared_ptr<CollidingRectangleEntity>& entity) {
+void PythonScene::AddEntity(const std::shared_ptr<GameEntity>& entity) {
     m_Entities.push_back(entity);
 }

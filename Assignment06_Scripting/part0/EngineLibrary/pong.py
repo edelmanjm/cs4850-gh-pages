@@ -62,6 +62,8 @@ class Pong:
         self.reset(self.XDirection.RIGHT)
 
         self.score = Pong.Score(0, 0)
+        self.score_entity = rose.TextEntity()
+        self.scene.add_entity(self.score_entity)
 
         self.scene.set_on_update(lambda delta_time: self.on_update(delta_time))
 
