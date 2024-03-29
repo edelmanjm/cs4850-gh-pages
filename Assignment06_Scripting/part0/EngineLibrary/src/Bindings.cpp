@@ -32,6 +32,13 @@ PYBIND11_MODULE(rose, m) {
             return SDL_GetRectIntersectionFloat(&foo, &bar, &result);
         });
 
+    py::class_<SDL_Color>(m, "SDL_Color")
+        .def(py::init<uint8_t, uint8_t, uint8_t, uint8_t>())
+        .def_readwrite("r", &SDL_Color::r)
+        .def_readwrite("g", &SDL_Color::g)
+        .def_readwrite("b", &SDL_Color::b)
+        .def_readwrite("a", &SDL_Color::a);
+
     py::enum_<SDL_Scancode>(m, "SDL_Scancode")
         .export_values();
 
@@ -60,7 +67,7 @@ PYBIND11_MODULE(rose, m) {
         .def("add_input_handler", &CollidingRectangleEntity::AddInputHandler)
         .def_static("intersects", &CollidingRectangleEntity::Intersects);
     py::class_<TextEntity, GameEntity, PYBIND11_SH_DEF(TextEntity)>(m, "TextEntity")
-        .def(py::init<>());
+        .def(py::init<std::string, uint32_t, SDL_Color>());
 
     py::class_<Scene, PYBIND11_SH_DEF(Scene)> scene(m, "Scene");
     py::class_<PythonScene, Scene, PYBIND11_SH_DEF(PythonScene)>(m, "PythonScene")

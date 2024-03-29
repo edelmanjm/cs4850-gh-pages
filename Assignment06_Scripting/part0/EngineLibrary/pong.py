@@ -62,7 +62,7 @@ class Pong:
         self.reset(self.XDirection.RIGHT)
 
         self.score = Pong.Score(0, 0)
-        self.score_entity = rose.TextEntity()
+        self.score_entity = rose.TextEntity("assets/bit5x3.ttf", 32 * scaling, rose.SDL_Color(255, 255, 255, 255))
         self.scene.add_entity(self.score_entity)
 
         self.scene.set_on_update(lambda delta_time: self.on_update(delta_time))
