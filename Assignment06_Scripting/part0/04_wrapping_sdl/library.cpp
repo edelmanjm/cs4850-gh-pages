@@ -39,7 +39,7 @@ public:
 class SDLWindow{
 public:
 	SDLWindow(const char* title, int x, int y, int w, int h ){
-    	window = SDL_CreateWindow( title, x, y, w, h, SDL_WINDOW_SHOWN );
+    	window = SDL_CreateWindow( title, w, h, SDL_WINDOW_OPENGL );
 		if(nullptr == window){
 			std::cerr << "window cannot be created\n";
 		}
