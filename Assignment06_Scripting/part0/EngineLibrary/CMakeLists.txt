@@ -5,7 +5,8 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_subdirectory(cmake)
 
-find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
+find_package(Python 3.12 EXACT REQUIRED COMPONENTS Interpreter Development.Module)
+set(PYBIND11_PYTHON_VERSION 3.12 CACHE STRING "")
 
 CPMAddPackage(
         NAME SDL
