@@ -55,6 +55,7 @@ public:
     }
 
     std::shared_ptr<TransformComponent> GetTransform();
+
     bool IsRenderable() const;
     void SetRenderable(bool mRenderable);
 

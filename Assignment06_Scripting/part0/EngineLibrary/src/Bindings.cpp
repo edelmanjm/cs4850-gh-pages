@@ -51,12 +51,14 @@ PYBIND11_MODULE(rose, m) {
     py::class_<GameEntity, PYBIND11_SH_DEF(GameEntity)> (m, "GameEntity")
         .def("get_transform", [](GameEntity& g) {
             return g.GetTransform()->m_Rectangle;
+        })
+        .def("set_transform", [](GameEntity& g, SDL_FRect r) {
+            g.GetTransform()->m_Rectangle = r;
         });
     py::class_<CollidingRectangleEntity,
                GameEntity, PYBIND11_SH_DEF(CollidingRectangleEntity)>(m, "CollidingRectangleEntity")
         .def(py::init<>())
         .def("add_required", &CollidingRectangleEntity::AddRequired)
-        .def("set_position", &CollidingRectangleEntity::SetPosition)
         .def("set_velocity", [](CollidingRectangleEntity& cre, float x, float y) {
             cre.m_VelocityX = x;
             cre.m_VelocityY = y;
@@ -68,8 +70,7 @@ PYBIND11_MODULE(rose, m) {
         .def_static("intersects", &CollidingRectangleEntity::Intersects);
     py::class_<TextEntity, GameEntity, PYBIND11_SH_DEF(TextEntity)>(m, "TextEntity")
         .def(py::init<std::string, uint32_t, SDL_Color>())
-        .def_readwrite("x", &TextEntity::m_X)
-        .def_readwrite("y", &TextEntity::m_Y)
+        .def("add_required", &TextEntity::AddRequired)
         .def_readwrite("text", &TextEntity::m_Text);
 
     py::class_<Scene, PYBIND11_SH_DEF(Scene)> scene(m, "Scene");

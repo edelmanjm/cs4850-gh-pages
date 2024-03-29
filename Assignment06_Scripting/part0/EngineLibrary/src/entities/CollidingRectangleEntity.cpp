@@ -19,8 +19,6 @@ void CollidingRectangleEntity::AddInputHandler(
     AddComponent<InputComponent>(i);
 }
 
-void CollidingRectangleEntity::SetPosition(SDL_FRect transform) { GetTransform()->m_Rectangle = transform; }
-
 void CollidingRectangleEntity::Update(float deltaTime) {
     auto transform = GetComponent<TransformComponent>(ComponentType::TransformComponent).value();
 

@@ -62,8 +62,8 @@ class Pong:
         self.score = Pong.Score(0, 0)
         self.score_display_l = rose.TextEntity("assets/bit5x3.ttf", 32 * scaling, rose.SDL_Color(255, 255, 255, 255))
         self.score_display_r = rose.TextEntity("assets/bit5x3.ttf", 32 * scaling, rose.SDL_Color(255, 255, 255, 255))
-        self.score_display_l.x = self.w / 3
-        self.score_display_r.x = self.w / 3 * 2
+        self.score_display_l.add_required(rose.SDL_FRect(self.w / 3, 0, 0, 0))
+        self.score_display_r.add_required(rose.SDL_FRect(self.w / 3 * 2, 0, 0, 0))
 
         self.scene.add_entity(self.score_display_l)
         self.scene.add_entity(self.score_display_r)
@@ -80,8 +80,8 @@ class Pong:
         self.score_display_r.text = str(self.score.r)
 
         ball_y = random.randint(int(self.h / 3), int(self.h * 2 / 3))
-        self.ball.set_position(rose.SDL_FRect(self.w / 2 - self.ball_size / 2, ball_y,
-                                              self.ball_size, self.ball_size))
+        self.ball.set_transform(rose.SDL_FRect(self.w / 2 - self.ball_size / 2, ball_y,
+                                               self.ball_size, self.ball_size))
         x_multiplier: float
         if serve_direction == self.XDirection.LEFT:
             x_multiplier = -1.0
@@ -89,9 +89,9 @@ class Pong:
             x_multiplier = 1.0
         self.ball.set_velocity(self.ball_speed * x_multiplier, (random.random() * 2 - 1) * self.ball_speed * 0.25)
 
-        self.paddle_l.set_position(rose.SDL_FRect(self.paddle_x, self.paddle_y, self.paddle_w, self.paddle_h))
-        self.paddle_r.set_position(rose.SDL_FRect(self.w - self.paddle_x - self.paddle_w, self.paddle_y,
-                                                  self.paddle_w, self.paddle_h))
+        self.paddle_l.set_transform(rose.SDL_FRect(self.paddle_x, self.paddle_y, self.paddle_w, self.paddle_h))
+        self.paddle_r.set_transform(rose.SDL_FRect(self.w - self.paddle_x - self.paddle_w, self.paddle_y,
+                                                   self.paddle_w, self.paddle_h))
 
     def on_input(self, delta_time: float, keys: List[int]):
         # TODO either import the SDL_Scancode enum, or find an equivalent in python
@@ -112,10 +112,10 @@ class Pong:
         transform = paddle.get_transform()
         if direction == self.YDirection.UP:
             new_y = min(transform.y + self.paddle_speed * delta_time, self.h - self.paddle_h)
-            paddle.set_position(rose.SDL_FRect(transform.x, new_y, transform.w, transform.h))
+            paddle.set_transform(rose.SDL_FRect(transform.x, new_y, transform.w, transform.h))
         else:
             new_y = max(transform.y - self.paddle_speed * delta_time, 0)
-            paddle.set_position(rose.SDL_FRect(transform.x, new_y, transform.w, transform.h))
+            paddle.set_transform(rose.SDL_FRect(transform.x, new_y, transform.w, transform.h))
 
     def bounce(self, paddle, horizontal_multiplier: float):
         ball_y = self.ball.get_transform().y
