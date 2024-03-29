@@ -59,11 +59,16 @@ class Pong:
         self.top = rose.SDL_FRect(0, -1, self.w, 1)
         self.bottom = rose.SDL_FRect(0, self.h + 1, self.w, 1)
 
-        self.reset(self.XDirection.RIGHT)
-
         self.score = Pong.Score(0, 0)
-        self.score_entity = rose.TextEntity("assets/bit5x3.ttf", 32 * scaling, rose.SDL_Color(255, 255, 255, 255))
-        self.scene.add_entity(self.score_entity)
+        self.score_display_l = rose.TextEntity("assets/bit5x3.ttf", 32 * scaling, rose.SDL_Color(255, 255, 255, 255))
+        self.score_display_r = rose.TextEntity("assets/bit5x3.ttf", 32 * scaling, rose.SDL_Color(255, 255, 255, 255))
+        self.score_display_l.x = self.w / 3
+        self.score_display_r.x = self.w / 3 * 2
+
+        self.scene.add_entity(self.score_display_l)
+        self.scene.add_entity(self.score_display_r)
+
+        self.reset(self.XDirection.RIGHT)
 
         self.scene.set_on_update(lambda delta_time: self.on_update(delta_time))
 
@@ -71,6 +76,9 @@ class Pong:
         self.application.set_scene(self.scene)
 
     def reset(self, serve_direction: XDirection):
+        self.score_display_l.text = str(self.score.l)
+        self.score_display_r.text = str(self.score.r)
+
         ball_y = random.randint(int(self.h / 3), int(self.h * 2 / 3))
         self.ball.set_position(rose.SDL_FRect(self.w / 2 - self.ball_size / 2, ball_y,
                                               self.ball_size, self.ball_size))
@@ -126,11 +134,11 @@ class Pong:
 
     def on_update(self, delta_time: float):
         if rose.SDL_FRect.intersects(self.ball.get_transform(), self.left):
-            self.score = Pong.Score(self.score.l + 1, self.score.r)
+            self.score = Pong.Score(self.score.l, self.score.r + 1)
             # Winner serves
             self.reset(self.XDirection.RIGHT)
         elif rose.SDL_FRect.intersects(self.ball.get_transform(), self.right):
-            self.score = Pong.Score(self.score.l, self.score.r + 1)
+            self.score = Pong.Score(self.score.l + 1, self.score.r)
             # Winner serves
             self.reset(self.XDirection.LEFT)
         elif (rose.SDL_FRect.intersects(self.ball.get_transform(), self.top)

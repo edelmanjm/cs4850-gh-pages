@@ -12,6 +12,11 @@ public:
 
     void Render(SDL_Renderer *renderer) override;
 
+public:
+    float m_X = 0.0;
+    float m_Y = 0.0;
+    std::string m_Text;
+
 private:
     std::string m_FontPath;
     uint32_t m_FontSize;

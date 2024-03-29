@@ -20,7 +20,7 @@ void TextEntity::Render(SDL_Renderer* renderer) {
         m_FontLoaded = true;
     }
 
-    FC_Draw(m_Font, renderer, 0, 0, "This is %s.\n It works.", "example text");
+    FC_Draw(m_Font, renderer, m_X, m_Y, m_Text.c_str());
 }
 
 void TextEntity::AddRequired(SDL_FRect transform) { GameEntity::AddRequired(transform); }
