@@ -12,7 +12,7 @@ public:
 
     [[nodiscard]] virtual std::shared_ptr<ProjectileEntity> GetProjectile() const;
 private:
-    float m_Speed{150};
-    float m_XMin{0};
-    float m_XMax{0};
+    double m_Speed{150};
+    double m_XMin{0};
+    double m_XMax{0};
 };

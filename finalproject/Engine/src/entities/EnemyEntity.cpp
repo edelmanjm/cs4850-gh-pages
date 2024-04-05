@@ -19,8 +19,7 @@ void EnemyEntity::AddRequired(SDL_FRect transform, SDL_Renderer* renderer) {
     AddComponent(col);
 
     std::shared_ptr<ProjectileEntity> projectile = std::make_shared<ProjectileEntity>();
-    projectile->AddRequired({20.0f, 20.0f, 32.0f, 32.0f}, renderer);
-    projectile->GetTransform()->m_Rectangle.w = 24.0f;
+    projectile->AddRequired({20.0f, 20.0f, 44.0f, 32.0f}, renderer);
     AddChild(projectile);
 }
 
@@ -38,15 +37,15 @@ void EnemyEntity::Update(float deltaTime) {
     auto transform = GetComponent<TransformComponent>(ComponentType::TransformComponent).value();
 
     if (m_XPositiveDirection) {
-        transform->m_Rectangle.x = transform->m_Rectangle.x + m_Speed * deltaTime;
+        transform->SetX(transform->GetX() + m_Speed * deltaTime);
         m_Offset += m_Speed * deltaTime;
     } else {
-        transform->m_Rectangle.x = transform->m_Rectangle.x - m_Speed * deltaTime;
+        transform->SetX(transform->GetX() - m_Speed * deltaTime);
         m_Offset -= m_Speed * deltaTime;
     }
 
     if (IsRenderable()) {
-        GetProjectile()->Launch(transform->m_Rectangle.x, transform->m_Rectangle.y, 200, m_MinLaunchTime);
+        GetProjectile()->Launch(transform->GetX(), transform->GetY(), 200, m_MinLaunchTime);
     }
 
     for (auto& [key, value] : m_Components) {

@@ -10,7 +10,7 @@ public:
 
     void Update(float deltaTime) override;
 
-    static bool Intersects(std::shared_ptr<CollidingRectangleEntity> foo, std::shared_ptr<CollidingRectangleEntity> bar);
+    static bool Intersects(const std::shared_ptr<CollidingRectangleEntity>& foo, const std::shared_ptr<CollidingRectangleEntity>& bar);
 
 public:
     // Eh maybe I'll put this in a struct later

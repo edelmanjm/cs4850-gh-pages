@@ -22,7 +22,7 @@ public:
     static bool Intersects(std::shared_ptr<Collision2DComponent> foo, std::shared_ptr<Collision2DComponent> bar);
 
 private:
-    SDL_FRect& getCollisionBox();
+    SDL_FRect getCollisionBox();
 
 private:
 //    SDL_FRect m_Rectangle;

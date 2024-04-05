@@ -23,5 +23,5 @@ void TextEntity::Render(SDL_Renderer* renderer) {
         m_FontLoaded = true;
     }
 
-    FC_Draw(m_Font, renderer, GetTransform()->m_Rectangle.x, GetTransform()->m_Rectangle.y, m_Text.c_str());
+    FC_Draw(m_Font, renderer, GetTransform()->GetX(), GetTransform()->GetY(), m_Text.c_str());
 }

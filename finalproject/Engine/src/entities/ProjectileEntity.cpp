@@ -23,8 +23,7 @@ void ProjectileEntity::Launch(float x, float y, float speed, uint64_t minLaunchT
     if (SDL_GetTicks() - timeSinceLastLaunch > minLaunchTime) {
         auto transform = GetComponent<TransformComponent>(ComponentType::TransformComponent).value();
         auto col = GetComponent<Collision2DComponent>(ComponentType::Collision2DComponent).value();
-        transform->m_Rectangle.x = x;
-        transform->m_Rectangle.y = y;
+        transform->m_Rectangle.moveTo(x, y);
 
         timeSinceLastLaunch = SDL_GetTicks();
         m_IsFiring = true;
@@ -44,12 +43,12 @@ void ProjectileEntity::Update(float deltaTime) {
 
     if (m_IsFiring) {
         SetRenderable(true);
-        transform->m_Rectangle.y = transform->m_Rectangle.y + m_Speed * deltaTime;
+        transform->m_Rectangle.translate(0, m_Speed * deltaTime);
     } else {
         SetRenderable(false);
     }
 
-    if (transform->m_Rectangle.y < 0.0f || transform->m_Rectangle.y > 480.0f) {
+    if (transform->GetY() < 0.0 || transform->GetY() > 480.0f) {
         m_IsFiring = false;
     }
 

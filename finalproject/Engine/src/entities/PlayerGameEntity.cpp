@@ -11,7 +11,7 @@ PlayerGameEntity::PlayerGameEntity() = default;
 void PlayerGameEntity::AddRequired(SDL_FRect transform, SDL_Renderer* renderer, uint32_t screenWidth) {
     GameEntity::AddRequired(transform);
 
-    m_XMax = static_cast<float>(screenWidth) - GetTransform()->m_Rectangle.w;
+    m_XMax = static_cast<double>(screenWidth) - GetTransform()->m_Rectangle.width();
 
     std::shared_ptr<TextureComponent> characterTexture = std::make_shared<TextureComponent>();
     characterTexture->CreateTextureComponent(renderer, "../assets/hero.bmp");
@@ -22,7 +22,6 @@ void PlayerGameEntity::AddRequired(SDL_FRect transform, SDL_Renderer* renderer, 
 
     std::shared_ptr<ProjectileEntity> projectile = std::make_shared<ProjectileEntity>();
     projectile->AddRequired(transform, renderer);
-    projectile->GetTransform()->m_Rectangle.w = 24.0f;
     AddChild(projectile);
 
     std::shared_ptr<InputComponent> inputController =
@@ -34,16 +33,16 @@ void PlayerGameEntity::AddRequired(SDL_FRect transform, SDL_Renderer* renderer, 
         auto transform = ge->GetComponent<TransformComponent>(ComponentType::TransformComponent).value();
 
         if (keys[SDL_SCANCODE_LEFT]) {
-            transform->m_Rectangle.x = std::max(m_XMin, transform->m_Rectangle.x - m_Speed * deltaTime);
+            transform->SetX(std::max(m_XMin, transform->GetX() - m_Speed * deltaTime));
         } else if (keys[SDL_SCANCODE_RIGHT]) {
-            transform->m_Rectangle.x = std::min(m_XMax, transform->m_Rectangle.x + m_Speed * deltaTime);
+            transform->SetX(std::min(m_XMax, transform->GetX() + m_Speed * deltaTime));
         }
 
         if (keys[SDL_SCANCODE_UP]) {
             SDL_Log("Launching!");
             // Don't like dynamic casts, but we'll do this for now until we either implement CRTP for entities or go another
             // route; don't want to jump ahead in the course and have to redo a ton of work
-            projectile->Launch(transform->m_Rectangle.x, transform->m_Rectangle.y, -200);
+            projectile->Launch(transform->GetX(), transform->GetY(), -200);
         }
     };
     inputController->SetOnKeypress(inputHandler);
