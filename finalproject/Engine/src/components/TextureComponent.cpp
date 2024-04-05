@@ -2,8 +2,7 @@
 #include <components/TextureComponent.h>
 #include <components/TransformComponent.h>
 #include <entities/GameEntity.h>
-
-#include <utility>
+#include <utility/Geometry.h>
 
 TextureComponent::TextureComponent() = default;
 
@@ -18,14 +17,11 @@ ComponentType TextureComponent::GetType() { return ComponentType::TextureCompone
 void TextureComponent::Input(float deltaTime) {}
 void TextureComponent::Update(float deltaTime) {}
 void TextureComponent::Render(SDL_Renderer* renderer) {
+    auto ge = GetGameEntity();
+    auto transform = Geometry::AsSDL(ge->GetTransform()->m_Rectangle).value();
     if (nullptr == m_Texture) {
-        auto ge = GetGameEntity();
-        auto transform = ge->GetTransform()->AsSDL().value();
         SDL_RenderRect(renderer, &transform);
     } else {
-        auto ge = GetGameEntity();
-        auto transform = ge->GetTransform()->AsSDL().value();
-
         SDL_RenderTexture(renderer, m_Texture.get(), nullptr, &transform);
     }
 }

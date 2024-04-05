@@ -1,6 +1,7 @@
 #include <components/Collision2DComponent.h>
 #include <components/TextureComponent.h>
 #include <entities/ProjectileEntity.h>
+#include <utility/Geometry.h>
 
 ProjectileEntity::ProjectileEntity() {
     timeSinceLastLaunch = SDL_GetTicks();
@@ -39,16 +40,16 @@ void ProjectileEntity::Input(float deltaTime) {
 }
 
 void ProjectileEntity::Update(float deltaTime) {
-    auto transform = GetComponent<TransformComponent>(ComponentType::TransformComponent).value();
+    auto& transform = GetComponent<TransformComponent>(ComponentType::TransformComponent).value()->m_Rectangle;
 
     if (m_IsFiring) {
         SetRenderable(true);
-        transform->m_Rectangle.translate(0, m_Speed * deltaTime);
+        transform.translate(0, m_Speed * deltaTime);
     } else {
         SetRenderable(false);
     }
 
-    if (transform->GetY() < 0.0 || transform->GetY() > 480.0f) {
+    if (Geometry::GetY(transform) < 0.0 || Geometry::GetY(transform) > 480.0f) {
         m_IsFiring = false;
     }
 

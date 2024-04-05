@@ -55,6 +55,7 @@ set(PYBIND11_USE_SMART_HOLDER_AS_DEFAULT ON)
 add_library(rose-lib
         src/Application.cpp
         src/ResourceManager.cpp
+        src/Renderer.cpp
         src/components/Component.cpp
         src/components/Collision2DComponent.cpp
         src/components/InputComponent.cpp
@@ -65,11 +66,11 @@ add_library(rose-lib
         src/entities/GameEntity.cpp
         src/entities/PlayerGameEntity.cpp
         src/entities/ProjectileEntity.cpp
+        src/entities/TextEntity.cpp
         src/scenes/SpaceInvaders.cpp
         src/scenes/Scene.cpp
         src/scenes/PythonScene.cpp
-        src/Renderer.cpp
-        src/entities/TextEntity.cpp)
+        src/utility/Geometry.cpp)
 
 target_include_directories(rose-lib PUBLIC include)
 target_include_directories(rose-lib PUBLIC ${homog2d_SOURCE_DIR})

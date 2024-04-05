@@ -1,6 +1,7 @@
 #include <components/Collision2DComponent.h>
 #include <components/TextureComponent.h>
 #include <entities/EnemyEntity.h>
+#include <utility/Geometry.h>
 
 EnemyEntity::EnemyEntity() {
     // Set a random launch time for the enemies
@@ -34,18 +35,19 @@ void EnemyEntity::Update(float deltaTime) {
     }
 
     // Keeping track of our projectile game logic
-    auto transform = GetComponent<TransformComponent>(ComponentType::TransformComponent).value();
+    auto& transform = GetComponent<TransformComponent>(ComponentType::TransformComponent).value()->m_Rectangle;
 
     if (m_XPositiveDirection) {
-        transform->SetX(transform->GetX() + m_Speed * deltaTime);
+        transform.translate(m_Speed * deltaTime, 0);
         m_Offset += m_Speed * deltaTime;
     } else {
-        transform->SetX(transform->GetX() - m_Speed * deltaTime);
+        transform.translate(-m_Speed * deltaTime, 0);
         m_Offset -= m_Speed * deltaTime;
     }
 
     if (IsRenderable()) {
-        GetProjectile()->Launch(transform->GetX(), transform->GetY(), 200, m_MinLaunchTime);
+        GetProjectile()->Launch(static_cast<float>(Geometry::GetX(transform)),
+                                static_cast<float>(Geometry::GetY(transform)), 200, m_MinLaunchTime);
     }
 
     for (auto& [key, value] : m_Components) {

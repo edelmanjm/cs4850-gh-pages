@@ -21,6 +21,9 @@ PYBIND11_MODULE(rose, m) {
     m.doc() = "ROSE: Really Open Simple Engine";
     // Could do whyengine or something else punny, but eh
 
+    py::class_<h2d::FRect>(m, "FRect")
+        .def(py::init<double, double, double, double>());
+
     py::class_<SDL_FRect>(m, "SDL_FRect")
         .def(py::init<float, float, float, float>())
         .def_readwrite("x", &SDL_FRect::x)
@@ -52,7 +55,7 @@ PYBIND11_MODULE(rose, m) {
         .def("get_transform", [](GameEntity& g) {
             return g.GetTransform()->m_Rectangle;
         })
-        .def("set_transform", [](GameEntity& g, SDL_FRect r) {
+        .def("set_transform", [](GameEntity& g, h2d::FRect r) {
             g.GetTransform()->m_Rectangle = r;
         });
     py::class_<CollidingRectangleEntity,

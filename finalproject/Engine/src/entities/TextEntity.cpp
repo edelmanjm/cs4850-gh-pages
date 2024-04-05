@@ -1,9 +1,8 @@
 #include <SDL3_ttf/SDL_ttf.h>
 
+#include <entities/CollidingRectangleEntity.h>
 #include <entities/TextEntity.h>
-
-#include <utility>
-#include "entities/CollidingRectangleEntity.h"
+#include <utility/Geometry.h>
 
 TextEntity::TextEntity(std::string fontPath, uint32_t fontSize, SDL_Color fontColor)
     : m_FontPath(std::move(fontPath))
@@ -23,5 +22,6 @@ void TextEntity::Render(SDL_Renderer* renderer) {
         m_FontLoaded = true;
     }
 
-    FC_Draw(m_Font, renderer, GetTransform()->GetX(), GetTransform()->GetY(), m_Text.c_str());
+    FC_Draw(m_Font, renderer, static_cast<float>(Geometry::GetX(GetTransform()->m_Rectangle)),
+            static_cast<float>(Geometry::GetY(GetTransform()->m_Rectangle)), m_Text.c_str());
 }

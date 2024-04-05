@@ -3,6 +3,7 @@
 #include <components/TextureComponent.h>
 #include <entities/PlayerGameEntity.h>
 #include <entities/ProjectileEntity.h>
+#include <utility/Geometry.h>
 
 #include <algorithm>
 
@@ -24,27 +25,28 @@ void PlayerGameEntity::AddRequired(SDL_FRect transform, SDL_Renderer* renderer, 
     projectile->AddRequired(transform, renderer);
     AddChild(projectile);
 
-    std::shared_ptr<InputComponent> inputController =
-        std::make_shared<InputComponent>();
+    std::shared_ptr<InputComponent> inputController = std::make_shared<InputComponent>();
     std::function<void(float, const std::vector<uint8_t> keys)> inputHandler =
         [inputController, projectile, this](float deltaTime, const std::vector<uint8_t> keys) {
-        // For now -- keep a reference to our first sprite
-        auto ge = inputController->GetGameEntity();
-        auto transform = ge->GetComponent<TransformComponent>(ComponentType::TransformComponent).value();
+            // For now -- keep a reference to our first sprite
+            auto ge = inputController->GetGameEntity();
+            auto& transform =
+                ge->GetComponent<TransformComponent>(ComponentType::TransformComponent).value()->m_Rectangle;
 
-        if (keys[SDL_SCANCODE_LEFT]) {
-            transform->SetX(std::max(m_XMin, transform->GetX() - m_Speed * deltaTime));
-        } else if (keys[SDL_SCANCODE_RIGHT]) {
-            transform->SetX(std::min(m_XMax, transform->GetX() + m_Speed * deltaTime));
-        }
+            if (keys[SDL_SCANCODE_LEFT]) {
+                Geometry::SetX(transform, std::max(m_XMin, Geometry::GetX(transform) - m_Speed * deltaTime));
+            } else if (keys[SDL_SCANCODE_RIGHT]) {
+                Geometry::SetX(transform, std::min(m_XMax, Geometry::GetX(transform) + m_Speed * deltaTime));
+            }
 
-        if (keys[SDL_SCANCODE_UP]) {
-            SDL_Log("Launching!");
-            // Don't like dynamic casts, but we'll do this for now until we either implement CRTP for entities or go another
-            // route; don't want to jump ahead in the course and have to redo a ton of work
-            projectile->Launch(transform->GetX(), transform->GetY(), -200);
-        }
-    };
+            if (keys[SDL_SCANCODE_UP]) {
+                SDL_Log("Launching!");
+                // Don't like dynamic casts, but we'll do this for now until we either implement CRTP for entities or go
+                // another route; don't want to jump ahead in the course and have to redo a ton of work
+                projectile->Launch(static_cast<float>(Geometry::GetX(transform)),
+                                   static_cast<float>(Geometry::GetY(transform)), -200);
+            }
+        };
     inputController->SetOnKeypress(inputHandler);
     AddComponent(inputController);
 }
