@@ -1,0 +1,64 @@
+#include <components/Collision2DComponent.h>
+#include <entities/GameEntity.h>
+
+GameEntity::GameEntity() = default;
+
+GameEntity::~GameEntity() = default;
+
+void GameEntity::AddRequired(SDL_FRect transform) {
+    std::shared_ptr<TransformComponent> t = std::make_shared<TransformComponent>(transform);
+    AddComponent<TransformComponent>(t);
+}
+
+void GameEntity::Input(float deltaTime) {
+    for (auto& [key, value] : m_Components) {
+        m_Components[key]->Input(deltaTime);
+    }
+
+    for (auto& child : m_Children) {
+        child->Input(deltaTime);
+    }
+}
+
+void GameEntity::Update(float deltaTime) {
+    for (auto& [key, value] : m_Components) {
+        m_Components[key]->Update(deltaTime);
+    }
+
+    for (auto& child : m_Children) {
+        child->Update(deltaTime);
+    }
+}
+
+void GameEntity::Render(SDL_Renderer* renderer) {
+    if (IsRenderable()) {
+        for (auto& [key, value] : m_Components) {
+            m_Components[key]->Render(renderer);
+        }
+    }
+
+    for (auto& child : m_Children) {
+        child->Render(renderer);
+    }
+}
+
+bool GameEntity::Intersects(const std::shared_ptr<GameEntity>& e) {
+    auto source = e->GetComponent<Collision2DComponent>(ComponentType::Collision2DComponent).value();
+    auto us = GetComponent<Collision2DComponent>(ComponentType::Collision2DComponent).value();
+    return Collision2DComponent::Intersects(us, source);
+}
+
+void GameEntity::AddChild(std::shared_ptr<GameEntity> child) {
+    m_Children.push_back(child);
+}
+
+std::shared_ptr<GameEntity> GameEntity::GetChildAtIndex(size_t i) {
+    return m_Children.at(i);
+}
+
+std::shared_ptr<TransformComponent> GameEntity::GetTransform(){
+    return GetComponent<TransformComponent>(ComponentType::TransformComponent).value();
+}
+
+bool GameEntity::IsRenderable() const { return m_Renderable; }
+void GameEntity::SetRenderable(bool mRenderable) { m_Renderable = mRenderable; }

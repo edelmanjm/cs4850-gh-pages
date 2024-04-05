@@ -3,7 +3,7 @@
   <component name="Black">
     <option name="sdkName" value="Python 3.12" />
   </component>
-  <component name="CMakeWorkspace" PROJECT_DIR="$PROJECT_DIR$/Assignment06_Scripting/part0/EngineLibrary">
+  <component name="CMakeWorkspace" PROJECT_DIR="$PROJECT_DIR$/finalproject/Engine">
     <contentRoot DIR="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownProjectSettings" wasCopied="true">
