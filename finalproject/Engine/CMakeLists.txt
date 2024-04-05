@@ -9,27 +9,33 @@ find_package(Python 3.12 EXACT REQUIRED COMPONENTS Interpreter Development.Modul
 set(PYBIND11_PYTHON_VERSION 3.12 CACHE STRING "")
 
 CPMAddPackage(
+        NAME homog2d
+        GITHUB_REPOSITORY skramm/homog2d
+        GIT_TAG master # No release with SVG support yet
+)
+
+CPMAddPackage(
         NAME SDL
         GITHUB_REPOSITORY libsdl-org/SDL
-        GIT_TAG main
+        GIT_TAG main # No release for SDL3 yet
 )
 
 CPMAddPackage(
         NAME SDL_ttf
         GITHUB_REPOSITORY libsdl-org/SDL_ttf
-        GIT_TAG main
+        GIT_TAG main # No release for SDL3 yet
 )
 
 CPMAddPackage(
         NAME SDL_FontCache
         GITHUB_REPOSITORY edelmanjm/SDL_FontCache
-        GIT_TAG master
+        GIT_TAG master # I promise I won't screw it up
 )
 
 CPMAddPackage(
         NAME pybind11
         GITHUB_REPOSITORY pybind/pybind11
-        GIT_TAG smart_holder
+        GIT_TAG smart_holder # This branch doesn't get releases
 )
 
 #CPMAddPackage(
@@ -45,17 +51,6 @@ CPMAddPackage(
 #)
 
 set(PYBIND11_USE_SMART_HOLDER_AS_DEFAULT ON)
-
-include_directories(include)
-
-link_libraries(
-        SDL3::SDL3
-        SDL3_ttf::SDL3_ttf
-        SDL_FontCache::SDL_FontCache
-#        units
-#        Boost::algorithm
-#        Boost::geometry
-)
 
 add_library(rose-lib
         src/Application.cpp
@@ -75,6 +70,18 @@ add_library(rose-lib
         src/scenes/PythonScene.cpp
         src/Renderer.cpp
         src/entities/TextEntity.cpp)
+
+target_include_directories(rose-lib PUBLIC include)
+target_include_directories(rose-lib PUBLIC ${homog2d_SOURCE_DIR})
+
+target_link_libraries(rose-lib PUBLIC
+        SDL3::SDL3
+        SDL3_ttf::SDL3_ttf
+        SDL_FontCache::SDL_FontCache
+#        units
+#        Boost::algorithm
+#        Boost::geometry
+)
 
 pybind11_add_module(rose
         src/Bindings.cpp)
