@@ -1,4 +1,5 @@
 #include <pybind11/functional.h>
+#include <pybind11/operators.h>
 #include <pybind11/smart_holder.h>
 #include <pybind11/stl.h>
 
@@ -29,6 +30,12 @@ PYBIND11_MODULE(rose, m) {
     //        .def_property("y", &h2d::Point2d::getX, [](h2d::Point2d& p, double y) {
     //            p.translate(0, y);
     //        });
+
+    py::class_<h2d::Homogr>(m, "Homogr")
+        .def(py::init<>())
+        .def("set_rotation", &h2d::Homogr::setRotation<double>)
+        .def("add_rotation", &h2d::Homogr::addRotation<double>)
+        .def(py::self * h2d::FRect());
 
     py::class_<h2d::FRect>(m, "FRect")
         .def(py::init<double, double, double, double>())
@@ -95,6 +102,7 @@ PYBIND11_MODULE(rose, m) {
              })
         .def("get_velocity",
              [](CollidingRectangleEntity& cre) { return py::make_tuple(cre.m_VelocityX, cre.m_VelocityY); })
+        .def_readwrite("heading", &CollidingRectangleEntity::m_Heading)
         .def("add_input_handler", &CollidingRectangleEntity::AddInputHandler)
         .def_static("intersects", &CollidingRectangleEntity::Intersects);
     py::class_<TextEntity, GameEntity, PYBIND11_SH_DEF(TextEntity)>(m, "TextEntity")

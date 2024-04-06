@@ -16,4 +16,6 @@ public:
     // Eh maybe I'll put this in a struct later
     float m_VelocityX;
     float m_VelocityY;
+    // In radians
+    float m_Heading;
 };

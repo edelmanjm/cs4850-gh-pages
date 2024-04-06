@@ -8,6 +8,7 @@ CollidingRectangleEntity::CollidingRectangleEntity() { SetRenderable(true); }
 void CollidingRectangleEntity::AddRequired(SDL_FRect transform) {
     GameEntity::AddRequired(transform);
 
+    // TODO render rectangle with entity's heading
     auto c = std::make_shared<Collision2DComponent>(true);
     AddComponent<Collision2DComponent>(c);
 }
