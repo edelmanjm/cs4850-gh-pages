@@ -15,7 +15,7 @@ endif()
 
 CPMAddPackage(
         NAME homog2d
-        GITHUB_REPOSITORY edelmanjm/homog2d
+        GITHUB_REPOSITORY skramm/homog2d
         GIT_TAG master # No release with SVG support yet
 )
 
