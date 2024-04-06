@@ -8,6 +8,11 @@ add_subdirectory(cmake)
 find_package(Python 3.12 EXACT REQUIRED COMPONENTS Interpreter Development.Module)
 set(PYBIND11_PYTHON_VERSION 3.12 CACHE STRING "")
 
+# For SDL_image
+if (APPLE)
+    enable_language(OBJC)
+endif()
+
 CPMAddPackage(
         NAME homog2d
         GITHUB_REPOSITORY edelmanjm/homog2d
@@ -23,6 +28,12 @@ CPMAddPackage(
 CPMAddPackage(
         NAME SDL_ttf
         GITHUB_REPOSITORY libsdl-org/SDL_ttf
+        GIT_TAG main # No release for SDL3 yet
+)
+
+CPMAddPackage(
+        NAME SDL_image
+        GITHUB_REPOSITORY libsdl-org/SDL_image
         GIT_TAG main # No release for SDL3 yet
 )
 
@@ -78,6 +89,7 @@ target_include_directories(rose-lib PUBLIC ${homog2d_SOURCE_DIR})
 target_link_libraries(rose-lib PUBLIC
         SDL3::SDL3
         SDL3_ttf::SDL3_ttf
+        SDL3_image::SDL3_image
         SDL_FontCache::SDL_FontCache
 #        units
 #        Boost::algorithm
