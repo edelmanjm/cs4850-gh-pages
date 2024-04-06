@@ -1,3 +1,4 @@
+#include <ResourceManager.h>
 #include <components/Collision2DComponent.h>
 #include <components/TextureComponent.h>
 #include <entities/invaders/EnemyEntity.h>
@@ -12,8 +13,9 @@ void EnemyEntity::AddRequired(SDL_FRect transform, SDL_Renderer* renderer) {
     GameEntity::AddRequired(transform);
 
     // Add a texture component to our enemy
-    std::shared_ptr<TextureComponent> tex = std::make_shared<TextureComponent>();
-    tex->CreateTextureComponent(renderer, "../assets/enemy.bmp");
+
+    std::shared_ptr<TextureComponent> tex =
+        std::make_shared<TextureComponent>(ResourceManager::Instance().LoadTexture(renderer, "../assets/enemy.bmp"));
     AddComponent(tex);
 
     std::shared_ptr<Collision2DComponent> col = std::make_shared<Collision2DComponent>();

@@ -7,9 +7,7 @@
 
 class TextureComponent : public Component {
 public:
-    TextureComponent();
-
-    void CreateTextureComponent(SDL_Renderer* renderer, std::string filepath);
+    TextureComponent(std::shared_ptr<SDL_Texture> texture);
 
     ~TextureComponent() override;
 

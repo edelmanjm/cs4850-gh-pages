@@ -1,14 +1,11 @@
-#include <ResourceManager.h>
 #include <components/TextureComponent.h>
 #include <components/TransformComponent.h>
 #include <entities/GameEntity.h>
 #include <utility/Geometry.h>
 
-TextureComponent::TextureComponent() = default;
+#include <utility>
 
-void TextureComponent::CreateTextureComponent(SDL_Renderer* renderer, std::string filepath) {
-    m_Texture = ResourceManager::Instance().LoadTexture(renderer, std::move(filepath));
-}
+TextureComponent::TextureComponent(std::shared_ptr<SDL_Texture> texture) : m_Texture(std::move(texture)) {};
 
 TextureComponent::~TextureComponent() = default;
 

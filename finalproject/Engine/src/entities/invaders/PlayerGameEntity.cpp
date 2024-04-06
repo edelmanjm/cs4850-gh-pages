@@ -1,3 +1,4 @@
+#include <ResourceManager.h>
 #include <components/Collision2DComponent.h>
 #include <components/InputComponent.h>
 #include <components/TextureComponent.h>
@@ -14,8 +15,8 @@ void PlayerGameEntity::AddRequired(SDL_FRect transform, SDL_Renderer* renderer, 
 
     m_XMax = static_cast<double>(screenWidth) - GetTransform()->m_Rectangle.width();
 
-    std::shared_ptr<TextureComponent> characterTexture = std::make_shared<TextureComponent>();
-    characterTexture->CreateTextureComponent(renderer, "../assets/hero.bmp");
+    std::shared_ptr<TextureComponent> characterTexture =
+        std::make_shared<TextureComponent>(ResourceManager::Instance().LoadTexture(renderer, "../assets/hero.bmp"));
     AddComponent(characterTexture);
 
     std::shared_ptr<Collision2DComponent> col = std::make_shared<Collision2DComponent>();

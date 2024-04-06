@@ -1,3 +1,4 @@
+#include <ResourceManager.h>
 #include <components/Collision2DComponent.h>
 #include <components/TextureComponent.h>
 #include <entities/ProjectileEntity.h>
@@ -11,8 +12,8 @@ ProjectileEntity::ProjectileEntity() {
 void ProjectileEntity::AddRequired(SDL_FRect transform, SDL_Renderer* renderer) {
     GameEntity::AddRequired(transform);
 
-    std::shared_ptr<TextureComponent> texture = std::make_shared<TextureComponent>();
-    texture->CreateTextureComponent(renderer, "../assets/rocket.bmp");
+    std::shared_ptr<TextureComponent> texture =
+        std::make_shared<TextureComponent>(ResourceManager::Instance().LoadTexture(renderer, "../assets/rocket.bmp"));
     AddComponent(texture);
 
     std::shared_ptr<Collision2DComponent> col = std::make_shared<Collision2DComponent>();
