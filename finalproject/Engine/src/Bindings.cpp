@@ -45,6 +45,7 @@ PYBIND11_MODULE(rose, m) {
         .def("translate", [](h2d::FRect& self, double x, double y) { self.translate(x, y); })
         // IDK why this doesn't work either
         //        .def("intersects", &h2d::FRect::intersects<h2d::FRect>)
+        .def("move_to", [](h2d::FRect& self, double x, double y) { self.moveTo(x, y); })
         .def("intersects", [](h2d::FRect& self, h2d::FRect& other) { return self.intersects(other)(); });
 
     py::class_<SDL_FRect>(m, "SDL_FRect")

@@ -5,8 +5,8 @@ TransformComponent::TransformComponent(h2d::FRect rectangle) : m_Rectangle(recta
 TransformComponent::TransformComponent(SDL_FRect rectangle) {
     // h2d does not allow zero-width rectangles
     float fudgeFactor = 0.001;
-    float fudgedWidth = rectangle.w == 0 ? fudgeFactor : 0;
-    float fudgedHeight = rectangle.h == 0 ? fudgeFactor : 0;
+    float fudgedWidth = rectangle.w == 0 ? fudgeFactor : rectangle.w;
+    float fudgedHeight = rectangle.h == 0 ? fudgeFactor : rectangle.h;
     m_Rectangle.set(rectangle.x, rectangle.y, rectangle.x + fudgedWidth, rectangle.y + fudgedHeight);
 }
 
