@@ -12,11 +12,13 @@ void Collision2DComponent::Update(float deltaTime) {}
 
 void Collision2DComponent::Render(SDL_Renderer* renderer) {
     if (m_ShowBoundingBox) {
-        auto collisionBox = getCollisionBox();
-        auto converted = Geometry::AsSDL(collisionBox);
-        if (converted) {
-            SDL_RenderFillRect(renderer, &converted.value());
-        }
+        std::array<SDL_Vertex, 4> vertices{};
+        std::array<h2d::Point2d, 4> points = getCollisionBox().get4Pts();
+        std::transform(points.begin(), points.end(), vertices.begin(), [](h2d::Point2d& pt) {
+            return SDL_Vertex{static_cast<float>(pt.getX()), static_cast<float>(pt.getY()), 255, 255, 255, 255};
+        });
+        auto indices = std::array{0, 1, 2, 0, 2, 3};
+        SDL_RenderGeometry(renderer, nullptr, vertices.data(), vertices.size(), indices.data(), indices.size());
     }
 }
 
