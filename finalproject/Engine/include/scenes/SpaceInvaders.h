@@ -1,5 +1,7 @@
 #pragma once
 
+#include <entities/invaders/EnemyEntity.h>
+#include <entities/invaders/PlayerGameEntity.h>
 #include <scenes/Scene.h>
 
 class SpaceInvaders : public Scene {

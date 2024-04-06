@@ -6,9 +6,6 @@
 #include <memory>
 #include <vector>
 
-#include <entities/EnemyEntity.h>
-#include <entities/PlayerGameEntity.h>
-
 class Scene {
 public:
     explicit Scene(SDL_Renderer* renderer);

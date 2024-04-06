@@ -62,10 +62,10 @@ add_library(rose-lib
         src/components/TextureComponent.cpp
         src/components/TransformComponent.cpp
         src/entities/CollidingRectangleEntity.cpp
-        src/entities/EnemyEntity.cpp
         src/entities/GameEntity.cpp
-        src/entities/PlayerGameEntity.cpp
         src/entities/ProjectileEntity.cpp
+        src/entities/invaders/EnemyEntity.cpp
+        src/entities/invaders/PlayerGameEntity.cpp
         src/entities/TextEntity.cpp
         src/scenes/SpaceInvaders.cpp
         src/scenes/Scene.cpp

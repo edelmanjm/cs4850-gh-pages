@@ -1,6 +1,6 @@
-#include <scenes/SpaceInvaders.h>
 #include <components/InputComponent.h>
-#include <entities/PlayerGameEntity.h>
+#include <entities/invaders/PlayerGameEntity.h>
+#include <scenes/SpaceInvaders.h>
 
 SpaceInvaders::SpaceInvaders(SDL_Renderer* renderer, uint32_t width) : Scene(renderer) {
     // Initialize all the enemies

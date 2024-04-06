@@ -1,8 +1,8 @@
 #include <components/Collision2DComponent.h>
 #include <components/InputComponent.h>
 #include <components/TextureComponent.h>
-#include <entities/PlayerGameEntity.h>
 #include <entities/ProjectileEntity.h>
+#include <entities/invaders/PlayerGameEntity.h>
 #include <utility/Geometry.h>
 
 #include <algorithm>

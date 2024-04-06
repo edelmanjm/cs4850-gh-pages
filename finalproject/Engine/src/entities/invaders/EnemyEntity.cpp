@@ -1,6 +1,6 @@
 #include <components/Collision2DComponent.h>
 #include <components/TextureComponent.h>
-#include <entities/EnemyEntity.h>
+#include <entities/invaders/EnemyEntity.h>
 #include <utility/Geometry.h>
 
 EnemyEntity::EnemyEntity() {

@@ -7,9 +7,9 @@
 
 #include <Renderer.h>
 #include <scenes/Scene.h>
-#include <entities/EnemyEntity.h>
 #include <entities/GameEntity.h>
-#include <entities/PlayerGameEntity.h>
+#include <entities/invaders/EnemyEntity.h>
+#include <entities/invaders/PlayerGameEntity.h>
 #include <entities/ProjectileEntity.h>
 
 class Application {
