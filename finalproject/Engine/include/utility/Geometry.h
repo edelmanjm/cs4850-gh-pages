@@ -14,6 +14,8 @@ public:
      */
     static std::optional<SDL_FRect> AsSDL(h2d::FRect& r);
 
+    static h2d::FRect AsH2D(SDL_FRect& r);
+
     /**
      * Compatibility method.
      * @return The x-coordinate of the top-left of the transformation.

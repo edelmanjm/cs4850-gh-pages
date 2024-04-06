@@ -7,6 +7,7 @@
 #include <components/InputComponent.h>
 #include <entities/TextEntity.h>
 #include <scenes/PythonScene.h>
+#include <utility/Geometry.h>
 
 namespace py = pybind11;
 
@@ -21,8 +22,30 @@ PYBIND11_MODULE(rose, m) {
     m.doc() = "ROSE: Really Open Simple Engine";
     // Could do whyengine or something else punny, but eh
 
+    py::class_<h2d::Point2d>(m, "Point2d").def(py::init<double, double>());
+    //        .def_property("x", &h2d::Point2d::getX, [](h2d::Point2d& p, double x) {
+    //            p.translate(x, 0);
+    //        })
+    //        .def_property("y", &h2d::Point2d::getX, [](h2d::Point2d& p, double y) {
+    //            p.translate(0, y);
+    //        });
+
     py::class_<h2d::FRect>(m, "FRect")
-        .def(py::init<double, double, double, double>());
+        .def(py::init<double, double, double, double>())
+        .def_property(
+            "x", [](h2d::FRect& self) { return Geometry::GetX(self); },
+            [](h2d::FRect& self, double x) { Geometry::SetX(self, x); })
+        .def_property(
+            "y", [](h2d::FRect& self) { return Geometry::GetY(self); },
+            [](h2d::FRect& self, double y) { Geometry::SetY(self, y); })
+        .def("set", &h2d::FRect::set<float>)
+        .def("get_pts", &h2d::FRect::getPts)
+        // IDK why this doesn't work but whatever
+        //        .def("translate", &h2d::FRect::translate<double, double>)
+        .def("translate", [](h2d::FRect& self, double x, double y) { self.translate(x, y); })
+        // IDK why this doesn't work either
+        //        .def("intersects", &h2d::FRect::intersects<h2d::FRect>)
+        .def("intersects", [](h2d::FRect& self, h2d::FRect& other) { return self.intersects(other)(); });
 
     py::class_<SDL_FRect>(m, "SDL_FRect")
         .def(py::init<float, float, float, float>())
@@ -42,33 +65,35 @@ PYBIND11_MODULE(rose, m) {
         .def_readwrite("b", &SDL_Color::b)
         .def_readwrite("a", &SDL_Color::a);
 
-    py::enum_<SDL_Scancode>(m, "SDL_Scancode")
-        .export_values();
+    py::enum_<SDL_Scancode>(m, "SDL_Scancode").export_values();
 
-    py::class_<Renderer, PYBIND11_SH_DEF(Renderer)>(m, "Renderer")
-        .def(py::init<int, int>());
+    py::class_<Geometry>(m, "Geometry")
+        .def_static("as_sdl", &Geometry::AsSDL)
+        .def_static("as_h2d", &Geometry::AsH2D);
+    //        .def_static("get_x", &Geometry::GetX)
+    //        .def_static("get_y", &Geometry::GetY)
+    //        .def_static("set_x", &Geometry::SetX)
+    //        .def_static("set_y", &Geometry::SetY);
+
+    py::class_<Renderer, PYBIND11_SH_DEF(Renderer)>(m, "Renderer").def(py::init<int, int>());
 
     // Using the first method of automatic downcasting
     // See https://pybind11.readthedocs.io/en/stable/classes.html#inheritance-and-automatic-downcasting
 
-    py::class_<GameEntity, PYBIND11_SH_DEF(GameEntity)> (m, "GameEntity")
-        .def("get_transform", [](GameEntity& g) {
-            return g.GetTransform()->m_Rectangle;
-        })
-        .def("set_transform", [](GameEntity& g, h2d::FRect r) {
-            g.GetTransform()->m_Rectangle = r;
-        });
-    py::class_<CollidingRectangleEntity,
-               GameEntity, PYBIND11_SH_DEF(CollidingRectangleEntity)>(m, "CollidingRectangleEntity")
+    py::class_<GameEntity, PYBIND11_SH_DEF(GameEntity)>(m, "GameEntity")
+        .def("get_transform", [](GameEntity& g) { return g.GetTransform()->m_Rectangle; })
+        .def("set_transform", [](GameEntity& g, h2d::FRect r) { g.GetTransform()->m_Rectangle = r; });
+    py::class_<CollidingRectangleEntity, GameEntity, PYBIND11_SH_DEF(CollidingRectangleEntity)>(
+        m, "CollidingRectangleEntity")
         .def(py::init<>())
         .def("add_required", &CollidingRectangleEntity::AddRequired)
-        .def("set_velocity", [](CollidingRectangleEntity& cre, float x, float y) {
-            cre.m_VelocityX = x;
-            cre.m_VelocityY = y;
-        })
-        .def("get_velocity", [](CollidingRectangleEntity& cre) {
-            return py::make_tuple(cre.m_VelocityX, cre.m_VelocityY);
-        })
+        .def("set_velocity",
+             [](CollidingRectangleEntity& cre, float x, float y) {
+                 cre.m_VelocityX = x;
+                 cre.m_VelocityY = y;
+             })
+        .def("get_velocity",
+             [](CollidingRectangleEntity& cre) { return py::make_tuple(cre.m_VelocityX, cre.m_VelocityY); })
         .def("add_input_handler", &CollidingRectangleEntity::AddInputHandler)
         .def_static("intersects", &CollidingRectangleEntity::Intersects);
     py::class_<TextEntity, GameEntity, PYBIND11_SH_DEF(TextEntity)>(m, "TextEntity")

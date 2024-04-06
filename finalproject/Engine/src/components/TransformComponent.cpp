@@ -3,7 +3,11 @@
 TransformComponent::TransformComponent(h2d::FRect rectangle) : m_Rectangle(rectangle) {}
 
 TransformComponent::TransformComponent(SDL_FRect rectangle) {
-    m_Rectangle.set(rectangle.x, rectangle.y, rectangle.x + rectangle.w, rectangle.y + rectangle.h);
+    // h2d does not allow zero-width rectangles
+    float fudgeFactor = 0.001;
+    float fudgedWidth = rectangle.w == 0 ? fudgeFactor : 0;
+    float fudgedHeight = rectangle.h == 0 ? fudgeFactor : 0;
+    m_Rectangle.set(rectangle.x, rectangle.y, rectangle.x + fudgedWidth, rectangle.y + fudgedHeight);
 }
 
 TransformComponent::~TransformComponent() = default;
