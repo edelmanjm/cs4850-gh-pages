@@ -13,22 +13,24 @@ void Collision2DComponent::Update(float deltaTime) {}
 void Collision2DComponent::Render(SDL_Renderer* renderer) {
     if (m_ShowBoundingBox) {
         auto collisionBox = getCollisionBox();
-        SDL_RenderFillRect(renderer, &collisionBox);
+        auto converted = Geometry::AsSDL(collisionBox);
+        if (converted) {
+            SDL_RenderFillRect(renderer, &converted.value());
+        }
     }
 }
 
 bool Collision2DComponent::Intersects(std::shared_ptr<Collision2DComponent> foo, std::shared_ptr<Collision2DComponent> bar) {
-    SDL_FRect result;
-    auto fooBox = foo->getCollisionBox();
-    auto barBox = bar->getCollisionBox();
-    return SDL_GetRectIntersectionFloat(&fooBox, &barBox, &result);
+    h2d::FRect fooBox = foo->getCollisionBox();
+    h2d::FRect barBox = bar->getCollisionBox();
+    return fooBox.intersects(barBox)();
 }
 
-SDL_FRect Collision2DComponent::getCollisionBox() {
+h2d::FRect Collision2DComponent::getCollisionBox() {
     // Default behavior for now is just to use the same box as the transformation; in the future, this could be updated
     // to allow for larger or smaller bounding boxes, as appropriate, and could also pull from fields of the
     // Collision2DComponent
-    return Geometry::AsSDL(GetGameEntity()->GetTransform()->m_Rectangle).value();
+    return GetGameEntity()->GetTransform()->m_Rectangle;
 }
 
 ComponentType Collision2DComponent::GetType() { return ComponentType::Collision2DComponent; }

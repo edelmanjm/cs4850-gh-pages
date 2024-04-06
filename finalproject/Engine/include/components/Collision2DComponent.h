@@ -1,7 +1,9 @@
 #pragma once
-#include <SDL3/SDL.h>
 #include <memory>
 #include <string>
+
+#include <SDL3/SDL.h>
+#include <homog2d.hpp>
 
 #include <components/Component.h>
 
@@ -22,7 +24,7 @@ public:
     static bool Intersects(std::shared_ptr<Collision2DComponent> foo, std::shared_ptr<Collision2DComponent> bar);
 
 private:
-    SDL_FRect getCollisionBox();
+    h2d::FRect getCollisionBox();
 
 private:
 //    SDL_FRect m_Rectangle;
