@@ -33,7 +33,8 @@ void CollidingRectangleEntity::Update(float deltaTime) {
 void CollidingRectangleEntity::Rotate(float rads) {
     auto transform = GetComponent<TransformComponent>(ComponentType::TransformComponent).value();
     m_Rotation += rads;
-    transform->m_Transform.addRotation(rads);
+    h2d::Homogr rotated = h2d::Homogr().addRotation(rads);
+    transform->m_Transform = transform->m_Transform * rotated;
 }
 
 float CollidingRectangleEntity::GetRotation() {

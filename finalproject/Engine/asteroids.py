@@ -18,11 +18,11 @@ class Asteroids:
         renderer = rose.Renderer(self.w, self.h)
 
         self.player_speed = 100
-        self.player_rotation_speed = math.radians(30)
+        self.player_rotation_speed = math.radians(180)
 
         self.player = rose.CollidingRectangleEntity()
         player_size = 4 * scaling
-        self.player.add_required(rose.SDL_FRect(self.w / 2, self.h / 2, player_size, player_size))
+        self.player.add_required(rose.FRect(-player_size / 2, -player_size / 2, player_size / 2, player_size / 2))
         self.player.add_input_handler(lambda delta_time, keys: self.on_input(delta_time, keys))
 
         self.scene = rose.PythonScene(renderer)
@@ -36,21 +36,19 @@ class Asteroids:
         self.application.set_scene(self.scene)
 
     def reset(self):
-        new_transform = self.player.get_transform()
-        new_transform.move_to(self.w / 2, self.h / 2)
-        self.player.set_transform(new_transform)
+        self.player.set_transform(rose.Homogr().set_translation(self.w / 2, self.h / 2))
         self.player.set_velocity(0, 0)
 
     def on_input(self, delta_time: float, keys: List[int]):
         # TODO either import the SDL_Scancode enum, or find an equivalent in python
         if keys[82]:
             velocity_x, velocity_y = self.player.get_velocity()
-            self.player.set_velocity(velocity_x + math.cos(self.player.heading) * self.player_speed * delta_time,
-                                     velocity_y + math.sin(self.player.heading) * self.player_speed * delta_time)
-        elif keys[79]:
-            self.player.heading += self.player_rotation_speed * delta_time
+            self.player.set_velocity(velocity_x + math.cos(self.player.get_rotation()) * self.player_speed * delta_time,
+                                     velocity_y + math.sin(self.player.get_rotation()) * self.player_speed * delta_time)
+        if keys[79]:
+            self.player.rotate(self.player_rotation_speed * delta_time)
         elif keys[80]:
-            self.player.heading -= self.player_rotation_speed * delta_time
+            self.player.rotate(-self.player_rotation_speed * delta_time)
 
     def on_update(self, delta_time: float):
         pass
