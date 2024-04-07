@@ -5,8 +5,8 @@ GameEntity::GameEntity() = default;
 
 GameEntity::~GameEntity() = default;
 
-void GameEntity::AddRequired(SDL_FRect transform) {
-    std::shared_ptr<TransformComponent> t = std::make_shared<TransformComponent>(transform);
+void GameEntity::AddRequired() {
+    std::shared_ptr<TransformComponent> t = std::make_shared<TransformComponent>();
     AddComponent<TransformComponent>(t);
 }
 

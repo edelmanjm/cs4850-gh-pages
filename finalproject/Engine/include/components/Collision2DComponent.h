@@ -9,7 +9,7 @@
 
 class Collision2DComponent : public Component {
 public:
-    Collision2DComponent(bool showBoundingBox = false);
+    Collision2DComponent(h2d::FRect box, bool showBoundingBox = false);
 
     ~Collision2DComponent() override;
 
@@ -21,12 +21,13 @@ public:
 
     void Render(SDL_Renderer* renderer) override;
 
-    static bool Intersects(std::shared_ptr<Collision2DComponent> foo, std::shared_ptr<Collision2DComponent> bar);
+    static bool Intersects(const std::shared_ptr<Collision2DComponent>& foo, std::shared_ptr<Collision2DComponent> bar);
 
 private:
-    h2d::FRect getCollisionBox();
+    h2d::CPolyline getCollisionQuad();
 
 private:
-//    SDL_FRect m_Rectangle;
+    h2d::FRect m_Box;
+
     bool m_ShowBoundingBox;
 };

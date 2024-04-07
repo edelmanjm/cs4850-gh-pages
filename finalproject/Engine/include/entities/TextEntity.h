@@ -8,7 +8,7 @@ class TextEntity : public GameEntity {
 public:
     TextEntity(std::string fontPath, uint32_t fontSize, SDL_Color fontColor);
     ~TextEntity();
-    void AddRequired(SDL_FRect transform) override;
+    void AddRequired() override;
 
     void Render(SDL_Renderer *renderer) override;
 

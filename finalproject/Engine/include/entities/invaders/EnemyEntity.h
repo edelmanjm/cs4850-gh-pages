@@ -7,14 +7,14 @@ class EnemyEntity : public GameEntity {
 
 private:
     bool m_XPositiveDirection{true};
-    float m_Offset{0.0f};
-    float m_Speed{100.0f};
+    double m_Offset{0.0};
+    double m_Speed{100.0};
     uint64_t m_MinLaunchTime{5000};
 
 public:
     explicit EnemyEntity();
     ~EnemyEntity() override = default;
-    void AddRequired(SDL_FRect transform, SDL_Renderer* renderer);
+    void AddRequired(h2d::FRect dims, SDL_Renderer* renderer);
 
     void Update(float deltaTime) override;
     void Render(SDL_Renderer* renderer) override;

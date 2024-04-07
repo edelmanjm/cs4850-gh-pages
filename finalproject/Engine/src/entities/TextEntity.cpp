@@ -14,7 +14,7 @@ TextEntity::TextEntity(std::string fontPath, uint32_t fontSize, SDL_Color fontCo
 
 TextEntity::~TextEntity() { FC_FreeFont(m_Font); }
 
-void TextEntity::AddRequired(SDL_FRect transform) { GameEntity::AddRequired(transform); }
+void TextEntity::AddRequired() { GameEntity::AddRequired(); }
 
 void TextEntity::Render(SDL_Renderer* renderer) {
     if (!m_FontLoaded) {
@@ -22,6 +22,8 @@ void TextEntity::Render(SDL_Renderer* renderer) {
         m_FontLoaded = true;
     }
 
-    FC_Draw(m_Font, renderer, static_cast<float>(Geometry::GetX(GetTransform()->m_Rectangle)),
-            static_cast<float>(Geometry::GetY(GetTransform()->m_Rectangle)), m_Text.c_str());
+    h2d::Point2d origin(0, 0);
+    h2d::Point2d transformed = GetTransform()->m_Transform * origin;
+    FC_Draw(m_Font, renderer, static_cast<float>(transformed.getX()), static_cast<float>(transformed.getY()),
+            m_Text.c_str());
 }

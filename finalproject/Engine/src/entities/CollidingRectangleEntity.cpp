@@ -5,11 +5,11 @@
 
 CollidingRectangleEntity::CollidingRectangleEntity() { SetRenderable(true); }
 
-void CollidingRectangleEntity::AddRequired(SDL_FRect transform) {
-    GameEntity::AddRequired(transform);
+void CollidingRectangleEntity::AddRequired(h2d::FRect dims) {
+    GameEntity::AddRequired();
 
     // TODO render rectangle with entity's heading
-    auto c = std::make_shared<Collision2DComponent>(true);
+    auto c = std::make_shared<Collision2DComponent>(dims, true);
     AddComponent<Collision2DComponent>(c);
 }
 
@@ -23,11 +23,21 @@ void CollidingRectangleEntity::AddInputHandler(
 void CollidingRectangleEntity::Update(float deltaTime) {
     auto transform = GetComponent<TransformComponent>(ComponentType::TransformComponent).value();
 
-    transform->m_Rectangle.translate(m_VelocityX * deltaTime, m_VelocityY * deltaTime);
+    transform->m_Transform.addTranslation(m_VelocityX * deltaTime, m_VelocityY * deltaTime);
 
     for (auto& [key, value] : m_Components) {
         m_Components[key]->Update(deltaTime);
     }
+}
+
+void CollidingRectangleEntity::Rotate(float rads) {
+    auto transform = GetComponent<TransformComponent>(ComponentType::TransformComponent).value();
+    m_Rotation += rads;
+    transform->m_Transform.addRotation(rads);
+}
+
+float CollidingRectangleEntity::GetRotation() {
+    return m_Rotation;
 }
 
 bool CollidingRectangleEntity::Intersects(const std::shared_ptr<CollidingRectangleEntity>& foo,

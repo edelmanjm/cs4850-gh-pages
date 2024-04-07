@@ -6,15 +6,9 @@
 class Geometry {
 
 public:
-    /**
-     * SDL_FRects must be axis-aligned, while h2d::FRects do not have to be. If the underlying rectangle is
-     * axis-aligned, this function returns the corresponding equivalent SDL_FRect. If it is not axis-aligned, then
-     * the underlying rectangle cannot be represented as an SDL_FRect, and this returns an empty optional.
-     * @return An SDL_FRect, or empty.
-     */
-    static std::optional<SDL_FRect> AsSDL(h2d::FRect& r);
+    static SDL_FRect AsSDL(h2d::FRect r);
 
-    static h2d::FRect AsH2D(SDL_FRect& r);
+    static h2d::FRect AsH2D(SDL_FRect r);
 
     /**
      * Compatibility method.

@@ -8,8 +8,7 @@
 
 class TransformComponent : public Component {
 public:
-    TransformComponent(h2d::FRect rectangle);
-    TransformComponent(SDL_FRect rectangle);
+    TransformComponent();
 
     ~TransformComponent() override;
 
@@ -22,5 +21,5 @@ public:
     void Render(SDL_Renderer* renderer) override;
 
 public:
-    h2d::FRect m_Rectangle;
+    h2d::Homogr m_Transform;
 };

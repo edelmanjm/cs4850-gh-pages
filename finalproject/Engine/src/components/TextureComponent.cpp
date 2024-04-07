@@ -5,7 +5,9 @@
 
 #include <utility>
 
-TextureComponent::TextureComponent(std::shared_ptr<SDL_Texture> texture) : m_Texture(std::move(texture)) {};
+TextureComponent::TextureComponent(std::shared_ptr<SDL_Texture> texture, h2d::FRect box)
+    : m_Texture(std::move(texture))
+    , m_Box(box){};
 
 TextureComponent::~TextureComponent() = default;
 
@@ -15,10 +17,12 @@ void TextureComponent::Input(float deltaTime) {}
 void TextureComponent::Update(float deltaTime) {}
 void TextureComponent::Render(SDL_Renderer* renderer) {
     auto ge = GetGameEntity();
-    auto transform = Geometry::AsSDL(ge->GetTransform()->m_Rectangle).value();
+    auto translated = (ge->GetTransform()->m_Transform * m_Box.getPts().first);
+    SDL_FRect bounded{static_cast<float>(translated.getX()), static_cast<float>(translated.getY()),
+                      static_cast<float>(m_Box.width()), static_cast<float>(m_Box.height())};
     if (nullptr == m_Texture) {
-        SDL_RenderRect(renderer, &transform);
+        SDL_RenderRect(renderer, &bounded);
     } else {
-        SDL_RenderTexture(renderer, m_Texture.get(), nullptr, &transform);
+        SDL_RenderTexture(renderer, m_Texture.get(), nullptr, &bounded);
     }
 }

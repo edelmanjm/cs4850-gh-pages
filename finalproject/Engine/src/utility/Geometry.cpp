@@ -1,17 +1,13 @@
 #include <utility/Geometry.h>
 
-std::optional<SDL_FRect> Geometry::AsSDL(h2d::FRect& r) {
-    auto points = r.get4Pts();
-    if (points[0].getX() == points[1].getX()) {
-        return SDL_FRect{static_cast<float>(points[0].getX()), static_cast<float>(points[0].getY()),
-                         static_cast<float>(r.width()), static_cast<float>(r.height())};
-    } else {
-        return std::nullopt;
-    }
+SDL_FRect Geometry::AsSDL(h2d::FRect r) {
+    auto points = r.getPts();
+    return SDL_FRect{static_cast<float>(points.first.getX()), static_cast<float>(points.first.getY()),
+                     static_cast<float>(r.width()), static_cast<float>(r.height())};
 }
 
-h2d::FRect Geometry::AsH2D(SDL_FRect& r) {
-    return h2d::FRect(r.x, r.y, r.x + r.w, r.y + r.h);
+h2d::FRect Geometry::AsH2D(SDL_FRect r) {
+    return {r.x, r.y, r.x + r.w, r.y + r.h};
 }
 
 double Geometry::GetX(h2d::FRect& r) {

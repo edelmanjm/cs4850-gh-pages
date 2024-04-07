@@ -9,14 +9,15 @@ ProjectileEntity::ProjectileEntity() {
     SetRenderable(false);
 }
 
-void ProjectileEntity::AddRequired(SDL_FRect transform, SDL_Renderer* renderer) {
-    GameEntity::AddRequired(transform);
+void ProjectileEntity::AddRequired(h2d::FRect dims, SDL_Renderer* renderer) {
+    GameEntity::AddRequired();
 
     std::shared_ptr<TextureComponent> texture =
-        std::make_shared<TextureComponent>(ResourceManager::Instance().LoadTexture(renderer, "../assets/rocket.bmp"));
+        std::make_shared<TextureComponent>(ResourceManager::Instance().LoadTexture(renderer, "../assets/rocket.bmp"),
+                                           dims);
     AddComponent(texture);
 
-    std::shared_ptr<Collision2DComponent> col = std::make_shared<Collision2DComponent>();
+    std::shared_ptr<Collision2DComponent> col = std::make_shared<Collision2DComponent>(dims);
     AddComponent(col);
 }
 
@@ -25,7 +26,7 @@ void ProjectileEntity::Launch(float x, float y, float speed, uint64_t minLaunchT
     if (SDL_GetTicks() - timeSinceLastLaunch > minLaunchTime) {
         auto transform = GetComponent<TransformComponent>(ComponentType::TransformComponent).value();
         auto col = GetComponent<Collision2DComponent>(ComponentType::Collision2DComponent).value();
-        transform->m_Rectangle.moveTo(x, y);
+        transform->m_Transform.setTranslation(x, y);
 
         timeSinceLastLaunch = SDL_GetTicks();
         m_IsFiring = true;
@@ -41,16 +42,18 @@ void ProjectileEntity::Input(float deltaTime) {
 }
 
 void ProjectileEntity::Update(float deltaTime) {
-    auto& transform = GetComponent<TransformComponent>(ComponentType::TransformComponent).value()->m_Rectangle;
+    auto& transform = GetComponent<TransformComponent>(ComponentType::TransformComponent).value()->m_Transform;
 
     if (m_IsFiring) {
         SetRenderable(true);
-        transform.translate(0, m_Speed * deltaTime);
+        transform.addTranslation(0.0, m_Speed * deltaTime);
     } else {
         SetRenderable(false);
     }
 
-    if (Geometry::GetY(transform) < 0.0 || Geometry::GetY(transform) > 480.0f) {
+    h2d::Point2d origin(0, 0);
+    h2d::Point2d transformed = GetTransform()->m_Transform * origin;
+    if (transformed.getY() < 0.0 || transformed.getY() > 480.0f) {
         m_IsFiring = false;
     }
 
