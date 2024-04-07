@@ -34,4 +34,11 @@ public:
      */
     static void SetY(h2d::FRect& r, double y);
 
+    /**
+     * Calculate the rotation that this transformation applies
+     * @param transform The transform to extract the rotation from.
+     * @return The rotation, in radians.
+     */
+    static double ApproximateRotation(h2d::Homogr transform);
+
 };

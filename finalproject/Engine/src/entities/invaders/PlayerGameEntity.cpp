@@ -36,8 +36,7 @@ void PlayerGameEntity::AddRequired(SDL_FRect transform, SDL_Renderer* renderer, 
             auto& transform =
                 ge->GetComponent<TransformComponent>(ComponentType::TransformComponent).value()->m_Transform;
 
-            h2d::Point2d origin(0, 0);
-            h2d::Point2d transformed = GetTransform()->m_Transform * origin;
+            auto transformed = GetTransformedOrigin();
 
             if (keys[SDL_SCANCODE_LEFT]) {
                 transform.setTranslation(std::max(m_XMin, transformed.getX() - m_Speed * deltaTime),

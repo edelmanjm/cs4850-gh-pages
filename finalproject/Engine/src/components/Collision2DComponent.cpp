@@ -30,6 +30,11 @@ bool Collision2DComponent::Intersects(const std::shared_ptr<Collision2DComponent
     return fooBox.intersects(barBox)();
 }
 
+bool Collision2DComponent::IntersectsFRect(const std::shared_ptr<Collision2DComponent>& foo, h2d::FRect bar) {
+    h2d::CPolyline fooBox = foo->getCollisionQuad();
+    return fooBox.intersects(bar)();
+}
+
 h2d::CPolyline Collision2DComponent::getCollisionQuad() {
     // Default behavior for now is just to use the same box as the transformation; in the future, this could be updated
     // to allow for larger or smaller bounding boxes, as appropriate, and could also pull from fields of the

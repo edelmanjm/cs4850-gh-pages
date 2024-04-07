@@ -60,5 +60,10 @@ std::shared_ptr<TransformComponent> GameEntity::GetTransform(){
     return GetComponent<TransformComponent>(ComponentType::TransformComponent).value();
 }
 
+h2d::Point2d GameEntity::GetTransformedOrigin() {
+    h2d::Point2d origin(0, 0);
+    return GetTransform()->m_Transform * origin;
+}
+
 bool GameEntity::IsRenderable() const { return m_Renderable; }
 void GameEntity::SetRenderable(bool mRenderable) { m_Renderable = mRenderable; }

@@ -22,8 +22,7 @@ void TextEntity::Render(SDL_Renderer* renderer) {
         m_FontLoaded = true;
     }
 
-    h2d::Point2d origin(0, 0);
-    h2d::Point2d transformed = GetTransform()->m_Transform * origin;
+    auto transformed = GetTransformedOrigin();
     FC_Draw(m_Font, renderer, static_cast<float>(transformed.getX()), static_cast<float>(transformed.getY()),
             m_Text.c_str());
 }

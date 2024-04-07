@@ -35,7 +35,7 @@ class Pong:
 
         self.ball = rose.CollidingRectangleEntity()
         self.ball_size = 4 * scaling
-        self.ball.add_required(rose.SDL_FRect(0, 0, 0, 0))
+        self.ball.add_required(rose.FRect(0, 0, self.ball_size, self.ball_size))
 
         self.paddle_w = 4 * scaling
         self.paddle_h = 16 * scaling
@@ -43,10 +43,10 @@ class Pong:
         self.paddle_y = self.h / 2 - self.paddle_h / 2
 
         self.paddle_l = rose.CollidingRectangleEntity()
-        self.paddle_l.add_required(rose.SDL_FRect(0, 0, 0, 0))
+        self.paddle_l.add_required(rose.FRect(0, 0, self.paddle_w, self.paddle_h))
 
         self.paddle_r = rose.CollidingRectangleEntity()
-        self.paddle_r.add_required(rose.SDL_FRect(0, 0, 0, 0))
+        self.paddle_r.add_required(rose.FRect(0, 0, self.paddle_w, self.paddle_h))
         self.paddle_r.add_input_handler(lambda delta_time, keys: self.on_input(delta_time, keys))
 
         self.scene = rose.PythonScene(renderer)
@@ -63,8 +63,10 @@ class Pong:
         self.score = Pong.Score(0, 0)
         self.score_display_l = rose.TextEntity("assets/bit5x3.ttf", 32 * scaling, rose.SDL_Color(255, 255, 255, 255))
         self.score_display_r = rose.TextEntity("assets/bit5x3.ttf", 32 * scaling, rose.SDL_Color(255, 255, 255, 255))
-        self.score_display_l.add_required(rose.SDL_FRect(self.w / 3, 0, 0, 0))
-        self.score_display_r.add_required(rose.SDL_FRect(self.w / 3 * 2, 0, 0, 0))
+        self.score_display_l.add_required()
+        self.score_display_l.set_transform(rose.Homogr().set_translation(self.w / 3, 0))
+        self.score_display_r.add_required()
+        self.score_display_r.set_transform(rose.Homogr().set_translation(2 * self.w / 3, 0))
 
         self.scene.add_entity(self.score_display_l)
         self.scene.add_entity(self.score_display_r)
@@ -81,8 +83,7 @@ class Pong:
         self.score_display_r.text = str(self.score.r)
 
         ball_y = random.randint(int(self.h / 3), int(self.h * 2 / 3))
-        self.ball.set_transform(rose.Geometry.as_h2d(rose.SDL_FRect(self.w / 2 - self.ball_size / 2, ball_y,
-                                                                    self.ball_size, self.ball_size)))
+        self.ball.set_transform(rose.Homogr().set_translation(self.w / 2 - self.ball_size / 2, ball_y))
         x_multiplier: float
         if serve_direction == self.XDirection.LEFT:
             x_multiplier = -1.0
@@ -90,11 +91,9 @@ class Pong:
             x_multiplier = 1.0
         self.ball.set_velocity(self.ball_speed * x_multiplier, (random.random() * 2 - 1) * self.ball_speed * 0.25)
 
-        self.paddle_l.set_transform(
-            rose.Geometry.as_h2d(rose.SDL_FRect(self.paddle_x, self.paddle_y, self.paddle_w, self.paddle_h)))
-        self.paddle_r.set_transform(
-            rose.Geometry.as_h2d(rose.SDL_FRect(self.w - self.paddle_x - self.paddle_w,
-                                                self.paddle_y, self.paddle_w, self.paddle_h)))
+        self.paddle_l.set_transform(rose.Homogr().set_translation(self.paddle_x, self.paddle_y))
+        self.paddle_r.set_transform(rose.Homogr().set_translation(self.w - self.paddle_x - self.paddle_w,
+                                                                  self.paddle_y))
 
     def on_input(self, delta_time: float, keys: List[int]):
         # TODO either import the SDL_Scancode enum, or find an equivalent in python
@@ -105,24 +104,24 @@ class Pong:
 
     def ai(self, delta_time: float):
         paddle = self.paddle_l
-        difference = self.ball.get_transform().y - paddle.get_transform().y
+        difference = self.ball.get_transformed_origin().y - paddle.get_transformed_origin().y
         if difference > 4:
             self.move_paddle(delta_time, paddle, self.YDirection.UP)
         elif difference < -4:
             self.move_paddle(delta_time, paddle, self.YDirection.DOWN)
 
     def move_paddle(self, delta_time: float, paddle, direction: YDirection):
-        transform = paddle.get_transform()
+        transformed = paddle.get_transformed_origin()
         if direction == self.YDirection.UP:
-            transform.y = min(transform.y + self.paddle_speed * delta_time, self.h - self.paddle_h)
+            new_y = min(transformed.y + self.paddle_speed * delta_time, self.h - self.paddle_h)
         else:
-            transform.y = max(transform.y - self.paddle_speed * delta_time, 0)
+            new_y = max(transformed.y - self.paddle_speed * delta_time, 0)
 
-        paddle.set_transform(transform)
+        paddle.set_transform(rose.Homogr().set_translation(transformed.x, new_y))
 
     def bounce(self, paddle, horizontal_multiplier: float):
-        ball_y = self.ball.get_transform().y
-        paddle_y = paddle.get_transform().y
+        ball_y = self.ball.get_transformed_origin().y
+        paddle_y = paddle.get_transformed_origin().y
 
         # The distance, in pixels, from the center of the paddle to the center of the ball
         relative_intersect = ball_y - paddle_y - self.paddle_h / 2 + self.ball_size / 2
@@ -136,15 +135,16 @@ class Pong:
         self.ball.set_velocity(self.ball_speed * horizontal_multiplier, self.ball_speed * math.sin(bounce_angle))
 
     def on_update(self, delta_time: float):
-        if self.ball.get_transform().intersects(self.left):
+        if rose.CollidingRectangleEntity.intersects_frect(self.ball, self.left):
             self.score = Pong.Score(self.score.l, self.score.r + 1)
             # Winner serves
             self.reset(self.XDirection.RIGHT)
-        elif self.ball.get_transform().intersects(self.right):
+        elif rose.CollidingRectangleEntity.intersects_frect(self.ball, self.right):
             self.score = Pong.Score(self.score.l + 1, self.score.r)
             # Winner serves
             self.reset(self.XDirection.LEFT)
-        elif self.ball.get_transform().intersects(self.top) or self.ball.get_transform().intersects(self.bottom):
+        elif (rose.CollidingRectangleEntity.intersects_frect(self.ball, self.top) or
+              rose.CollidingRectangleEntity.intersects_frect(self.ball, self.bottom)):
             prev_velocity = self.ball.get_velocity()
             self.ball.set_velocity(prev_velocity[0], -prev_velocity[1])
         elif rose.CollidingRectangleEntity.intersects(self.ball, self.paddle_l):

@@ -22,6 +22,7 @@ public:
     void Render(SDL_Renderer* renderer) override;
 
     static bool Intersects(const std::shared_ptr<Collision2DComponent>& foo, std::shared_ptr<Collision2DComponent> bar);
+    static bool IntersectsFRect(const std::shared_ptr<Collision2DComponent>& foo, h2d::FRect bar);
 
 private:
     h2d::CPolyline getCollisionQuad();

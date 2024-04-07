@@ -27,3 +27,9 @@ void Geometry::SetY(h2d::FRect& r, double y) {
     auto smallest = r.getPts().first;
     r.moveTo(smallest.getX(), y);
 }
+
+double Geometry::ApproximateRotation(h2d::Homogr transform) {
+    h2d::Line2d unit(0, 0, 1, 0);
+    h2d::Line2d applied = transform * unit;
+    return applied.getAngle(unit);
+}

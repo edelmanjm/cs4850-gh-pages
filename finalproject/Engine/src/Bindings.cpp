@@ -23,16 +23,18 @@ PYBIND11_MODULE(rose, m) {
     m.doc() = "ROSE: Really Open Simple Engine";
     // Could do whyengine or something else punny, but eh
 
-    py::class_<h2d::Point2d>(m, "Point2d").def(py::init<double, double>());
-    //        .def_property("x", &h2d::Point2d::getX, [](h2d::Point2d& p, double x) {
-    //            p.translate(x, 0);
-    //        })
-    //        .def_property("y", &h2d::Point2d::getX, [](h2d::Point2d& p, double y) {
-    //            p.translate(0, y);
-    //        });
+    py::class_<h2d::Point2d>(m, "Point2d").def(py::init<double, double>())
+            .def_property("x", &h2d::Point2d::getX, [](h2d::Point2d& p, double x) {
+                p.translate(x, 0);
+            })
+            .def_property("y", &h2d::Point2d::getY, [](h2d::Point2d& p, double y) {
+                p.translate(0, y);
+            });
 
     py::class_<h2d::Homogr>(m, "Homogr")
         .def(py::init<>())
+        .def("set_translation", &h2d::Homogr::setTranslation<double, double>)
+        .def("add_translation", &h2d::Homogr::addTranslation<double>)
         .def("set_rotation", &h2d::Homogr::setRotation<double>)
         .def("add_rotation", &h2d::Homogr::addRotation<double>)
         .def(py::self * h2d::FRect());
@@ -89,8 +91,9 @@ PYBIND11_MODULE(rose, m) {
     // See https://pybind11.readthedocs.io/en/stable/classes.html#inheritance-and-automatic-downcasting
 
     py::class_<GameEntity, PYBIND11_SH_DEF(GameEntity)>(m, "GameEntity")
-        .def("get_transform", [](GameEntity& g) { return g.GetTransform()->m_Rectangle; })
-        .def("set_transform", [](GameEntity& g, h2d::FRect r) { g.GetTransform()->m_Rectangle = r; });
+        .def("get_transform", [](GameEntity& g) { return g.GetTransform()->m_Transform; })
+        .def("set_transform", [](GameEntity& g, const h2d::Homogr& t) { g.GetTransform()->m_Transform = t; })
+        .def("get_transformed_origin", &GameEntity::GetTransformedOrigin);
     py::class_<CollidingRectangleEntity, GameEntity, PYBIND11_SH_DEF(CollidingRectangleEntity)>(
         m, "CollidingRectangleEntity")
         .def(py::init<>())
@@ -102,9 +105,11 @@ PYBIND11_MODULE(rose, m) {
              })
         .def("get_velocity",
              [](CollidingRectangleEntity& cre) { return py::make_tuple(cre.m_VelocityX, cre.m_VelocityY); })
-        .def_readwrite("heading", &CollidingRectangleEntity::m_Heading)
+        .def("rotate", &CollidingRectangleEntity::Rotate)
+        .def("get_rotation", &CollidingRectangleEntity::GetRotation)
         .def("add_input_handler", &CollidingRectangleEntity::AddInputHandler)
-        .def_static("intersects", &CollidingRectangleEntity::Intersects);
+        .def_static("intersects", &CollidingRectangleEntity::Intersects)
+        .def_static("intersects_frect", &CollidingRectangleEntity::IntersectsFRect);
     py::class_<TextEntity, GameEntity, PYBIND11_SH_DEF(TextEntity)>(m, "TextEntity")
         .def(py::init<std::string, uint32_t, SDL_Color>())
         .def("add_required", &TextEntity::AddRequired)

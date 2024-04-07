@@ -46,3 +46,8 @@ bool CollidingRectangleEntity::Intersects(const std::shared_ptr<CollidingRectang
     auto barCollision = bar->GetComponent<Collision2DComponent>(ComponentType::Collision2DComponent).value();
     return Collision2DComponent::Intersects(fooCollision, barCollision);
 }
+
+bool CollidingRectangleEntity::IntersectsFRect(const std::shared_ptr<CollidingRectangleEntity>& foo, h2d::FRect bar) {
+    auto fooCollision = foo->GetComponent<Collision2DComponent>(ComponentType::Collision2DComponent).value();
+    return Collision2DComponent::IntersectsFRect(fooCollision, bar);
+}

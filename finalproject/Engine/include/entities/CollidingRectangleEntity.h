@@ -14,6 +14,7 @@ public:
     float GetRotation();
 
     static bool Intersects(const std::shared_ptr<CollidingRectangleEntity>& foo, const std::shared_ptr<CollidingRectangleEntity>& bar);
+    static bool IntersectsFRect(const std::shared_ptr<CollidingRectangleEntity>& foo, h2d::FRect bar);
 
 public:
     // Eh maybe I'll put this in a struct later

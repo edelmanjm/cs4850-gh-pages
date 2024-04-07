@@ -48,9 +48,8 @@ void EnemyEntity::Update(float deltaTime) {
         m_Offset -= m_Speed * deltaTime;
     }
 
-    h2d::Point2d origin(0, 0);
-    h2d::Point2d transformed = GetTransform()->m_Transform * origin;
     if (IsRenderable()) {
+        auto transformed = GetTransformedOrigin();
         GetProjectile()->Launch(static_cast<float>(transformed.getX()),
                                 static_cast<float>(transformed.getY()), 200, m_MinLaunchTime);
     }

@@ -55,6 +55,7 @@ public:
     }
 
     std::shared_ptr<TransformComponent> GetTransform();
+    h2d::Point2d GetTransformedOrigin();
 
     bool IsRenderable() const;
     void SetRenderable(bool mRenderable);

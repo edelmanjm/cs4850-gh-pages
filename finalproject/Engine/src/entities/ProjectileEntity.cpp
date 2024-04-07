@@ -51,8 +51,7 @@ void ProjectileEntity::Update(float deltaTime) {
         SetRenderable(false);
     }
 
-    h2d::Point2d origin(0, 0);
-    h2d::Point2d transformed = GetTransform()->m_Transform * origin;
+    auto transformed = GetTransformedOrigin();
     if (transformed.getY() < 0.0 || transformed.getY() > 480.0f) {
         m_IsFiring = false;
     }
