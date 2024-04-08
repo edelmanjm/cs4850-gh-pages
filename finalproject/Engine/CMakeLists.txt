@@ -72,6 +72,7 @@ add_library(rose-lib
         src/components/InputComponent.cpp
         src/components/TextureComponent.cpp
         src/components/TransformComponent.cpp
+        src/components/TransformWrappingComponent.cpp
         src/entities/CollidingRectangleEntity.cpp
         src/entities/GameEntity.cpp
         src/entities/ProjectileEntity.cpp

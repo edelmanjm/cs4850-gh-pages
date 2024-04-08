@@ -6,6 +6,7 @@
 #include <Application.h>
 #include <Renderer.h>
 #include <components/InputComponent.h>
+#include <components/TransformWrappingComponent.h>
 #include <entities/TextEntity.h>
 #include <scenes/PythonScene.h>
 #include <utility/Geometry.h>
@@ -90,10 +91,15 @@ PYBIND11_MODULE(rose, m) {
     // Using the first method of automatic downcasting
     // See https://pybind11.readthedocs.io/en/stable/classes.html#inheritance-and-automatic-downcasting
 
+    py::class_<Component, PYBIND11_SH_DEF(Component)>(m, "Component");
+    py::class_<TransformWrappingComponent, Component, PYBIND11_SH_DEF(TransformWrappingComponent)>(m, "TransformWrappingComponent")
+        .def(py::init<h2d::FRect>());
+
     py::class_<GameEntity, PYBIND11_SH_DEF(GameEntity)>(m, "GameEntity")
         .def("get_transform", [](GameEntity& g) { return g.GetTransform()->m_Transform; })
         .def("set_transform", [](GameEntity& g, const h2d::Homogr& t) { g.GetTransform()->m_Transform = t; })
-        .def("get_transformed_origin", &GameEntity::GetTransformedOrigin);
+        .def("get_transformed_origin", &GameEntity::GetTransformedOrigin)
+        .def("add_component", &GameEntity::AddComponent<Component>);
     py::class_<CollidingRectangleEntity, GameEntity, PYBIND11_SH_DEF(CollidingRectangleEntity)>(
         m, "CollidingRectangleEntity")
         .def(py::init<>())

@@ -23,6 +23,7 @@ class Asteroids:
         self.player = rose.CollidingRectangleEntity()
         player_size = 4 * scaling
         self.player.add_required(rose.FRect(-player_size / 2, -player_size / 2, player_size / 2, player_size / 2))
+        self.player.add_component(rose.TransformWrappingComponent(rose.FRect(0, 0, self.w, self.h)))
         self.player.add_input_handler(lambda delta_time, keys: self.on_input(delta_time, keys))
 
         self.scene = rose.PythonScene(renderer)
