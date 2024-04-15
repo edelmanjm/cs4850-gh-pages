@@ -7,7 +7,7 @@ Renderer::Renderer(int w, int h) {
 
     // Create our window
     auto* window = SDL_CreateWindow("An SDL3 Window", w, h, SDL_WINDOW_OPENGL);
-    m_Wrapped = SDL_CreateRenderer(window, nullptr, SDL_RENDERER_ACCELERATED);
+    m_Wrapped = SDL_CreateRenderer(window, nullptr, 0);
     if (nullptr == m_Wrapped) {
         SDL_Log("Error creating renderer");
     }
