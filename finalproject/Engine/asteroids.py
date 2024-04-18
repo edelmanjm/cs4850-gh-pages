@@ -21,6 +21,7 @@ class Rock:
         BIG = SizeData(dims=40 * scaling, speed=10 * scaling)
 
     def __init__(self, x, y, screen_w, screen_h, size: Size = Size.BIG):
+        self.size = size
         self.underlying = rose.CollidingRectangleEntity()
 
         dims, speed = size.value
@@ -70,6 +71,22 @@ class Asteroids:
         self.application = rose.Application(renderer)
         self.application.set_scene(self.scene)
 
+    def add_rock(self, r):
+        self.rocks.append(r)
+        self.scene.add_entity(r.underlying)
+
+    def add_projectile(self, p):
+        self.projectiles.append(p)
+        self.scene.add_entity(p)
+
+    def remove_rock(self, r):
+        self.rocks.remove(r)
+        self.scene.remove_entity(r.underlying)
+
+    def remove_projectile(self, p):
+        self.projectiles.remove(p)
+        self.scene.remove_entity(p)
+
     def reset(self):
         self.player.set_transform(rose.Homogr().set_translation(self.w / 2, self.h / 2))
         self.player.set_velocity(0, 0)
@@ -86,8 +103,27 @@ class Asteroids:
             x = random.randrange(0, self.w)
             y = random.randrange(0, self.h)
             r = Rock(x, y, self.w, self.h, Rock.Size.BIG)
-            self.scene.add_entity(r.underlying)
-            self.rocks.append(r)
+            self.add_rock(r)
+
+    def split_rock(self, rock):
+        next_size: Rock.Size | None
+        match rock.size:
+            case Rock.Size.BIG:
+                next_size = Rock.Size.MEDIUM
+            case Rock.Size.MEDIUM:
+                next_size = Rock.Size.SMALL
+            case _:
+                next_size = None
+
+        if next_size is None:
+            print(f"Error: Cannot split rock of size {rock.size}")
+
+        location = rock.underlying.get_transformed_origin()
+
+        children_count = 2
+        for i in range(children_count):
+            self.add_rock(Rock(location.x, location.y, self.w, self.h, next_size))
+        self.remove_rock(rock)
 
     def fire(self):
         projectile = rose.CollidingRectangleEntity()
@@ -103,7 +139,7 @@ class Asteroids:
         projectile.set_transform(self.player.get_transform())
         self.scene.add_entity(projectile)
 
-        self.projectiles.append(projectile)
+        self.add_projectile(projectile)
 
     def on_input(self, delta_time: float, keys: List[int]):
         # TODO either import the SDL_Scancode enum, or find an equivalent in python
@@ -139,8 +175,11 @@ class Asteroids:
         for projectile in self.projectiles:
             for rock in self.rocks:
                 if rose.CollidingRectangleEntity.intersects(projectile, rock.underlying):
-                    self.scene.remove_entity(rock.underlying)
-                    self.rocks.remove(rock)
+                    if rock.size == Rock.Size.SMALL:
+                        self.scene.remove_entity(rock.underlying)
+                        self.rocks.remove(rock)
+                    else:
+                        self.split_rock(rock)
 
         for rock in self.rocks:
             if rose.CollidingRectangleEntity.intersects(rock.underlying, self.player):
