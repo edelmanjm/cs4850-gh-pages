@@ -1,5 +1,4 @@
 import random
-from collections import namedtuple
 from enum import Enum
 import math
 from typing import List, NamedTuple
@@ -10,15 +9,18 @@ import rose
 
 scaling = 2
 
-SizeData = namedtuple('SizeData','dims speed')
+
+class RockSizeData(NamedTuple):
+    dims: int
+    speed: float
 
 
 class Rock:
 
     class Size(Enum):
-        SMALL = SizeData(dims=10 * scaling, speed=40 * scaling)
-        MEDIUM = SizeData(dims=20 * scaling, speed=20 * scaling)
-        BIG = SizeData(dims=40 * scaling, speed=10 * scaling)
+        SMALL = RockSizeData(dims=10 * scaling, speed=40 * scaling)
+        MEDIUM = RockSizeData(dims=20 * scaling, speed=20 * scaling)
+        BIG = RockSizeData(dims=40 * scaling, speed=10 * scaling)
 
     def __init__(self, x, y, screen_w, screen_h, size: Size = Size.BIG):
         self.size = size
