@@ -6,6 +6,7 @@
 #include <Application.h>
 #include <Renderer.h>
 #include <components/InputComponent.h>
+#include <components/LifetimeComponent.h>
 #include <components/TransformWrappingComponent.h>
 #include <entities/TextEntity.h>
 #include <scenes/PythonScene.h>
@@ -94,6 +95,8 @@ PYBIND11_MODULE(rose, m) {
     py::class_<Component, PYBIND11_SH_DEF(Component)>(m, "Component");
     py::class_<TransformWrappingComponent, Component, PYBIND11_SH_DEF(TransformWrappingComponent)>(m, "TransformWrappingComponent")
         .def(py::init<h2d::FRect>());
+    py::class_<LifetimeComponent, Component, PYBIND11_SH_DEF(LifetimeComponent)>(m, "LifetimeComponent")
+        .def(py::init<uint32_t>());
 
     py::class_<GameEntity, PYBIND11_SH_DEF(GameEntity)>(m, "GameEntity")
         .def("get_transform", [](GameEntity& g) { return g.GetTransform()->m_Transform; })

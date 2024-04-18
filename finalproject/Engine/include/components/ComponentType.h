@@ -3,5 +3,11 @@
 // of this enum.
 //
 // Declaration of our new type
-enum class ComponentType { TextureComponent, TransformComponent, Collision2DComponent, InputComponent,
-                           TransformWrappingComponent };
+enum class ComponentType {
+    Collision2DComponent,
+    InputComponent,
+    LifetimeComponent,
+    TransformComponent,
+    TransformWrappingComponent,
+    TextureComponent,
+};

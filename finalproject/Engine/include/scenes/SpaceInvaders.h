@@ -13,6 +13,9 @@ public:
     void Update(float deltaTime) override;
     void Render() override;
 
+    void AddEntity(const std::shared_ptr<GameEntity>& entity) override;
+    void RemoveEntity(std::shared_ptr<GameEntity> entity) override;
+
 private:
     std::vector<std::shared_ptr<EnemyEntity>> m_Enemies;
     std::shared_ptr<PlayerGameEntity> m_MainCharacter;

@@ -69,6 +69,7 @@ add_library(rose-lib
         src/Renderer.cpp
         src/components/Component.cpp
         src/components/Collision2DComponent.cpp
+        src/components/LifetimeComponent.cpp
         src/components/InputComponent.cpp
         src/components/TextureComponent.cpp
         src/components/TransformComponent.cpp
@@ -104,3 +105,7 @@ target_link_libraries(rose PRIVATE rose-lib)
 add_executable(space-invaders
         src/main.cpp)
 target_link_libraries(space-invaders PRIVATE rose-lib)
+
+add_executable(test
+        src/test.cpp)
+target_link_libraries(test PRIVATE rose-lib)

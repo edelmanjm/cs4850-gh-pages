@@ -87,3 +87,11 @@ void SpaceInvaders::Render() {
 
     SDL_RenderPresent(m_Renderer);
 }
+
+void SpaceInvaders::AddEntity(const std::shared_ptr<GameEntity>& entity) {
+    entity->m_ParentScene = shared_from_this();
+}
+
+void SpaceInvaders::RemoveEntity(std::shared_ptr<GameEntity> entity) {
+
+}

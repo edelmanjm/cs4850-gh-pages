@@ -13,7 +13,8 @@ public:
     void Render() override;
     void SetOnUpdate(std::function<void(float deltaTime)> onUpdate);
 
-    void AddEntity(const std::shared_ptr<GameEntity>& entity);
+    void AddEntity(const std::shared_ptr<GameEntity>& entity) override;
+    void RemoveEntity(std::shared_ptr<GameEntity> entity) override;
 
 private:
     std::vector<std::shared_ptr<GameEntity>> m_Entities;

@@ -6,13 +6,19 @@ PythonScene::PythonScene(std::shared_ptr<Renderer> renderer) : Scene(renderer->m
 
 void PythonScene::Input(float deltaTime) {
     for (const auto& e : m_Entities) {
-        e->Input(deltaTime);
+        // Safeguard against elements that are being erased
+        if (e != nullptr) {
+            e->Input(deltaTime);
+        }
     }
 }
 
 void PythonScene::Update(float deltaTime) {
     for (const auto& e : m_Entities) {
-        e->Update(deltaTime);
+        // Safeguard against elements that are being erased
+        if (e != nullptr) {
+            e->Update(deltaTime);
+        }
     }
 
     // Typically calls Python code
@@ -26,7 +32,10 @@ void PythonScene::Render() {
     SDL_SetRenderDrawColor(m_Renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
 
     for (const auto& e : m_Entities) {
-        e->Render(m_Renderer);
+        // Safeguard against elements that are being erased
+        if (e != nullptr) {
+            e->Render(m_Renderer);
+        }
     }
 
     SDL_RenderPresent(m_Renderer);
@@ -37,5 +46,13 @@ void PythonScene::SetOnUpdate(std::function<void(float deltaTime)> onUpdate) {
 }
 
 void PythonScene::AddEntity(const std::shared_ptr<GameEntity>& entity) {
+    entity->m_ParentScene = shared_from_this();
     m_Entities.push_back(entity);
+}
+
+void PythonScene::RemoveEntity(std::shared_ptr<GameEntity> entity) {
+    auto it = std::find(m_Entities.begin(), m_Entities.end(), entity);
+    if (it != m_Entities.end()) {
+        m_Entities.erase(it);
+    }
 }
