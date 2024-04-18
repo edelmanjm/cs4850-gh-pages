@@ -16,9 +16,9 @@ SizeData = namedtuple('SizeData','dims speed')
 class Rock:
 
     class Size(Enum):
-        SMALL = SizeData(dims=10 * scaling, speed=50 * scaling)
-        MEDIUM = SizeData(dims=25 * scaling, speed=25 * scaling)
-        BIG = SizeData(dims=50 * scaling, speed=10 * scaling)
+        SMALL = SizeData(dims=10 * scaling, speed=40 * scaling)
+        MEDIUM = SizeData(dims=20 * scaling, speed=20 * scaling)
+        BIG = SizeData(dims=40 * scaling, speed=10 * scaling)
 
     def __init__(self, x, y, screen_w, screen_h, size: Size = Size.BIG):
         self.underlying = rose.CollidingRectangleEntity()
@@ -49,13 +49,13 @@ class Asteroids:
         self.player_speed = 100 * scaling
         self.player_rotation_speed = math.radians(180)
 
-        self.projectile_speed = 50 * scaling
+        self.projectile_speed = 125 * scaling
         self.fire_debounce_time = 0.25
         self.should_fire = False
         self.time_since_last_fire = self.fire_debounce_time
 
         self.player = rose.CollidingRectangleEntity()
-        player_size = 4 * scaling
+        player_size = 5 * scaling
         self.player.add_required(rose.FRect(-player_size / 2, -player_size / 2, player_size / 2, player_size / 2))
         self.player.add_component(rose.TransformWrappingComponent(rose.FRect(0, 0, self.w, self.h)))
         self.player.add_input_handler(lambda delta_time, keys: self.on_input(delta_time, keys))
@@ -128,6 +128,12 @@ class Asteroids:
             if not projectile.renderable:
                 self.scene.remove_entity(projectile)
         self.projectiles = list(filter(lambda p: p.renderable, self.projectiles))
+
+        for projectile in self.projectiles:
+            for rock in self.rocks:
+                if rose.CollidingRectangleEntity.intersects(projectile, rock.underlying):
+                    self.scene.remove_entity(rock.underlying)
+                    self.rocks.remove(rock)
 
 
 asteroids = Asteroids()
