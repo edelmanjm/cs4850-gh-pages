@@ -1,4 +1,5 @@
 import random
+from collections import namedtuple
 from enum import Enum
 import math
 from typing import List, NamedTuple
@@ -7,28 +8,54 @@ import sys
 sys.path.append('./cmake-build-debug')
 import rose
 
+scaling = 2
+
+SizeData = namedtuple('SizeData','dims speed')
+
+
+class Rock:
+
+    class Size(Enum):
+        SMALL = SizeData(dims=10 * scaling, speed=50 * scaling)
+        MEDIUM = SizeData(dims=25 * scaling, speed=25 * scaling)
+        BIG = SizeData(dims=50 * scaling, speed=10 * scaling)
+
+    def __init__(self, x, y, screen_w, screen_h, size: Size = Size.BIG):
+        self.underlying = rose.CollidingRectangleEntity()
+
+        dims, speed = size.value
+
+        self.underlying.add_required(
+            rose.FRect(-dims / 2, -dims / 2, dims / 2, dims / 2))
+        self.underlying.add_component(rose.TransformWrappingComponent(rose.FRect(0, 0, screen_w, screen_h)))
+
+        angle = random.random() * math.pi * 2
+        self.underlying.set_velocity(math.cos(angle) * speed, math.sin(angle) * speed)
+        self.underlying.set_transform(rose.Homogr().set_translation(x, y))
+
 
 class Asteroids:
-    def __init__(self):
-        self.scaling = 2
 
-        self.w = 375 * self.scaling
-        self.h = 246 * self.scaling
+    projectiles: List[rose.CollidingRectangleEntity] = []
+    rocks: List[Rock] = []
+    initial_rock_count = 4
+
+    def __init__(self):
+        self.w = 375 * scaling
+        self.h = 246 * scaling
 
         renderer = rose.Renderer(self.w, self.h)
 
-        self.player_speed = 100 * self.scaling
+        self.player_speed = 100 * scaling
         self.player_rotation_speed = math.radians(180)
 
-        self.projectile_speed = 50 * self.scaling
+        self.projectile_speed = 50 * scaling
         self.fire_debounce_time = 0.25
         self.should_fire = False
         self.time_since_last_fire = self.fire_debounce_time
 
-        self.projectiles = []
-
         self.player = rose.CollidingRectangleEntity()
-        player_size = 4 * self.scaling
+        player_size = 4 * scaling
         self.player.add_required(rose.FRect(-player_size / 2, -player_size / 2, player_size / 2, player_size / 2))
         self.player.add_component(rose.TransformWrappingComponent(rose.FRect(0, 0, self.w, self.h)))
         self.player.add_input_handler(lambda delta_time, keys: self.on_input(delta_time, keys))
@@ -48,9 +75,16 @@ class Asteroids:
         self.player.set_velocity(0, 0)
         self.should_fire = False
 
+        for i in range(self.initial_rock_count):
+            x = random.randrange(0, self.w)
+            y = random.randrange(0, self.h)
+            r = Rock(x, y, self.w, self.h, Rock.Size.BIG)
+            self.scene.add_entity(r.underlying)
+            self.rocks.append(r)
+
     def fire(self):
         projectile = rose.CollidingRectangleEntity()
-        projectile_size = 2 * self.scaling
+        projectile_size = 2 * scaling
         projectile.add_required(
             rose.FRect(-projectile_size / 2, -projectile_size / 2, projectile_size / 2, projectile_size / 2))
         projectile.add_component(rose.TransformWrappingComponent(rose.FRect(0, 0, self.w, self.h)))
