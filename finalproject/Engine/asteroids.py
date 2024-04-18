@@ -21,6 +21,9 @@ class Asteroids:
         self.player_rotation_speed = math.radians(180)
 
         self.projectile_speed = 50 * self.scaling
+        self.fire_debounce_time = 0.25
+        self.should_fire = False
+        self.time_since_last_fire = self.fire_debounce_time
 
         self.player = rose.CollidingRectangleEntity()
         player_size = 4 * self.scaling
@@ -28,11 +31,8 @@ class Asteroids:
         self.player.add_component(rose.TransformWrappingComponent(rose.FRect(0, 0, self.w, self.h)))
         self.player.add_input_handler(lambda delta_time, keys: self.on_input(delta_time, keys))
 
-        self.should_fire = False
-
         self.scene = rose.PythonScene(renderer)
         self.scene.add_entity(self.player)
-
 
         self.reset()
 
@@ -78,8 +78,12 @@ class Asteroids:
 
     def on_update(self, delta_time: float):
         if self.should_fire:
-            self.fire()
-            self.should_fire = False
+            if self.time_since_last_fire > self.fire_debounce_time:
+                self.fire()
+                self.should_fire = False
+                self.time_since_last_fire = 0
+            else:
+                self.time_since_last_fire += delta_time
 
 
 asteroids = Asteroids()
