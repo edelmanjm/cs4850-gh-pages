@@ -25,6 +25,8 @@ class Asteroids:
         self.should_fire = False
         self.time_since_last_fire = self.fire_debounce_time
 
+        self.projectiles = []
+
         self.player = rose.CollidingRectangleEntity()
         player_size = 4 * self.scaling
         self.player.add_required(rose.FRect(-player_size / 2, -player_size / 2, player_size / 2, player_size / 2))
@@ -60,6 +62,8 @@ class Asteroids:
         projectile.set_transform(self.player.get_transform())
         self.scene.add_entity(projectile)
 
+        self.projectiles.append(projectile)
+
     def on_input(self, delta_time: float, keys: List[int]):
         # TODO either import the SDL_Scancode enum, or find an equivalent in python
         if keys[82]:
@@ -84,6 +88,12 @@ class Asteroids:
                 self.time_since_last_fire = 0
             else:
                 self.time_since_last_fire += delta_time
+
+        # Remove dead projectiles
+        for projectile in self.projectiles:
+            if not projectile.renderable:
+                self.scene.remove_entity(projectile)
+        self.projectiles = list(filter(lambda p: p.renderable, self.projectiles))
 
 
 asteroids = Asteroids()

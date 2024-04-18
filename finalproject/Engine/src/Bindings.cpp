@@ -99,6 +99,7 @@ PYBIND11_MODULE(rose, m) {
         .def(py::init<uint32_t>());
 
     py::class_<GameEntity, PYBIND11_SH_DEF(GameEntity)>(m, "GameEntity")
+        .def_readwrite("renderable", &GameEntity::m_Renderable)
         .def("get_transform", [](GameEntity& g) { return g.GetTransform()->m_Transform; })
         .def("set_transform", [](GameEntity& g, const h2d::Homogr& t) { g.GetTransform()->m_Transform = t; })
         .def("get_transformed_origin", &GameEntity::GetTransformedOrigin)
@@ -128,6 +129,7 @@ PYBIND11_MODULE(rose, m) {
     py::class_<PythonScene, Scene, PYBIND11_SH_DEF(PythonScene)>(m, "PythonScene")
         .def(py::init<std::shared_ptr<Renderer>>())
         .def("add_entity", &PythonScene::AddEntity)
+        .def("remove_entity", &PythonScene::RemoveEntity)
         .def("set_on_update", &PythonScene::SetOnUpdate);
 
     py::class_<Application>(m, "Application")

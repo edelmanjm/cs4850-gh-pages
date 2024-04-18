@@ -46,13 +46,13 @@ void SpaceInvaders::Update(float deltaTime) {
 
         bool gameOver = false;
 
-        if (enemyIsHit && enemy->IsRenderable()) {
-            enemy->SetRenderable(false);
+        if (enemyIsHit && enemy->m_Renderable) {
+            enemy->m_Renderable = false;
             m_Points += 10.0f;
             SDL_Log("Your score is %f", m_Points);
             //            SDL_Log("Enemy was %i was removed", i);
         }
-        if (enemy->IsRenderable()) {
+        if (enemy->m_Renderable) {
             gameOver = m_MainCharacter->Intersects(enemy->GetProjectile());
         }
 

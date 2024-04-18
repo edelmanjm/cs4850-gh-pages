@@ -45,9 +45,6 @@ public:
     std::shared_ptr<TransformComponent> GetTransform();
     h2d::Point2d GetTransformedOrigin();
 
-    bool IsRenderable() const;
-    void SetRenderable(bool mRenderable);
-
     bool Intersects(const std::shared_ptr<GameEntity>& e);
 
 protected:
@@ -61,11 +58,9 @@ protected:
 
 public:
     std::shared_ptr<Scene> m_ParentScene;
+    bool m_Renderable = true;
 
 protected:
     std::map<ComponentType, std::shared_ptr<Component>> m_Components;
     std::vector<std::shared_ptr<GameEntity>> m_Children;
-
-private:
-    bool m_Renderable = true;
 };

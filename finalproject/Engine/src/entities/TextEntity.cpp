@@ -9,7 +9,7 @@ TextEntity::TextEntity(std::string fontPath, uint32_t fontSize, SDL_Color fontCo
     , m_FontSize(fontSize)
     , m_FontColor(fontColor) {
     m_Font = FC_CreateFont();
-    SetRenderable(true);
+    m_Renderable = true;
 }
 
 TextEntity::~TextEntity() { FC_FreeFont(m_Font); }

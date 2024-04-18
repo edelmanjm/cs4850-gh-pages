@@ -48,7 +48,7 @@ void EnemyEntity::Update(float deltaTime) {
         m_Offset -= m_Speed * deltaTime;
     }
 
-    if (IsRenderable()) {
+    if (m_Renderable) {
         auto transformed = GetTransformedOrigin();
         GetProjectile()->Launch(static_cast<float>(transformed.getX()),
                                 static_cast<float>(transformed.getY()), 200, m_MinLaunchTime);
@@ -62,11 +62,11 @@ void EnemyEntity::Update(float deltaTime) {
 void EnemyEntity::Render(SDL_Renderer* renderer) {
     GameEntity::Render(renderer);
 
-    if (IsRenderable()) {
+    if (m_Renderable) {
         GetProjectile()->Render(renderer);
     } else {
         // Do nothing;
-        GetProjectile()->SetRenderable(false);
+        GetProjectile()->m_Renderable = false;
         return;
     }
 }

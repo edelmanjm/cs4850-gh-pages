@@ -21,5 +21,7 @@ uint32_t LifetimeComponent::Dispatch(uint32_t interval, void *param) {
 
 void LifetimeComponent::Despawn(uint32_t interval) {
     auto ge = GetGameEntity();
-    ge->m_ParentScene->RemoveEntity(ge);
+    // Can cause issues, we'll just set it to be invisible for now and then remove it later
+//    ge->m_ParentScene->RemoveEntity(ge);
+    ge->m_Renderable = false;
 }

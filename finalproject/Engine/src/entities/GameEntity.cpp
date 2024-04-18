@@ -31,7 +31,7 @@ void GameEntity::Update(float deltaTime) {
 }
 
 void GameEntity::Render(SDL_Renderer* renderer) {
-    if (IsRenderable()) {
+    if (m_Renderable) {
         for (auto& [key, value] : m_Components) {
             m_Components[key]->Render(renderer);
         }
@@ -64,6 +64,3 @@ h2d::Point2d GameEntity::GetTransformedOrigin() {
     h2d::Point2d origin(0, 0);
     return GetTransform()->m_Transform * origin;
 }
-
-bool GameEntity::IsRenderable() const { return m_Renderable; }
-void GameEntity::SetRenderable(bool mRenderable) { m_Renderable = mRenderable; }

@@ -3,7 +3,7 @@
 #include <entities/CollidingRectangleEntity.h>
 
 
-CollidingRectangleEntity::CollidingRectangleEntity() { SetRenderable(true); }
+CollidingRectangleEntity::CollidingRectangleEntity() { m_Renderable = true; }
 
 void CollidingRectangleEntity::AddRequired(h2d::FRect dims) {
     GameEntity::AddRequired();

@@ -6,7 +6,7 @@
 
 ProjectileEntity::ProjectileEntity() {
     timeSinceLastLaunch = SDL_GetTicks();
-    SetRenderable(false);
+    m_Renderable = false;
 }
 
 void ProjectileEntity::AddRequired(h2d::FRect dims, SDL_Renderer* renderer) {
@@ -31,7 +31,7 @@ void ProjectileEntity::Launch(float x, float y, float speed, uint64_t minLaunchT
         timeSinceLastLaunch = SDL_GetTicks();
         m_IsFiring = true;
 
-        SetRenderable(true);
+        m_Renderable = true;
     }
 }
 
@@ -45,10 +45,10 @@ void ProjectileEntity::Update(float deltaTime) {
     auto& transform = GetComponent<TransformComponent>(ComponentType::TransformComponent).value()->m_Transform;
 
     if (m_IsFiring) {
-        SetRenderable(true);
+        m_Renderable = true;
         transform.addTranslation(0.0, m_Speed * deltaTime);
     } else {
-        SetRenderable(false);
+        m_Renderable = false;
     }
 
     auto transformed = GetTransformedOrigin();
