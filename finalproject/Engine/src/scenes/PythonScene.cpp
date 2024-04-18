@@ -41,9 +41,7 @@ void PythonScene::Render() {
     SDL_RenderPresent(m_Renderer);
 }
 
-void PythonScene::SetOnUpdate(std::function<void(float deltaTime)> onUpdate) {
-    m_OnUpdate = std::move(onUpdate);
-}
+void PythonScene::SetOnUpdate(std::function<void(float deltaTime)> onUpdate) { m_OnUpdate = std::move(onUpdate); }
 
 void PythonScene::AddEntity(const std::shared_ptr<GameEntity>& entity) {
     entity->m_ParentScene = shared_from_this();
@@ -51,8 +49,10 @@ void PythonScene::AddEntity(const std::shared_ptr<GameEntity>& entity) {
 }
 
 void PythonScene::RemoveEntity(std::shared_ptr<GameEntity> entity) {
-    auto it = std::find(m_Entities.begin(), m_Entities.end(), entity);
-    if (it != m_Entities.end()) {
-        m_Entities.erase(it);
-    }
+    //    auto it = std::find(m_Entities.begin(), m_Entities.end(), entity);
+    //    if (it != m_Entities.end()) {
+    //        m_Entities.erase(it);
+    //    }
+    m_Entities.erase(std::remove_if(m_Entities.begin(), m_Entities.end(), [entity](auto& e) { return entity == e; }),
+                     m_Entities.end());
 }

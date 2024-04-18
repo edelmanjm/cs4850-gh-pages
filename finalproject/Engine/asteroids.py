@@ -18,9 +18,9 @@ class RockSizeData(NamedTuple):
 class Rock:
 
     class Size(Enum):
-        SMALL = RockSizeData(dims=10 * scaling, speed=40 * scaling)
-        MEDIUM = RockSizeData(dims=20 * scaling, speed=20 * scaling)
-        BIG = RockSizeData(dims=40 * scaling, speed=10 * scaling)
+        SMALL = RockSizeData(dims=8 * scaling, speed=40 * scaling)
+        MEDIUM = RockSizeData(dims=16 * scaling, speed=20 * scaling)
+        BIG = RockSizeData(dims=32 * scaling, speed=10 * scaling)
 
     def __init__(self, x, y, screen_w, screen_h, size: Size = Size.BIG):
         self.size = size
@@ -182,6 +182,7 @@ class Asteroids:
                         self.rocks.remove(rock)
                     else:
                         self.split_rock(rock)
+                    self.remove_projectile(projectile)
 
         for rock in self.rocks:
             if rose.CollidingRectangleEntity.intersects(rock.underlying, self.player):
