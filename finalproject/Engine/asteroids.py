@@ -75,6 +75,13 @@ class Asteroids:
         self.player.set_velocity(0, 0)
         self.should_fire = False
 
+        for rock in self.rocks:
+            self.scene.remove_entity(rock.underlying)
+        for projectile in self.projectiles:
+            self.scene.remove_entity(projectile)
+        self.rocks = []
+        self.projectiles = []
+
         for i in range(self.initial_rock_count):
             x = random.randrange(0, self.w)
             y = random.randrange(0, self.h)
@@ -134,6 +141,10 @@ class Asteroids:
                 if rose.CollidingRectangleEntity.intersects(projectile, rock.underlying):
                     self.scene.remove_entity(rock.underlying)
                     self.rocks.remove(rock)
+
+        for rock in self.rocks:
+            if rose.CollidingRectangleEntity.intersects(rock.underlying, self.player):
+                self.reset()
 
 
 asteroids = Asteroids()
