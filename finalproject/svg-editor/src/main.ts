@@ -54,17 +54,21 @@ export function Draw() {
       }
     }
 
-    // Snap start to existing lines, if possible
-    if (selectedLine != null && selectedEndpoint != null) {
-      const coords = getCoords(selectedLine, selectedEndpoint);
-      startX = coords.x;
-      startY = coords.y;
-    } else {
-      startX = offsetX;
-      startY = offsetY;
+    // If any of these keys are held, we want to move the existing lines instead of drawing a
+    // new one
+    if (!(altKey || ctrlKey || metaKey)) {
+      // Snap start to existing lines, if possible
+      if (selectedLine != null && selectedEndpoint != null) {
+        const coords = getCoords(selectedLine, selectedEndpoint);
+        startX = coords.x;
+        startY = coords.y;
+      } else {
+        startX = offsetX;
+        startY = offsetY;
+      }
+      // Start drawing a new line if not near an existing endpoint
+      newLine = draw.line(startX, startY, startX, startY).stroke({ width: 2, color: 'black' });
     }
-    // Start drawing a new line if not near an existing endpoint
-    newLine = draw.line(startX, startY, startX, startY).stroke({ width: 2, color: 'black' });
   };
 
   const onMouseMove = (event: MouseEvent) => {
