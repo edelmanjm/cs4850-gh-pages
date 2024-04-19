@@ -1,8 +1,32 @@
 import { SVG, Line } from '@svgdotjs/svg.js';
 
 enum Endpoint {
-  Start,
-  End,
+  Start = 1,
+  End = 2,
+}
+
+function getCoords(line: Line, endpoint: Endpoint): { x: number; y: number } {
+  return { x: line.attr(`x${endpoint}`), y: line.attr(`y${endpoint}`) };
+}
+
+// Function to calculate distance between two points
+function distance(x1: number, y1: number, x2: number, y2: number): number {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+// Function to check if a point is close to a line endpoint
+function isCloseToEndpoint(x: number, y: number, line: Line): Endpoint | null {
+  const tolerance = 5; // Adjust this value to set the proximity tolerance
+  for (const [key, value] of Object.entries(Endpoint)) {
+    const endpoint = value as Endpoint;
+    let coords = getCoords(line, endpoint);
+    if (distance(x, y, coords.x, coords.y) < tolerance) {
+      return endpoint;
+    }
+  }
+  return null;
 }
 
 export function Draw() {
@@ -14,52 +38,25 @@ export function Draw() {
   let selectedLine: Line | null = null;
   let selectedEndpoint: Endpoint | null = null;
 
-  // Function to calculate distance between two points
-  const distance = (x1: number, y1: number, x2: number, y2: number) => {
-    const dx = x2 - x1;
-    const dy = y2 - y1;
-    return Math.sqrt(dx * dx + dy * dy);
-  };
-
-  // Function to check if a point is close to a line endpoint
-  const isCloseToEndpoint = (x: number, y: number, line: Line) => {
-    const tolerance = 5; // Adjust this value to set the proximity tolerance
-    return (
-      distance(x, y, line.attr('x1'), line.attr('y1')) < tolerance ||
-      distance(x, y, line.attr('x2'), line.attr('y2')) < tolerance
-    );
-  };
-
   const onMouseDown = (event: MouseEvent) => {
     const { offsetX, offsetY, button, altKey, ctrlKey, metaKey } = event;
     selectedLine = null;
     selectedEndpoint = null;
 
     for (const line of lines) {
-      if (isCloseToEndpoint(offsetX, offsetY, line)) {
-        selectedLine = line;
-        selectedEndpoint =
-          distance(offsetX, offsetY, line.attr('x1'), line.attr('y1')) <
-          distance(offsetX, offsetY, line.attr('x2'), line.attr('y2'))
-            ? Endpoint.Start
-            : Endpoint.End;
-        break;
+      if (selectedEndpoint === null) {
+        selectedEndpoint = isCloseToEndpoint(offsetX, offsetY, line);
+        if (selectedEndpoint !== null) {
+          selectedLine = line;
+        }
       }
     }
 
     // Snap start to existing lines, if possible
-    if (selectedLine && selectedEndpoint != null) {
-      let id: string;
-      switch (selectedEndpoint) {
-        case Endpoint.Start:
-          id = '1';
-          break;
-        case Endpoint.End:
-          id = '2';
-          break;
-      }
-      startX = selectedLine.attr(`x${id}`);
-      startY = selectedLine.attr(`y${id}`);
+    if (selectedLine != null && selectedEndpoint != null) {
+      const coords = getCoords(selectedLine, selectedEndpoint);
+      startX = coords.x;
+      startY = coords.y;
     } else {
       startX = offsetX;
       startY = offsetY;
