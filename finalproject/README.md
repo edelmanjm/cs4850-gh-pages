@@ -7,7 +7,7 @@
 
 ## Logistics
 
-- You will put all of your code and deliverables in the [Engine](./Engine) directory.
+- You will put all of your code and deliverables in the [Engine](./engine) directory.
 	- You can have a separate 'game' directory if you otherwise choose.
 <!-- NOTE:  This semester you will be completing the project yourself.
 - You will be working on this assignment as a team on your choice (or a combination) of the Mac, Linux, or Windows Operating Sytstem.
