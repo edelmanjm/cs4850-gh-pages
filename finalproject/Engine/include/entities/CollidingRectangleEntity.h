@@ -5,7 +5,7 @@
 class CollidingRectangleEntity : public GameEntity {
 public:
     CollidingRectangleEntity();
-    void AddRequired(h2d::FRect dims);
+    void AddRequired(h2d::FRect dims, bool showBoundingBox = true);
     void AddInputHandler(std::function<void(float deltaTime, const std::vector<uint8_t> keys)>& onKeypress);
 
     void Update(float deltaTime) override;

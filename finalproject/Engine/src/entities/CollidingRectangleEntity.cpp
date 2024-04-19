@@ -5,11 +5,11 @@
 
 CollidingRectangleEntity::CollidingRectangleEntity() { m_Renderable = true; }
 
-void CollidingRectangleEntity::AddRequired(h2d::FRect dims) {
+void CollidingRectangleEntity::AddRequired(h2d::FRect dims, bool showBoundingBox) {
     GameEntity::AddRequired();
 
     // TODO render rectangle with entity's heading
-    auto c = std::make_shared<Collision2DComponent>(dims, true);
+    auto c = std::make_shared<Collision2DComponent>(dims, showBoundingBox);
     AddComponent<Collision2DComponent>(c);
 }
 

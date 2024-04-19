@@ -22,15 +22,29 @@ class Rock:
         MEDIUM = RockSizeData(dims=16 * scaling, speed=20 * scaling)
         BIG = RockSizeData(dims=32 * scaling, speed=10 * scaling)
 
-    def __init__(self, x, y, screen_w, screen_h, size: Size = Size.BIG):
+    def __init__(self, renderer, x, y, screen_w, screen_h, size: Size = Size.BIG):
         self.size = size
         self.underlying = rose.CollidingRectangleEntity()
 
         dims, speed = size.value
 
-        self.underlying.add_required(
-            rose.FRect(-dims / 2, -dims / 2, dims / 2, dims / 2))
-        self.underlying.add_component(rose.TransformWrappingComponent(rose.FRect(0, 0, screen_w, screen_h)))
+        bbox = rose.FRect(-dims / 2, -dims / 2, dims / 2, dims / 2)
+        self.underlying.add_required(bbox, False)
+        self.underlying.add_component(rose.TransformWrappingComponent(rose.FRect(0.0, 0.0, screen_w, screen_h)))
+        svg = '''
+<?xml version="1.0"?>
+<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+  <title>Layer 1</title>
+  <line fill="none" fill-opacity="null" id="svg_3" stroke="#ffffff" x1="0.27" x2="12.28" y1="16.73" y2="63.46"/>
+  <line fill="none" fill-opacity="null" id="svg_4" stroke="#ffffff" x1="12.2" x2="40.03" y1="63.32" y2="56.35"/>
+  <line fill="none" fill-opacity="null" id="svg_5" stroke="#ffffff" x1="39.81" x2="48.72" y1="56.56" y2="63.61"/>
+  <line fill="none" fill-opacity="null" id="svg_6" stroke="#ffffff" x1="48.87" x2="63.89" y1="63.53" y2="42.11"/>
+  <line fill="none" fill-opacity="null" id="svg_7" stroke="#ffffff" x1="63.89" x2="47.43" y1="42.11" y2="-0.09"/>
+  <line fill="none" fill-opacity="null" id="svg_8" stroke="#ffffff" x1="17.09" x2="47.93" y1="22.92" y2="0.13"/>
+  <line fill="none" fill-opacity="null" id="svg_9" stroke="#ffffff" x1="16.95" x2="-0.09" y1="22.77" y2="16.59"/>
+</svg>
+        '''
+        self.underlying.add_component(rose.TextureComponent(rose.ResourceManager.load_svg(renderer.wrapped, svg), bbox))
 
         angle = random.random() * math.pi * 2
         self.underlying.set_velocity(math.cos(angle) * speed, math.sin(angle) * speed)
@@ -47,7 +61,7 @@ class Asteroids:
         self.w = 375 * scaling
         self.h = 246 * scaling
 
-        renderer = rose.Renderer(self.w, self.h)
+        self.renderer = rose.Renderer(self.w, self.h)
 
         self.player_speed = 100 * scaling
         self.player_rotation_speed = math.radians(180)
@@ -63,14 +77,14 @@ class Asteroids:
         self.player.add_component(rose.TransformWrappingComponent(rose.FRect(0, 0, self.w, self.h)))
         self.player.add_input_handler(lambda delta_time, keys: self.on_input(delta_time, keys))
 
-        self.scene = rose.PythonScene(renderer)
+        self.scene = rose.PythonScene(self.renderer)
         self.scene.add_entity(self.player)
 
         self.reset()
 
         self.scene.set_on_update(lambda delta_time: self.on_update(delta_time))
 
-        self.application = rose.Application(renderer)
+        self.application = rose.Application(self.renderer)
         self.application.set_scene(self.scene)
 
     def add_rock(self, r):
@@ -104,7 +118,7 @@ class Asteroids:
         for i in range(self.initial_rock_count):
             x = random.randrange(0, self.w)
             y = random.randrange(0, self.h)
-            r = Rock(x, y, self.w, self.h, Rock.Size.BIG)
+            r = Rock(self.renderer, x, y, self.w, self.h, Rock.Size.BIG)
             self.add_rock(r)
 
     def split_rock(self, rock):
@@ -124,7 +138,7 @@ class Asteroids:
 
         children_count = 2
         for i in range(children_count):
-            self.add_rock(Rock(location.x, location.y, self.w, self.h, next_size))
+            self.add_rock(Rock(self.renderer, location.x, location.y, self.w, self.h, next_size))
         self.remove_rock(rock)
 
     def fire(self):
