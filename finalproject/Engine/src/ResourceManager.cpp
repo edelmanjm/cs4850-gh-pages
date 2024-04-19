@@ -15,9 +15,6 @@ std::shared_ptr<SDL_Texture> ResourceManager::LoadTexture(SDL_Renderer* renderer
         m_TextureResources.insert({filepath, texture});
 
         SDL_DestroySurface(pixels);
-        SDL_Log("Created new resource %s", filepath.c_str());
-    } else {
-        SDL_Log("Reused resource %s", filepath.c_str());
     }
 
     return m_TextureResources[filepath];
@@ -31,9 +28,6 @@ std::shared_ptr<SDL_Texture> ResourceManager::LoadSvg(SDL_Renderer* renderer, co
         m_TextureResources.insert({svg, texture});
 
         SDL_DestroySurface(surface);
-        SDL_Log("Created new resource %s", svg.c_str());
-    } else {
-        SDL_Log("Reused resource %s", svg.c_str());
     }
 
     return m_TextureResources[svg];
