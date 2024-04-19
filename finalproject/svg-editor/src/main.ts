@@ -1,5 +1,10 @@
 import { SVG, Line } from '@svgdotjs/svg.js';
 
+enum Endpoint {
+  Start,
+  End,
+}
+
 export function Draw() {
   const draw = SVG().addTo('#canvas').size(800, 600);
   const lines: Line[] = [];
@@ -7,7 +12,7 @@ export function Draw() {
   let startX: number = 0;
   let startY: number = 0;
   let selectedLine: Line | null = null;
-  let selectedEndpoint: 'start' | 'end' | null = null;
+  let selectedEndpoint: Endpoint | null = null;
 
   // Function to calculate distance between two points
   const distance = (x1: number, y1: number, x2: number, y2: number) => {
@@ -32,30 +37,37 @@ export function Draw() {
 
     for (const line of lines) {
       if (isCloseToEndpoint(offsetX, offsetY, line)) {
-        // If any of these keys are held, we want to move the existing lines instead of drawing a
-        // new one
-        if (altKey || ctrlKey || metaKey) {
-          selectedLine = line;
-          selectedEndpoint =
-            distance(offsetX, offsetY, line.attr('x1'), line.attr('y1')) <
-            distance(offsetX, offsetY, line.attr('x2'), line.attr('y2'))
-              ? 'start'
-              : 'end';
-        }
+        selectedLine = line;
+        selectedEndpoint =
+          distance(offsetX, offsetY, line.attr('x1'), line.attr('y1')) <
+          distance(offsetX, offsetY, line.attr('x2'), line.attr('y2'))
+            ? Endpoint.Start
+            : Endpoint.End;
         break;
       }
     }
 
-    if (!selectedLine) {
-      // Start drawing a new line if not near an existing endpoint
-      isDrawing = true;
+    // Snap start to existing lines, if possible
+    if (selectedLine && selectedEndpoint != null) {
+      let id: string;
+      switch (selectedEndpoint) {
+        case Endpoint.Start:
+          id = '1';
+          break;
+        case Endpoint.End:
+          id = '2';
+          break;
+      }
+      startX = selectedLine.attr(`x${id}`);
+      startY = selectedLine.attr(`y${id}`);
+    } else {
       startX = offsetX;
       startY = offsetY;
-      const newLine = draw
-        .line(startX, startY, startX, startY)
-        .stroke({ width: 2, color: 'black' });
-      lines.push(newLine);
     }
+    // Start drawing a new line if not near an existing endpoint
+    isDrawing = true;
+    const newLine = draw.line(startX, startY, startX, startY).stroke({ width: 2, color: 'black' });
+    lines.push(newLine);
   };
 
   const onMouseMove = (event: MouseEvent) => {
@@ -64,12 +76,15 @@ export function Draw() {
     if (isDrawing && lines.length > 0) {
       const currentLine = lines[lines.length - 1];
       currentLine.plot(startX, startY, offsetX, offsetY);
-    } else if (selectedLine && selectedEndpoint) {
+    } else if (selectedLine && selectedEndpoint != null) {
       // Move the selected endpoint
-      if (selectedEndpoint === 'start') {
-        selectedLine.plot(offsetX, offsetY, selectedLine.attr('x2'), selectedLine.attr('y2'));
-      } else {
-        selectedLine.plot(selectedLine.attr('x1'), selectedLine.attr('y1'), offsetX, offsetY);
+      switch (selectedEndpoint) {
+        case Endpoint.Start:
+          selectedLine.plot(offsetX, offsetY, selectedLine.attr('x2'), selectedLine.attr('y2'));
+          break;
+        case Endpoint.End:
+          selectedLine.plot(selectedLine.attr('x1'), selectedLine.attr('y1'), offsetX, offsetY);
+          break;
       }
     }
   };
