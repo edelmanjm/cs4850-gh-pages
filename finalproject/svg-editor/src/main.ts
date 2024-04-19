@@ -1,4 +1,5 @@
 import { SVG, Line } from '@svgdotjs/svg.js';
+import * as assert from 'assert';
 
 enum Endpoint {
   Start = 1,
@@ -37,6 +38,7 @@ export function Draw() {
   let startY: number = 0;
   let selectedLine: Line | null = null;
   let selectedEndpoint: Endpoint | null = null;
+  let newLine: Line | null = null;
 
   const onMouseDown = (event: MouseEvent) => {
     const { offsetX, offsetY, button, altKey, ctrlKey, metaKey } = event;
@@ -62,17 +64,24 @@ export function Draw() {
       startY = offsetY;
     }
     // Start drawing a new line if not near an existing endpoint
-    isDrawing = true;
-    const newLine = draw.line(startX, startY, startX, startY).stroke({ width: 2, color: 'black' });
-    lines.push(newLine);
+    newLine = draw.line(startX, startY, startX, startY).stroke({ width: 2, color: 'black' });
   };
 
   const onMouseMove = (event: MouseEvent) => {
-    const { offsetX, offsetY } = event;
+    let { offsetX, offsetY } = event;
 
-    if (isDrawing && lines.length > 0) {
-      const currentLine = lines[lines.length - 1];
-      currentLine.plot(startX, startY, offsetX, offsetY);
+    // Snap start to existing lines, if possible
+    for (const line of lines) {
+      let endpoint = isCloseToEndpoint(offsetX, offsetY, line);
+      if (endpoint != null) {
+        const coords = getCoords(line, endpoint);
+        offsetX = coords.x;
+        offsetY = coords.y;
+      }
+    }
+
+    if (newLine) {
+      newLine.plot(startX, startY, offsetX, offsetY);
     } else if (selectedLine && selectedEndpoint != null) {
       // Move the selected endpoint
       switch (selectedEndpoint) {
@@ -90,6 +99,11 @@ export function Draw() {
     isDrawing = false;
     selectedLine = null;
     selectedEndpoint = null;
+
+    if (newLine != null) {
+      lines.push(newLine);
+    }
+    newLine = null;
   };
 
   draw.node.addEventListener('mousedown', onMouseDown);
