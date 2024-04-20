@@ -7,6 +7,12 @@ enum Endpoint {
   End = 2,
 }
 
+const params: { width: NumberAlias; height: NumberAlias; scale: number } = {
+  width: 128,
+  height: 128,
+  scale: 2.0,
+};
+
 function getCoords(line: Line, endpoint: Endpoint): { x: number; y: number } {
   return { x: line.attr(`x${endpoint}`), y: line.attr(`y${endpoint}`) };
 }
@@ -20,7 +26,7 @@ function distance(x1: number, y1: number, x2: number, y2: number): number {
 
 // Function to check if a point is close to a line endpoint
 function isCloseToEndpoint(x: number, y: number, line: Line): Endpoint | null {
-  const tolerance = 5; // Adjust this value to set the proximity tolerance
+  const tolerance = 5 / params.scale;
   for (const [key, value] of Object.entries(Endpoint)) {
     const endpoint = value as Endpoint;
     let coords = getCoords(line, endpoint);
@@ -34,12 +40,6 @@ function isCloseToEndpoint(x: number, y: number, line: Line): Endpoint | null {
 function setupTweakpane(draw: Svg, containerElement: HTMLDivElement) {
   const pane = new Pane();
   const folder = pane.addFolder({ title: 'Canvas Size' });
-
-  const params: { width: NumberAlias; height: NumberAlias; scale: number } = {
-    width: draw.width(),
-    height: draw.height(),
-    scale: 1.0,
-  };
 
   folder.addBinding(params, 'width', { label: 'Width', min: 1 }).on('change', ev => {
     draw.width(ev.value);
@@ -60,7 +60,10 @@ function setupTweakpane(draw: Svg, containerElement: HTMLDivElement) {
 
 export function Draw() {
   const containerElement = document.getElementById('container') as HTMLDivElement;
-  const draw = SVG().size(128, 128).css('border', '2px solid black').addTo(containerElement);
+  const draw = SVG()
+    .size(params.width, params.height)
+    .css('border', '2px solid black')
+    .addTo(containerElement);
   const lines: Line[] = [];
   let isDrawing = false;
   let startX: number = 0;
@@ -96,7 +99,7 @@ export function Draw() {
         startY = offsetY;
       }
       // Start drawing a new line if not near an existing endpoint
-      newLine = draw.line(startX, startY, startX, startY).stroke({ width: 2, color: 'black' });
+      newLine = draw.line(startX, startY, startX, startY).stroke({ width: 1, color: 'black' });
     }
   };
 
