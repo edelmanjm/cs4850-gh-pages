@@ -65,7 +65,6 @@ export function Draw() {
     .css('border', '2px solid black')
     .addTo(containerElement);
   const lines: Line[] = [];
-  let isDrawing = false;
   let startX: number = 0;
   let startY: number = 0;
   let selectedLine: Line | null = null;
@@ -132,7 +131,6 @@ export function Draw() {
   };
 
   const onMouseUp = () => {
-    isDrawing = false;
     selectedLine = null;
     selectedEndpoint = null;
 
