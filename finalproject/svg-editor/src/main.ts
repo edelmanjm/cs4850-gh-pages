@@ -62,7 +62,7 @@ export function Draw() {
   const containerElement = document.getElementById('container') as HTMLDivElement;
   const draw = SVG()
     .size(params.width, params.height)
-    .css('border', '2px solid black')
+    .css('border', '2px dashed grey')
     .addTo(containerElement);
   const lines: Line[] = [];
   let startX: number = 0;
@@ -98,7 +98,7 @@ export function Draw() {
         startY = offsetY;
       }
       // Start drawing a new line if not near an existing endpoint
-      newLine = draw.line(startX, startY, startX, startY).stroke({ width: 1, color: 'black' });
+      newLine = draw.line(startX, startY, startX, startY).stroke({ width: 1, color: 'white' });
     }
   };
 
