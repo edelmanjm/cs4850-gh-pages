@@ -1,5 +1,6 @@
-import { SVG, Line } from '@svgdotjs/svg.js';
+import { SVG, Line, Svg, NumberAlias } from '@svgdotjs/svg.js';
 import * as assert from 'assert';
+import { Pane } from 'tweakpane';
 
 enum Endpoint {
   Start = 1,
@@ -30,8 +31,36 @@ function isCloseToEndpoint(x: number, y: number, line: Line): Endpoint | null {
   return null;
 }
 
+function setupTweakpane(draw: Svg, containerElement: HTMLDivElement) {
+  const pane = new Pane();
+  const folder = pane.addFolder({ title: 'Canvas Size' });
+
+  const params: { width: NumberAlias; height: NumberAlias; scale: number } = {
+    width: draw.width(),
+    height: draw.height(),
+    scale: 1.0,
+  };
+
+  folder.addBinding(params, 'width', { label: 'Width', min: 1 }).on('change', ev => {
+    draw.width(ev.value);
+    containerElement.style.width = ev.value.valueOf.length + 'px';
+  });
+
+  folder.addBinding(params, 'height', { label: 'Height', min: 1 }).on('change', ev => {
+    draw.height(ev.value);
+    containerElement.style.height = ev.value.valueOf.length + 'px';
+  });
+
+  folder
+    .addBinding(params, 'scale', { label: 'Scale', min: 0.1, max: 10, step: 0.1 })
+    .on('change', ev => {
+      containerElement.style.transform = `scale(${ev.value})`;
+    });
+}
+
 export function Draw() {
-  const draw = SVG().addTo('#canvas').size(800, 600);
+  const containerElement = document.getElementById('container') as HTMLDivElement;
+  const draw = SVG().size(128, 128).css('border', '2px solid black').addTo(containerElement);
   const lines: Line[] = [];
   let isDrawing = false;
   let startX: number = 0;
@@ -113,6 +142,8 @@ export function Draw() {
   draw.node.addEventListener('mousedown', onMouseDown);
   draw.node.addEventListener('mousemove', onMouseMove);
   draw.node.addEventListener('mouseup', onMouseUp);
+
+  setupTweakpane(draw, containerElement);
 }
 
 document.addEventListener('DOMContentLoaded', Draw);
