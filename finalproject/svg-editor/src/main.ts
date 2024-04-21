@@ -147,7 +147,7 @@ export function Draw() {
 }
 
 function setupDownloadButton(draw: Svg) {
-  const downloadButton = document.getElementById('download') as HTMLButtonElement;
+  const downloadButton = document.getElementById('downloadButton') as HTMLButtonElement;
   downloadButton.addEventListener('click', () => {
     const svgContent = draw.svg();
     const blob = new Blob([svgContent], { type: 'image/svg+xml' });
@@ -165,7 +165,7 @@ function setupDownloadButton(draw: Svg) {
 
 function addUploadButton() {
   const uploadInput = document.getElementById('uploadInput') as HTMLInputElement;
-  const uploadButton = document.getElementById('upload') as HTMLButtonElement;
+  const uploadButton = document.getElementById('uploadButton') as HTMLButtonElement;
   const reference = document.getElementById('reference') as HTMLImageElement;
 
   uploadButton.addEventListener('click', () => {
