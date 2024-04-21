@@ -5,11 +5,11 @@
     <title>Very Simple SVG</title>
 </head>
 <body>
-    <div id="container">
+    <div id="toolbar">
+        <button id="download">Download SVG</button>
     </div>
 
-    <div>
-        <button id="download">Download SVG</button>
+    <div id="container">
     </div>
 
     <script src="bundle.js"></script>
@@ -18,6 +18,10 @@
 <style>
     body {
         background-color: black
+    }
+
+    #toolbar {
+        padding-bottom: 10px;
     }
 
     #container {

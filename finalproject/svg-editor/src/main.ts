@@ -162,8 +162,6 @@ function setupDownloadButton(draw: Svg) {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   });
-
-  document.body.appendChild(downloadButton);
 }
 
 document.addEventListener('DOMContentLoaded', Draw);
