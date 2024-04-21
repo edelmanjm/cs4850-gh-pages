@@ -1,5 +1,4 @@
-import { SVG, Line, Svg, NumberAlias } from '@svgdotjs/svg.js';
-import * as assert from 'assert';
+import { Line, NumberAlias, Svg, SVG } from '@svgdotjs/svg.js';
 import { Pane } from 'tweakpane';
 
 enum Endpoint {
@@ -164,4 +163,29 @@ function setupDownloadButton(draw: Svg) {
   });
 }
 
+function addUploadButton() {
+  const uploadInput = document.getElementById('uploadInput') as HTMLInputElement;
+  const uploadButton = document.getElementById('upload') as HTMLButtonElement;
+  const reference = document.getElementById('reference') as HTMLImageElement;
+
+  uploadButton.addEventListener('click', () => {
+    uploadInput.click();
+  });
+
+  uploadInput.addEventListener('change', () => {
+    const file = uploadInput.files?.[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        reference.src = reader.result as string;
+      };
+
+      reader.readAsDataURL(file);
+    }
+  });
+}
+
+addUploadButton();
 document.addEventListener('DOMContentLoaded', Draw);
