@@ -43,12 +43,12 @@ function setupTweakpane(draw: Svg, containerElement: HTMLDivElement) {
 
   folder.addBinding(params, 'width', { label: 'Width', min: 1 }).on('change', ev => {
     draw.width(ev.value);
-    containerElement.style.width = ev.value.valueOf.length + 'px';
+    containerElement.style.width = `${ev.value}px`;
   });
 
   folder.addBinding(params, 'height', { label: 'Height', min: 1 }).on('change', ev => {
     draw.height(ev.value);
-    containerElement.style.height = ev.value.valueOf.length + 'px';
+    containerElement.style.height = `${ev.value}px`;
   });
 
   folder
@@ -60,10 +60,9 @@ function setupTweakpane(draw: Svg, containerElement: HTMLDivElement) {
 
 export function Draw() {
   const containerElement = document.getElementById('container') as HTMLDivElement;
-  const draw = SVG()
-    .size(params.width, params.height)
-    .css('border', '2px dashed grey')
-    .addTo(containerElement);
+  containerElement.style.width = `${params.width}px`;
+  containerElement.style.height = `${params.height}px`;
+  const draw = SVG().size(params.width, params.height).addTo(containerElement);
   const lines: Line[] = [];
   let startX: number = 0;
   let startY: number = 0;
@@ -145,6 +144,26 @@ export function Draw() {
   draw.node.addEventListener('mouseup', onMouseUp);
 
   setupTweakpane(draw, containerElement);
+  setupDownloadButton(draw);
+}
+
+function setupDownloadButton(draw: Svg) {
+  const downloadButton = document.getElementById('download') as HTMLButtonElement;
+  downloadButton.addEventListener('click', () => {
+    const svgContent = draw.svg();
+    const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'drawing.svg';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  document.body.appendChild(downloadButton);
 }
 
 document.addEventListener('DOMContentLoaded', Draw);
