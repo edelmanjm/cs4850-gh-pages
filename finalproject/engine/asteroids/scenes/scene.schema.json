@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "rock_speed_multiplier": {
+      "type": "number"
+    },
+    "initial_rock_count": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "rock_speed_multiplier",
+    "initial_rock_count"
+  ]
+}

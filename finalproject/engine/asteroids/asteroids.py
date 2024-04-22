@@ -1,5 +1,6 @@
 import random
 from enum import Enum
+import json
 import math
 from typing import List, NamedTuple
 import sys
@@ -8,7 +9,11 @@ from xml.etree import ElementTree
 sys.path.append('../cmake-build-debug')
 import rose
 
-scaling = 2
+scaling: float
+with open("config.json") as json_data:
+    config = json.load(json_data)
+    scaling = config['scaling']
+
 # Make the hitbox smaller to avoid "unfair" collisions
 hitbox_margin = 2 * scaling
 
@@ -41,11 +46,12 @@ class Rock:
         MEDIUM = RockSizeData(dims=16 * scaling, speed=20 * scaling, score=50)
         BIG = RockSizeData(dims=32 * scaling, speed=10 * scaling, score=20)
 
-    def __init__(self, renderer, x, y, screen_w, screen_h, size: Size = Size.BIG):
+    def __init__(self, renderer, x, y, screen_w, screen_h, speed_multiplier, size: Size = Size.BIG):
         self.size = size
         self.underlying = rose.CollidingRectangleEntity()
 
         dims, speed, score = size.value
+        speed *= speed_multiplier
 
         self.underlying.add_required(
             rose.FRect(-dims / 2 + hitbox_margin, -dims / 2 + hitbox_margin, dims / 2 - hitbox_margin,
@@ -63,10 +69,11 @@ class Rock:
 class Asteroids:
     projectiles: List[rose.CollidingRectangleEntity] = []
     rocks: List[Rock] = []
-    initial_rock_count = 4
+    scene_index = config['scene_index']
     score = 0
 
     def __init__(self):
+        self.scene_config = None
         self.w = 375 * scaling
         self.h = 246 * scaling
 
@@ -145,6 +152,9 @@ class Asteroids:
         self.scene.remove_entity(p)
 
     def reset(self):
+        with open(f"scenes/scene_{self.scene_index}.json") as json_data:
+            self.scene_config = json.load(json_data)
+
         self.player.set_transform(rose.Homogr().set_translation(self.w / 2, self.h / 2))
         self.player.set_velocity(0, 0)
         self.should_fire = False
@@ -156,7 +166,7 @@ class Asteroids:
         self.rocks = []
         self.projectiles = []
 
-        for i in range(self.initial_rock_count):
+        for i in range(self.scene_config['initial_rock_count']):
             keepout_size = 50 * scaling
             x = self.w / 2
             y = self.h / 2
@@ -164,7 +174,7 @@ class Asteroids:
                 x = random.randrange(0, self.w)
             while abs(y - self.h / 2) < keepout_size:
                 y = random.randrange(0, self.h)
-            r = Rock(self.renderer, x, y, self.w, self.h, Rock.Size.BIG)
+            r = Rock(self.renderer, x, y, self.w, self.h, self.scene_config['rock_speed_multiplier'], Rock.Size.BIG)
             self.add_rock(r)
 
     def split_rock(self, rock):
@@ -184,7 +194,8 @@ class Asteroids:
 
         children_count = 2
         for i in range(children_count):
-            self.add_rock(Rock(self.renderer, location.x, location.y, self.w, self.h, next_size))
+            self.add_rock(Rock(self.renderer, location.x, location.y, self.w, self.h, self.scene_config[
+                'rock_speed_multiplier'], next_size))
         self.remove_rock(rock)
 
     def fire(self):
@@ -241,6 +252,9 @@ class Asteroids:
             self.should_fire = True
 
     def on_update(self, delta_time: float):
+        if len(self.rocks) == 0:
+            self.reset()
+
         if self.should_fire:
             if self.time_since_last_fire > self.fire_debounce_time:
                 self.fire()
