@@ -1,0 +1,20 @@
+<map id="src/scenes/SpaceInvaders.cpp" name="src/scenes/SpaceInvaders.cpp">
+<area shape="rect" id="node1" title=" " alt="" coords="509,5,711,31"/>
+<area shape="rect" id="node2" href="$_input_component_8h.html" title=" " alt="" coords="651,389,854,414"/>
+<area shape="rect" id="node8" href="$_player_game_entity_8h.html" title=" " alt="" coords="531,153,689,193"/>
+<area shape="rect" id="node14" href="$_space_invaders_8h.html" title=" " alt="" coords="365,79,530,105"/>
+<area shape="rect" id="node3" title=" " alt="" coords="822,536,918,562"/>
+<area shape="rect" id="node4" title=" " alt="" coords="268,536,336,562"/>
+<area shape="rect" id="node5" title=" " alt="" coords="462,462,515,488"/>
+<area shape="rect" id="node6" href="$_component_8h.html" title=" " alt="" coords="590,462,764,488"/>
+<area shape="rect" id="node7" href="$_component_type_8h.html" title=" " alt="" coords="576,536,778,562"/>
+<area shape="rect" id="node9" href="$_projectile_entity_8h.html" title=" " alt="" coords="432,241,596,267"/>
+<area shape="rect" id="node10" href="$_game_entity_8h.html" title=" " alt="" coords="321,315,467,341"/>
+<area shape="rect" id="node11" title=" " alt="" coords="580,389,627,414"/>
+<area shape="rect" id="node12" href="$_transform_component_8h.html" title=" " alt="" coords="272,389,505,414"/>
+<area shape="rect" id="node13" title=" " alt="" coords="339,462,438,488"/>
+<area shape="rect" id="node15" href="$_enemy_entity_8h.html" title=" " alt="" coords="303,160,507,186"/>
+<area shape="rect" id="node16" href="$_scene_8h.html" title=" " alt="" coords="142,241,257,267"/>
+<area shape="rect" id="node17" title=" " alt="" coords="87,315,146,341"/>
+<area shape="rect" id="node18" title=" " alt="" coords="5,315,63,341"/>
+</map>

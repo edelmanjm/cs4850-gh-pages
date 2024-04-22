@@ -1,0 +1,4 @@
+<map id="SDL_Renderer_Wrapper" name="SDL_Renderer_Wrapper">
+<area shape="rect" id="node1" title="Needed because SDL_Renderer is an incomplete, renderer&#45;specific type." alt="" coords="5,147,168,225"/>
+<area shape="rect" id="node2" title=" " alt="" coords="28,5,145,84"/>
+</map>

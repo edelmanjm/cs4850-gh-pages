@@ -1,0 +1,9 @@
+<map id="GameEntity" name="GameEntity">
+<area shape="rect" id="node1" title="GameEntities are the main &quot;things&quot; in a scene." alt="" coords="356,147,525,450"/>
+<area shape="rect" id="node3" href="$class_colliding_rectangle_entity.html" title="An entity with a Collision2DComponent, rotation, and velocity." alt="" coords="5,498,190,696"/>
+<area shape="rect" id="node4" href="$class_enemy_entity.html" title=" " alt="" coords="214,521,338,674"/>
+<area shape="rect" id="node5" href="$class_player_game_entity.html" title=" " alt="" coords="363,536,518,659"/>
+<area shape="rect" id="node6" href="$class_projectile_entity.html" title="It&#39;s a projectile! IDK what else to say." alt="" coords="542,528,672,666"/>
+<area shape="rect" id="node7" href="$class_text_entity.html" title="A TextEntity renders text, given a font and a string to render." alt="" coords="696,536,811,659"/>
+<area shape="rect" id="node2" title=" " alt="" coords="353,5,528,99"/>
+</map>

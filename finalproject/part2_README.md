@@ -10,14 +10,17 @@ The **key** components for your project are:
 
 The following are the technical requirements of your game engine. There is significant freedom in how you achieve them, but I would like you to apply these techniques in your engine.
 
-- [ ] Implement a resource manager
-- [ ] Implement a GUI-based editor/environment for assisting building a game (e.g. A tilemap editor, 2D animation preview tool, etc.)
+- [x] Implement a resource manager
+- [x] Implement a GUI-based editor/environment for assisting building a game (e.g. A tilemap editor, 2D animation 
+  preview tool, etc.)
 	- This tool need not be implemented in C++, but should otherwise generate data that your C++ engine can use.
-- [ ] Your engine must be data-driven
-  - [ ] Scripts should be loaded for the gameplay logic
-  - [ ] Other configuration files (e.g. levels, scenes, etc.) should be loaded at run-time.
-- [ ] Your engine should be component-based **or** use some other logical pattern for organizing game objects (At a minimum you should have a gameobject class).
-- [ ] Something **extra** that gives your engine a 'wow' factor to show off to the TA's and instructors. Highlight this in your video (could be engineering, could be a gameplay mechanic that you designed your engine around, the goal is that it is something non-trivial)
+- [x] Your engine must be data-driven
+  - [x] Scripts should be loaded for the gameplay logic
+  - [x] Other configuration files (e.g. levels, scenes, etc.) should be loaded at run-time.
+- [x] Your engine should be component-based **or** use some other logical pattern for organizing game objects (At a 
+  minimum you should have a gameobject class).
+- [x] Something **extra** that gives your engine a 'wow' factor to show off to the TA's and instructors. Highlight 
+  this in your video (could be engineering, could be a gameplay mechanic that you designed your engine around, the goal is that it is something non-trivial)
 
 ## Gameplan
 

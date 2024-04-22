@@ -1,0 +1,10 @@
+<map id="TextEntity" name="TextEntity">
+<area shape="rect" id="node1" title="A TextEntity renders text, given a font and a string to render." alt="" coords="423,483,539,606"/>
+<area shape="rect" id="node2" href="$class_game_entity.html" title="GameEntities are the main &quot;things&quot; in a scene." alt="" coords="328,162,498,420"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,181,99"/>
+<area shape="rect" id="node4" title=" " alt="" coords="205,13,349,91"/>
+<area shape="rect" id="node5" title=" " alt="" coords="382,13,428,91"/>
+<area shape="rect" id="node6" title=" " alt="" coords="452,5,667,99"/>
+<area shape="rect" id="node7" title=" " alt="" coords="691,5,839,99"/>
+<area shape="rect" id="node8" title=" " alt="" coords="522,252,576,330"/>
+</map>

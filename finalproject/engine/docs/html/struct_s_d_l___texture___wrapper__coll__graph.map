@@ -1,0 +1,4 @@
+<map id="SDL_Texture_Wrapper" name="SDL_Texture_Wrapper">
+<area shape="rect" id="node1" title="Needed because SDL_Texture is an incomplete, renderer&#45;specific type." alt="" coords="20,147,173,225"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,188,84"/>
+</map>
