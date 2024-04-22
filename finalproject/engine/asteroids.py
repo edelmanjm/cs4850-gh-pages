@@ -30,21 +30,22 @@ def rotate_svg(svg_string, center_x, center_y, angle):
 class RockSizeData(NamedTuple):
     dims: int
     speed: float
+    score: int
 
 
 class Rock:
     sprites: List[str] = [f'assets/asteroids/asteroid-{i}.svg' for i in range(3)]
 
     class Size(Enum):
-        SMALL = RockSizeData(dims=8 * scaling, speed=40 * scaling)
-        MEDIUM = RockSizeData(dims=16 * scaling, speed=20 * scaling)
-        BIG = RockSizeData(dims=32 * scaling, speed=10 * scaling)
+        SMALL = RockSizeData(dims=8 * scaling, speed=40 * scaling, score=100)
+        MEDIUM = RockSizeData(dims=16 * scaling, speed=20 * scaling, score=50)
+        BIG = RockSizeData(dims=32 * scaling, speed=10 * scaling, score=20)
 
     def __init__(self, renderer, x, y, screen_w, screen_h, size: Size = Size.BIG):
         self.size = size
         self.underlying = rose.CollidingRectangleEntity()
 
-        dims, speed = size.value
+        dims, speed, score = size.value
 
         self.underlying.add_required(
             rose.FRect(-dims / 2 + hitbox_margin, -dims / 2 + hitbox_margin, dims / 2 - hitbox_margin,
@@ -63,6 +64,7 @@ class Asteroids:
     projectiles: List[rose.CollidingRectangleEntity] = []
     rocks: List[Rock] = []
     initial_rock_count = 4
+    score = 0
 
     def __init__(self):
         self.w = 375 * scaling
@@ -110,6 +112,12 @@ class Asteroids:
         self.scene = rose.PythonScene(self.renderer)
         self.scene.add_entity(self.player)
 
+        self.score_display = rose.TextEntity("assets/hyperspace.ttf", 16 * scaling, rose.SDL_Color(255, 255, 255, 255))
+        self.score_display.add_required()
+        self.score_display.set_transform(rose.Homogr().set_translation(48 * scaling, 0))
+        self.score_display.text = str(self.score)
+        self.scene.add_entity(self.score_display)
+
         self.reset()
 
         self.scene.set_on_update(lambda delta_time: self.on_update(delta_time))
@@ -128,6 +136,9 @@ class Asteroids:
     def remove_rock(self, r):
         self.rocks.remove(r)
         self.scene.remove_entity(r.underlying)
+
+        self.score += r.size.value.score
+        self.score_display.text = str(self.score)
 
     def remove_projectile(self, p):
         self.projectiles.remove(p)
