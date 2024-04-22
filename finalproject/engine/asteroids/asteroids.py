@@ -165,13 +165,16 @@ class Asteroids:
         self.projectiles.remove(p)
         self.scene.remove_entity(p)
 
+    def reset_player(self):
+        self.player.set_transform(rose.Homogr().set_translation(self.w / 2, self.h / 2))
+        self.player.set_velocity(0, 0)
+        self.should_fire = False
+
     def reset(self):
         with open(f"scenes/scene_{self.scene_index}.json") as json_data:
             self.scene_config = json.load(json_data)
 
-        self.player.set_transform(rose.Homogr().set_translation(self.w / 2, self.h / 2))
-        self.player.set_velocity(0, 0)
-        self.should_fire = False
+        self.reset_player()
 
         for rock in self.rocks:
             self.scene.remove_entity(rock.underlying)
@@ -272,7 +275,7 @@ class Asteroids:
                 print("You won!")
                 exit(0)
             else:
-                print(f"Advancing to level {self.scene_index}...")
+                print(f"Advancing to level {self.scene_index + 1}...")
             self.reset()
 
         if self.should_fire:
@@ -301,8 +304,12 @@ class Asteroids:
 
         for rock in self.rocks:
             if rose.CollidingRectangleEntity.intersects(rock.underlying, self.player):
-                print(f"Game over! You scored {self.score}")
-                exit(0)
+                self.set_lives(self.lives - 1)
+                if self.lives > 0:
+                    self.reset_player()
+                else:
+                    print(f"Game over! You scored {self.score}")
+                    exit(0)
 
 
 asteroids = Asteroids()
