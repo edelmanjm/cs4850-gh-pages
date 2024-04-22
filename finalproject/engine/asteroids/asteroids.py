@@ -70,7 +70,8 @@ class Asteroids:
     projectiles: List[rose.CollidingRectangleEntity] = []
     rocks: List[Rock] = []
     scene_index = config['scene_index_start']
-    score = 0
+    lives: int
+    score: int
 
     def __init__(self):
         self.scene_config = None
@@ -121,9 +122,15 @@ class Asteroids:
 
         self.score_display = rose.TextEntity("assets/hyperspace.ttf", 16 * scaling, rose.SDL_Color(255, 255, 255, 255))
         self.score_display.add_required()
-        self.score_display.set_transform(rose.Homogr().set_translation(48 * scaling, 0))
-        self.score_display.text = str(self.score)
+        self.score_display.set_transform(rose.Homogr().set_translation(16 * scaling, 0))
+        self.set_score(0)
         self.scene.add_entity(self.score_display)
+
+        self.lives_display = rose.TextEntity("assets/hyperspace.ttf", 8 * scaling, rose.SDL_Color(255, 255, 255, 255))
+        self.lives_display.add_required()
+        self.lives_display.set_transform(rose.Homogr().set_translation(16 * scaling, 24 * scaling))
+        self.set_lives(config['lives'])
+        self.scene.add_entity(self.lives_display)
 
         self.reset()
 
@@ -131,6 +138,14 @@ class Asteroids:
 
         self.application = rose.Application(self.renderer)
         self.application.set_scene(self.scene)
+
+    def set_score(self, score):
+        self.score = score
+        self.score_display.text = f"Score:{self.score}"
+
+    def set_lives(self, lives):
+        self.lives = lives
+        self.lives_display.text = f"Lives:{self.lives}"
 
     def add_rock(self, r):
         self.rocks.append(r)
@@ -144,8 +159,7 @@ class Asteroids:
         self.rocks.remove(r)
         self.scene.remove_entity(r.underlying)
 
-        self.score += r.size.value.score
-        self.score_display.text = str(self.score)
+        self.set_score(self.score + r.size.value.score)
 
     def remove_projectile(self, p):
         self.projectiles.remove(p)
