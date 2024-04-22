@@ -287,7 +287,8 @@ class Asteroids:
 
         for rock in self.rocks:
             if rose.CollidingRectangleEntity.intersects(rock.underlying, self.player):
-                self.reset()
+                print(f"Game over! You scored {self.score}")
+                exit(0)
 
 
 asteroids = Asteroids()
