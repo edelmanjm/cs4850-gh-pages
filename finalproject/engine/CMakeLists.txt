@@ -49,6 +49,12 @@ CPMAddPackage(
         GIT_TAG smart_holder # This branch doesn't get releases
 )
 
+CPMAddPackage(
+        NAME NanoSVG
+        GITHUB_REPOSITORY memononen/nanosvg
+        GIT_TAG master
+)
+
 #CPMAddPackage(
 #        NAME units
 #        VERSION 2.3.3
@@ -87,6 +93,7 @@ add_library(rose-lib
 
 target_include_directories(rose-lib PUBLIC include)
 target_include_directories(rose-lib PUBLIC ${homog2d_SOURCE_DIR})
+target_include_directories(rose-lib PUBLIC ${NanoSVG_SOURCE_DIR}/src)
 
 target_link_libraries(rose-lib PUBLIC
         SDL3::SDL3

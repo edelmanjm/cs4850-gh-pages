@@ -28,7 +28,7 @@ public:
      * @param svg An SVG, as a string. Note that this is *not* a path to an SVG file, but rather the SVG itself.
      * @return A shared pointer to the responding texture.
      */
-    std::shared_ptr<SDL_Texture> LoadSvg(SDL_Renderer* renderer, const std::string& svg);
+    std::shared_ptr<SDL_Texture> LoadSvg(SDL_Renderer* renderer, const std::string& svg, float scale = 1.0);
 
     /**
      * Loads a supported image as a texture, using SDL_Image.
@@ -45,4 +45,12 @@ private:
     };
 
     static std::shared_ptr<SDL_Texture> MakeSharedTexture(SDL_Renderer* renderer, SDL_Surface* surface);
+
+    /**
+     * Copied from IMG_svg.c, but with the scale parameter actually exposed.
+     * @param src
+     * @param scale
+     * @return
+     */
+    SDL_Surface* LoadScaledSvg(SDL_IOStream *src, float scale = 1.0);
 };

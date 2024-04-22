@@ -103,12 +103,13 @@ class Asteroids:
         with open("assets/ship-firing.svg", "r") as f:
             player_sprite: str = f.read()
             self.rotated_player_textures_firing = [
-                rose.ResourceManager.load_svg(self.renderer.wrapped, rotate_svg(player_sprite, 32, 32, degrees))
+                rose.ResourceManager.load_svg(self.renderer.wrapped, rotate_svg(player_sprite, 32, 32, degrees),
+                                              scaling)
                 for degrees in range(360)]
         with open("assets/ship-static.svg", "r") as f:
             player_sprite: str = f.read()
             self.rotated_player_textures_static = [
-                rose.ResourceManager.load_svg(self.renderer.wrapped, rotate_svg(player_sprite, 32, 32, degrees))
+                rose.ResourceManager.load_svg(self.renderer.wrapped, rotate_svg(player_sprite, 32, 32, degrees), scaling)
                 for degrees in range(360)]
         print("Done!")
         self.player_texture = rose.TextureComponent(self.rotated_player_textures_static[0],
