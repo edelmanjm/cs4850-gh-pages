@@ -7,6 +7,10 @@
 
 #include <components/Component.h>
 
+/**
+ * A component backed by a rectangular bounding box. Useful for when you want to check for intersections with other
+ * {@link Collision2DComponent}s or {@link h2d::FRect}.
+ */
 class Collision2DComponent : public Component {
 public:
     Collision2DComponent(h2d::FRect box, bool showBoundingBox = false);

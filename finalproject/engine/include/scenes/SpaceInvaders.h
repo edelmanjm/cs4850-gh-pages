@@ -4,6 +4,9 @@
 #include <entities/invaders/PlayerGameEntity.h>
 #include <scenes/Scene.h>
 
+/**
+ * Space Invaders-specific scene.
+ */
 class SpaceInvaders : public Scene {
 public:
     SpaceInvaders(SDL_Renderer* renderer, uint32_t width);

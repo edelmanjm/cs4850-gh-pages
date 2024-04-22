@@ -2,6 +2,12 @@
 
 #include <components/Component.h>
 
+/**
+ * A lifetime component automatically hides (or, optionally, despawns) its parent entity when its lifetime expires.
+ * An internal SDL timer keeps track of this lifetime.
+ *
+ * Be careful with these, otherwise you may get segfaults!
+ */
 class LifetimeComponent : public Component {
 public:
     explicit LifetimeComponent(uint32_t interval);

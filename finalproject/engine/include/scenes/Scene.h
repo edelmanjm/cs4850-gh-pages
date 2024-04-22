@@ -8,6 +8,9 @@
 #include <memory>
 #include <vector>
 
+/**
+ * A scene is the highest level component in ROSE. It contains {@link GameEntity GameEntities}.
+ */
 class Scene : public std::enable_shared_from_this<Scene> {
 public:
     explicit Scene(SDL_Renderer* renderer);

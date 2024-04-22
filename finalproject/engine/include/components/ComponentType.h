@@ -1,8 +1,8 @@
 #pragma once
-// Our 'key' when adding to a game object is based off
-// of this enum.
-//
-// Declaration of our new type
+
+/**
+ * Used to distinguish components from each other when adding/retriving them from an entityt.
+ */
 enum class ComponentType {
     Collision2DComponent,
     InputComponent,

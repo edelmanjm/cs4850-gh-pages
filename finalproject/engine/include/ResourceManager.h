@@ -5,6 +5,9 @@
 #include <string>
 #include <unordered_map>
 
+/**
+ * Manages resources, with automatic resource sharing and file I/O. Currently just for images, but easily extensible.
+ */
 class ResourceManager {
 private:
     std::unordered_map<std::string, std::shared_ptr<SDL_Texture>> m_TextureResources;

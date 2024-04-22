@@ -7,6 +7,10 @@
 
 #include <components/Component.h>
 
+/**
+ * A texture component store a texture (duh.) Take a look at {@link ResourceManager} for how to load and manage
+ * textures.
+ */
 class TextureComponent : public Component {
 public:
     TextureComponent(std::shared_ptr<SDL_Texture> texture, h2d::FRect box);

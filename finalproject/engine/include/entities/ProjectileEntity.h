@@ -2,6 +2,9 @@
 
 #include <entities/GameEntity.h>
 
+/**
+ * It's a projectile! IDK what else to say.
+ */
 class ProjectileEntity : public GameEntity {
 
 private:

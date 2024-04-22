@@ -4,6 +4,9 @@
 
 #include <entities/GameEntity.h>
 
+/**
+ * A TextEntity renders text, given a font and a string to render.
+ */
 class TextEntity : public GameEntity {
 public:
     TextEntity(std::string fontPath, uint32_t fontSize, SDL_Color fontColor);

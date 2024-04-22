@@ -4,6 +4,9 @@
 #include <entities/CollidingRectangleEntity.h>
 #include <scenes/Scene.h>
 
+/**
+ * Used by the Python bindings to make scene stuff accessible via Python.
+ */
 class PythonScene : public Scene {
 public:
     PythonScene(std::shared_ptr<Renderer> renderer);

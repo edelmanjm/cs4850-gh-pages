@@ -6,6 +6,10 @@
 
 #include <components/Component.h>
 
+/**
+ * A transform component stores a transform, backed by a {@link h2d::Homogr}. All entities include this component by
+ * default.
+ */
 class TransformComponent : public Component {
 public:
     TransformComponent();

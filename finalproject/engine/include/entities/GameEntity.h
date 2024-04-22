@@ -9,6 +9,11 @@
 // Forward declaration
 class Scene;
 
+/**
+ * GameEntities are the main "things" in a scene. They represent individual contents of the scene, and have child
+ * components to provide functionality. GameEntities may also have child entities. GameEntities know which scene they
+ * are placed in.
+ */
 class GameEntity : public std::enable_shared_from_this<GameEntity> {
 
 public:

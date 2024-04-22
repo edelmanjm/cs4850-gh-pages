@@ -2,6 +2,9 @@
 
 #include <entities/GameEntity.h>
 
+/**
+ * An entity with a {@link Collision2DComponent}, rotation, and velocity. Generally pretty useful.
+ */
 class CollidingRectangleEntity : public GameEntity {
 public:
     CollidingRectangleEntity();

@@ -12,6 +12,9 @@
 #include <entities/invaders/PlayerGameEntity.h>
 #include <entities/ProjectileEntity.h>
 
+/**
+ * The core application. Runs the main loop.
+ */
 class Application {
 
 private:

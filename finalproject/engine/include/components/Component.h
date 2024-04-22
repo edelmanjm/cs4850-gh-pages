@@ -7,8 +7,10 @@
 // Forward declaration of GameEntity, since GameEntity also relies on Component and we don't want a circular dependency
 struct GameEntity;
 
-/// Components, must know about the gameEntity that they are associated with
-/// Components, must have a 'Type'
+/**
+ * Components are the "building blocks" used to give entities functionality. Components are assigned as children to
+ * their parent {@link GameEntity} and know of said association. Components must supply their {@link ComponentType}.
+ */
 class Component {
 public:
     Component();

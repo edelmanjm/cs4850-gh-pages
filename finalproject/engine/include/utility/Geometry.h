@@ -3,6 +3,9 @@
 #include <SDL.h>
 #include <homog2d.hpp>
 
+/**
+ * Various wrappers around and translations between {@link SDL_FRect} and h2d's stuff.
+ */
 class Geometry {
 
 public:
