@@ -1,0 +1,208 @@
+<h1 id="ataris-asteroids-in-the-rose-engine">Atari&#39;s <em>Asteroids</em> in the ROSE engine</h1>
+
+<p>
+    For my final project, I completed a basic implementation of the classic 1979 Atari game <em>Asteroids</em> in my
+    custom engine ROSE. ROSE builds on the entity-component model we&#39;ve been developing throughout this course.
+</p>
+<p>
+    <em>Asteroids</em> provides an interesting challenge in that the original game is implemented using vector graphics
+    on a vector display. Such hardware is no longer commonplace; however, modern high-resolution displays and
+    advances in computation power allow us to rasterize vector graphics in realtime with ease. As such, I decided to
+    tackle the challenge of handling vector graphics for my &quot;wow&quot; factor.
+</p>
+<p>
+    To do this, I decided to rely on the extant SVG standard. I created a simple browser-based SVG editor tool that
+    allowed me to trace screenshots of the original game art, while making basic adjustments to the lines. I then
+    added support for basic SVG manipulation using Python&#39;s XML document parsing to transform the source SVG
+    according to the movement of the player. Finally, I modified SDL_Image&#39;s SVG rendering code (which itself
+    relies on nanosvg) to handle scaling properly when interfacing with Python. This provides me with
+    infinitely-scalable graphics (which you can adjust through the <code>scaling</code> parameter of <code>config
+    .json</code>).
+</p>
+
+
+<h2 id="demo">Demo</h2>
+
+<iframe width="952" height="536" src="https://www.youtube.com/embed/tAlfn_pZ1Nc" title="" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+<h2 id="engine-architecture-diagram">Engine Architecture Diagram</h2>
+
+<table border="0" cellspacing="10" cellpadding="0">
+    <tbody>
+    <tr>
+        <td><img src="html/inherit_graph_0.png" border="0" usemap="#a_application" alt="">
+            <map name="a_application" id="a_application">
+                <area shape="rect" href="html/class_application.html" title="The core application." alt=""
+                      coords="5,5,91,31">
+            </map>
+        </td>
+    </tr>
+    <tr>
+        <td><img src="html/inherit_graph_1.png" border="0" usemap="#a_component" alt="">
+            <map name="a_component" id="a_component">
+                <area shape="rect" href="html/class_component.html"
+                      title="Components are the &quot;building blocks&quot; used to give entities functionality." alt=""
+                      coords="5,129,94,155">
+                <area shape="rect" href="html/class_collision2_d_component.html"
+                      title="A component backed by a rectangular bounding box." alt="" coords="165,5,320,31">
+                <area shape="rect" href="html/class_input_component.html"
+                      title="An input component is used to handle inputs by forwarding them to an on-keypress function,..."
+                      alt="" coords="184,55,301,80">
+                <area shape="rect" href="html/class_lifetime_component.html"
+                      title="A lifetime component automatically hides (or, optionally, despawns) its parent entity when its lifeti..."
+                      alt="" coords="175,104,310,130">
+                <area shape="rect" href="html/class_texture_component.html"
+                      title="A texture component store a texture (duh.) Take a look at ResourceManager for how to load and manage ..."
+                      alt="" coords="177,153,308,179">
+                <area shape="rect" href="html/class_transform_component.html"
+                      title="A transform component stores a transform, backed by a h2d::Homogr." alt=""
+                      coords="169,203,316,228">
+                <area shape="rect" href="html/class_transform_wrapping_component.html"
+                      title="A component that makes it so when the transform exceeds the bounds specified, it wraps to the other s..."
+                      alt="" coords="142,252,343,278">
+            </map>
+        </td>
+    </tr>
+    <tr>
+        <td><img src="html/inherit_graph_2.png" border="0" usemap="#a_geometry" alt="">
+            <map name="a_geometry" id="a_geometry">
+                <area shape="rect" href="html/class_geometry.html"
+                      title="Various wrappers around and translations between SDL_FRect and h2d's stuff." alt=""
+                      coords="5,5,84,31">
+            </map>
+        </td>
+    </tr>
+    <tr>
+        <td><img src="html/inherit_graph_3.png" border="0" usemap="#a_renderer" alt="">
+            <map name="a_renderer" id="a_renderer">
+                <area shape="rect" href="html/class_renderer.html" title="Wrapper for use with pybind11." alt=""
+                      coords="5,5,80,31">
+            </map>
+        </td>
+    </tr>
+    <tr>
+        <td><img src="html/inherit_graph_4.png" border="0" usemap="#a_resource_manager" alt="">
+            <map name="a_resource_manager" id="a_resource_manager">
+                <area shape="rect" href="html/class_resource_manager.html"
+                      title="Manages resources, with automatic resource sharing and file I/O." alt=""
+                      coords="5,5,133,31">
+            </map>
+        </td>
+    </tr>
+    <tr>
+        <td><img src="html/inherit_graph_5.png" border="0" usemap="#a_s_d_l___renderer___wrapper" alt="">
+            <map name="a_s_d_l___renderer___wrapper" id="a_s_d_l___renderer___wrapper">
+                <area shape="rect" href="html/struct_s_d_l___renderer___wrapper.html"
+                      title="Needed because SDL_Renderer is an incomplete, renderer-specific type." alt=""
+                      coords="5,5,168,31">
+            </map>
+        </td>
+    </tr>
+    <tr>
+        <td><img src="html/inherit_graph_6.png" border="0" usemap="#a_s_d_l___texture___wrapper" alt="">
+            <map name="a_s_d_l___texture___wrapper" id="a_s_d_l___texture___wrapper">
+                <area shape="rect" href="html/struct_s_d_l___texture___wrapper.html"
+                      title="Needed because SDL_Texture is an incomplete, renderer-specific type." alt=""
+                      coords="5,5,158,31">
+            </map>
+        </td>
+    </tr>
+    <tr>
+        <td><img src="html/inherit_graph_7.png" border="0" usemap="#astd_1_1enable__shared__from__this" alt="">
+            <map name="astd_1_1enable__shared__from__this" id="astd_1_1enable__shared__from__this">
+                <area shape="rect" title=" " alt="" coords="5,195,137,236">
+                <area shape="rect" href="html/class_game_entity.html"
+                      title="GameEntities are the main &quot;things&quot; in a scene." alt="" coords="185,129,275,155">
+                <area shape="rect" href="html/class_scene.html" title="A scene is the highest level component in ROSE."
+                      alt="" coords="201,252,259,278">
+                <area shape="rect" href="html/class_colliding_rectangle_entity.html"
+                      title="An entity with a Collision2DComponent, rotation, and velocity." alt=""
+                      coords="323,5,487,31">
+                <area shape="rect" href="html/class_enemy_entity.html" title=" " alt="" coords="357,55,453,80">
+                <area shape="rect" href="html/class_player_game_entity.html" title=" " alt="" coords="342,104,469,130">
+                <area shape="rect" href="html/class_projectile_entity.html"
+                      title="It's a projectile! IDK what else to say." alt="" coords="351,153,460,179">
+                <area shape="rect" href="html/class_text_entity.html"
+                      title="A TextEntity renders text, given a font and a string to render." alt=""
+                      coords="365,203,445,228">
+                <area shape="rect" href="html/class_python_scene.html"
+                      title="Used by the Python bindings to make scene stuff accessible via Python." alt=""
+                      coords="356,252,455,278">
+                <area shape="rect" href="html/class_space_invaders.html" title="Space Invaders-specific scene." alt=""
+                      coords="351,301,459,327">
+            </map>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h2 id="documentation">Documentation</h2>
+
+<p><a href="html/index.html">Click here!</a></p>
+
+<h2 id="release">Release</h2>
+
+<p>
+    Binary for the ROSE library is located in
+    <a href="../release/librose-lib.dylib" download="librose-lib.dylib"><code>release/</code></a>.
+    Complete build instructions are in the `README.md`, as requested.
+</p>
+
+
+<h2 id="post-mortem">Post-Mortem</h2>
+
+<p>
+    While I'm proud of what I accomplished, there were some significant cutbacks that had to be made to the scope of
+    the game to get it done on time. Given additional time, here's what I'd work on, in order:
+</p>
+
+<ol type="1">
+    <li>
+        I'd like to improve the boundary between <code>h2d::Homogr</code> and SDL's AABB-based approach. For the
+        purposes of this game, I needed to calculate the intersections between the character and other entities,
+        even though the character isn't always axis-aligned. This necessitated the introduction of a more complex
+        2D geometry library. I opted for h2d, which has been pretty good so far. However, converting between
+        homographic transforms and the AABBs that SDL requires for rendering purposes has been painful. There's a
+        lot of poorly-written, slower-than-necessary conversions scattered around the C++ side that were
+        necessary to use many of SDL's functions. Given more time, I'd probably ditch most of SDL's non-core
+        functionality and only rely on it for rendering (maybe even just for primitive drawing, while writing my
+        own SVG renderer? IDK.) While I understand the performance advantages that SDL gets with its AABB-only
+        approach, it just results in too many issues for a game that requires this much rotation.
+    </li>
+    <li>
+        On the subject of boxes, I'd like to have perfect subpixel convex-hull based collisions. This is totally
+        feasible using h2d, but I simply didn't implement it due to the significant increase in
+        complexity—especially given how much SDL-based stuff is still in there.
+    </li>
+    <li>
+        I'd clean up the Python game logic. While it's totally functional and extensible, it's messy enough that
+        it's annoying to do so and difficult to read. There's no reason that needs to be the case, beyond that I
+        didn't have time to clean it up.
+    </li>
+    <li>
+        I'd add temporary invincibility after death. While I have implemented an asteroid "keep out" area for the
+        initial spawn, respawning can still result in insta-death. That's not ideal.
+    </li>
+    <li>
+        I'd add enemy ships, like the original game has. It adds a lot of gameplay depth, but I didn't have time
+        to add them.
+    </li>
+    <li>
+        I'd add the game's iconic audio and explosion FX.
+    </li>
+    <li>
+        I'd add additional configurable game modes based on the various sequels to <em>Asteroids</em>, namely
+        <em>Asteroids Deluxe</em> and <em>Space Duel</em>. The latter in particular is substantially more
+        complex, but still retains the key gameplay loop and vector graphics of the original.
+    </li>
+</ol>
+
+
+
+<style>
+    body {
+        font-family: sans-serif;
+    }
+</style>
