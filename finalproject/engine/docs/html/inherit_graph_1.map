@@ -1,0 +1,9 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_component.html" title="Components are the &quot;building blocks&quot; used to give entities functionality." alt="" coords="5,129,94,155"/>
+<area shape="rect" id="node2" href="$class_collision2_d_component.html" title="A component backed by a rectangular bounding box." alt="" coords="165,5,320,31"/>
+<area shape="rect" id="node3" href="$class_input_component.html" title="An input component is used to handle inputs by forwarding them to an on&#45;keypress function,..." alt="" coords="184,55,301,80"/>
+<area shape="rect" id="node4" href="$class_lifetime_component.html" title="A lifetime component automatically hides (or, optionally, despawns) its parent entity when its lifeti..." alt="" coords="175,104,310,130"/>
+<area shape="rect" id="node5" href="$class_texture_component.html" title="A texture component store a texture (duh.) Take a look at ResourceManager for how to load and manage ..." alt="" coords="177,153,308,179"/>
+<area shape="rect" id="node6" href="$class_transform_component.html" title="A transform component stores a transform, backed by a h2d::Homogr." alt="" coords="169,203,316,228"/>
+<area shape="rect" id="node7" href="$class_transform_wrapping_component.html" title="A component that makes it so when the transform exceeds the bounds specified, it wraps to the other s..." alt="" coords="142,252,343,278"/>
+</map>

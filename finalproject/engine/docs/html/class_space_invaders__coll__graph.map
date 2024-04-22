@@ -1,0 +1,7 @@
+<map id="SpaceInvaders" name="SpaceInvaders">
+<area shape="rect" id="node1" title="Space Invaders&#45;specific scene." alt="" coords="128,379,264,548"/>
+<area shape="rect" id="node2" href="$class_scene.html" title="A scene is the highest level component in ROSE." alt="" coords="134,162,258,330"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,149,99"/>
+<area shape="rect" id="node4" title=" " alt="" coords="173,13,218,91"/>
+<area shape="rect" id="node5" title=" " alt="" coords="283,13,399,91"/>
+</map>

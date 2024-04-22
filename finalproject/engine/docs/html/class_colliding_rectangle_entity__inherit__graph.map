@@ -1,0 +1,5 @@
+<map id="CollidingRectangleEntity" name="CollidingRectangleEntity">
+<area shape="rect" id="node1" title="An entity with a Collision2DComponent, rotation, and velocity." alt="" coords="5,498,190,696"/>
+<area shape="rect" id="node2" href="$class_game_entity.html" title="GameEntities are the main &quot;things&quot; in a scene." alt="" coords="13,147,182,450"/>
+<area shape="rect" id="node3" title=" " alt="" coords="10,5,185,99"/>
+</map>

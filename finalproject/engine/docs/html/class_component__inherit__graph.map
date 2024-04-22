@@ -1,0 +1,9 @@
+<map id="Component" name="Component">
+<area shape="rect" id="node1" title="Components are the &quot;building blocks&quot; used to give entities functionality." alt="" coords="483,5,615,189"/>
+<area shape="rect" id="node2" href="$class_collision2_d_component.html" title="A component backed by a rectangular bounding box." alt="" coords="5,237,189,420"/>
+<area shape="rect" id="node3" href="$class_input_component.html" title="An input component is used to handle inputs by forwarding them to an on&#45;keypress function,..." alt="" coords="212,244,358,413"/>
+<area shape="rect" id="node4" href="$class_lifetime_component.html" title="A lifetime component automatically hides (or, optionally, despawns) its parent entity when its lifeti..." alt="" coords="381,259,536,398"/>
+<area shape="rect" id="node5" href="$class_texture_component.html" title="A texture component store a texture (duh.) Take a look at ResourceManager for how to load and manage ..." alt="" coords="560,244,719,413"/>
+<area shape="rect" id="node6" href="$class_transform_component.html" title="A transform component stores a transform, backed by a h2d::Homogr." alt="" coords="744,252,919,405"/>
+<area shape="rect" id="node7" href="$class_transform_wrapping_component.html" title="A component that makes it so when the transform exceeds the bounds specified, it wraps to the other s..." alt="" coords="944,252,1173,405"/>
+</map>

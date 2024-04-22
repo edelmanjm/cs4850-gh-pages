@@ -1,0 +1,5 @@
+<map id="TransformComponent" name="TransformComponent">
+<area shape="rect" id="node1" title="A transform component stores a transform, backed by a h2d::Homogr." alt="" coords="45,252,220,405"/>
+<area shape="rect" id="node2" href="$class_component.html" title="Components are the &quot;building blocks&quot; used to give entities functionality." alt="" coords="5,5,137,189"/>
+<area shape="rect" id="node3" title=" " alt="" coords="161,58,229,136"/>
+</map>

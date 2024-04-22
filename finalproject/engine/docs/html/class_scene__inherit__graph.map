@@ -1,0 +1,6 @@
+<map id="Scene" name="Scene">
+<area shape="rect" id="node1" title="A scene is the highest level component in ROSE." alt="" coords="77,147,213,330"/>
+<area shape="rect" id="node3" href="$class_python_scene.html" title="Used by the Python bindings to make scene stuff accessible via Python." alt="" coords="5,378,130,546"/>
+<area shape="rect" id="node4" href="$class_space_invaders.html" title="Space Invaders&#45;specific scene." alt="" coords="154,378,290,546"/>
+<area shape="rect" id="node2" title=" " alt="" coords="73,5,217,99"/>
+</map>

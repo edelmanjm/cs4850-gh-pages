@@ -1,0 +1,4 @@
+<map id="Collision2DComponent" name="Collision2DComponent">
+<area shape="rect" id="node1" title="A component backed by a rectangular bounding box." alt="" coords="5,237,189,420"/>
+<area shape="rect" id="node2" href="$class_component.html" title="Components are the &quot;building blocks&quot; used to give entities functionality." alt="" coords="31,5,163,189"/>
+</map>

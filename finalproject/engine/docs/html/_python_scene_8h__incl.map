@@ -1,0 +1,17 @@
+<map id="include/scenes/PythonScene.h" name="include/scenes/PythonScene.h">
+<area shape="rect" id="node1" title=" " alt="" coords="176,5,378,31"/>
+<area shape="rect" id="node2" href="$_renderer_8h.html" title=" " alt="" coords="5,241,90,267"/>
+<area shape="rect" id="node4" href="$_colliding_rectangle_entity_8h.html" title=" " alt="" coords="362,79,538,120"/>
+<area shape="rect" id="node13" href="$_scene_8h.html" title=" " alt="" coords="219,87,335,112"/>
+<area shape="rect" id="node3" title=" " alt="" coords="56,389,151,414"/>
+<area shape="rect" id="node5" href="$_game_entity_8h.html" title=" " alt="" coords="382,168,527,193"/>
+<area shape="rect" id="node6" title=" " alt="" coords="511,389,579,414"/>
+<area shape="rect" id="node7" title=" " alt="" coords="380,241,427,267"/>
+<area shape="rect" id="node8" href="$_component_8h.html" title=" " alt="" coords="167,315,341,341"/>
+<area shape="rect" id="node10" href="$_transform_component_8h.html" title=" " alt="" coords="451,241,684,267"/>
+<area shape="rect" id="node9" href="$_component_type_8h.html" title=" " alt="" coords="176,389,378,414"/>
+<area shape="rect" id="node11" title=" " alt="" coords="540,315,593,341"/>
+<area shape="rect" id="node12" title=" " alt="" coords="417,315,516,341"/>
+<area shape="rect" id="node14" title=" " alt="" coords="247,168,307,193"/>
+<area shape="rect" id="node15" title=" " alt="" coords="166,168,223,193"/>
+</map>

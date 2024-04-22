@@ -1,0 +1,12 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" title=" " alt="" coords="5,195,137,236"/>
+<area shape="rect" id="node2" href="$class_game_entity.html" title="GameEntities are the main &quot;things&quot; in a scene." alt="" coords="185,129,275,155"/>
+<area shape="rect" id="node8" href="$class_scene.html" title="A scene is the highest level component in ROSE." alt="" coords="201,252,259,278"/>
+<area shape="rect" id="node3" href="$class_colliding_rectangle_entity.html" title="An entity with a Collision2DComponent, rotation, and velocity." alt="" coords="323,5,487,31"/>
+<area shape="rect" id="node4" href="$class_enemy_entity.html" title=" " alt="" coords="357,55,453,80"/>
+<area shape="rect" id="node5" href="$class_player_game_entity.html" title=" " alt="" coords="342,104,469,130"/>
+<area shape="rect" id="node6" href="$class_projectile_entity.html" title="It&#39;s a projectile! IDK what else to say." alt="" coords="351,153,460,179"/>
+<area shape="rect" id="node7" href="$class_text_entity.html" title="A TextEntity renders text, given a font and a string to render." alt="" coords="365,203,445,228"/>
+<area shape="rect" id="node9" href="$class_python_scene.html" title="Used by the Python bindings to make scene stuff accessible via Python." alt="" coords="356,252,455,278"/>
+<area shape="rect" id="node10" href="$class_space_invaders.html" title="Space Invaders&#45;specific scene." alt="" coords="351,301,459,327"/>
+</map>

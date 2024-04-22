@@ -1,0 +1,4 @@
+<map id="InputComponent" name="InputComponent">
+<area shape="rect" id="node1" title="An input component is used to handle inputs by forwarding them to an on&#45;keypress function,..." alt="" coords="5,237,151,405"/>
+<area shape="rect" id="node2" href="$class_component.html" title="Components are the &quot;building blocks&quot; used to give entities functionality." alt="" coords="12,5,144,189"/>
+</map>

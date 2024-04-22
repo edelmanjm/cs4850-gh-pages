@@ -1,0 +1,4 @@
+<map id="TransformWrappingComponent" name="TransformWrappingComponent">
+<area shape="rect" id="node1" title="A component that makes it so when the transform exceeds the bounds specified, it wraps to the other s..." alt="" coords="5,237,235,390"/>
+<area shape="rect" id="node2" href="$class_component.html" title="Components are the &quot;building blocks&quot; used to give entities functionality." alt="" coords="54,5,186,189"/>
+</map>
