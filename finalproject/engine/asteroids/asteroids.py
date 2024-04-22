@@ -33,7 +33,7 @@ def rotate_svg(svg_string, center_x, center_y, angle):
 
 
 class RockSizeData(NamedTuple):
-    dims: int
+    dims: float
     speed: float
     score: int
 
@@ -171,9 +171,9 @@ class Asteroids:
             x = self.w / 2
             y = self.h / 2
             while abs(x - self.w / 2) < keepout_size:
-                x = random.randrange(0, self.w)
+                x = random.randrange(0, int(self.w))
             while abs(y - self.h / 2) < keepout_size:
-                y = random.randrange(0, self.h)
+                y = random.randrange(0, int(self.h))
             r = Rock(self.renderer, x, y, self.w, self.h, self.scene_config['rock_speed_multiplier'], Rock.Size.BIG)
             self.add_rock(r)
 
