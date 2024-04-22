@@ -17,6 +17,8 @@ class RockSizeData(NamedTuple):
 
 class Rock:
 
+    sprites: List[str] = [f'assets/asteroids/asteroid-{i}.svg' for i in range(3)]
+
     class Size(Enum):
         SMALL = RockSizeData(dims=8 * scaling, speed=40 * scaling)
         MEDIUM = RockSizeData(dims=16 * scaling, speed=20 * scaling)
@@ -31,20 +33,9 @@ class Rock:
         bbox = rose.FRect(-dims / 2, -dims / 2, dims / 2, dims / 2)
         self.underlying.add_required(bbox, False)
         self.underlying.add_component(rose.TransformWrappingComponent(rose.FRect(0.0, 0.0, screen_w, screen_h)))
-        svg = '''
-<?xml version="1.0"?>
-<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
-  <title>Layer 1</title>
-  <line fill="none" fill-opacity="null" id="svg_3" stroke="#ffffff" x1="0.27" x2="12.28" y1="16.73" y2="63.46"/>
-  <line fill="none" fill-opacity="null" id="svg_4" stroke="#ffffff" x1="12.2" x2="40.03" y1="63.32" y2="56.35"/>
-  <line fill="none" fill-opacity="null" id="svg_5" stroke="#ffffff" x1="39.81" x2="48.72" y1="56.56" y2="63.61"/>
-  <line fill="none" fill-opacity="null" id="svg_6" stroke="#ffffff" x1="48.87" x2="63.89" y1="63.53" y2="42.11"/>
-  <line fill="none" fill-opacity="null" id="svg_7" stroke="#ffffff" x1="63.89" x2="47.43" y1="42.11" y2="-0.09"/>
-  <line fill="none" fill-opacity="null" id="svg_8" stroke="#ffffff" x1="17.09" x2="47.93" y1="22.92" y2="0.13"/>
-  <line fill="none" fill-opacity="null" id="svg_9" stroke="#ffffff" x1="16.95" x2="-0.09" y1="22.77" y2="16.59"/>
-</svg>
-        '''
-        self.underlying.add_component(rose.TextureComponent(rose.ResourceManager.load_svg(renderer.wrapped, svg), bbox))
+        sprite = random.choice(self.sprites)
+        self.underlying.add_component(rose.TextureComponent(rose.ResourceManager.load_image(renderer.wrapped, sprite),
+                                                            bbox))
 
         angle = random.random() * math.pi * 2
         self.underlying.set_velocity(math.cos(angle) * speed, math.sin(angle) * speed)

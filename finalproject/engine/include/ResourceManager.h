@@ -27,6 +27,14 @@ public:
      */
     std::shared_ptr<SDL_Texture> LoadSvg(SDL_Renderer* renderer, const std::string& svg);
 
+    /**
+     * Loads a supported image as a texture, using SDL_Image.
+     * @param renderer The renderer to use for the image.
+     * @param filepath The path to the image to load.
+     * @return A shared pointer to the corresponding texture.
+     */
+    std::shared_ptr<SDL_Texture> LoadImage(SDL_Renderer* renderer, const std::string& filepath);
+
 private:
     // Functor
     struct TextureFunctorDeleter {

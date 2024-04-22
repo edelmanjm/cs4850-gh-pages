@@ -33,6 +33,18 @@ std::shared_ptr<SDL_Texture> ResourceManager::LoadSvg(SDL_Renderer* renderer, co
     return m_TextureResources[svg];
 }
 
+std::shared_ptr<SDL_Texture> ResourceManager::LoadImage(SDL_Renderer *renderer, const std::string &filepath) {
+    if (!m_TextureResources.contains(filepath)) {
+        SDL_Surface* surface = IMG_Load(filepath.c_str());
+        std::shared_ptr<SDL_Texture> texture = MakeSharedTexture(renderer, surface);
+        m_TextureResources.insert({filepath, texture});
+
+        SDL_DestroySurface(surface);
+    }
+
+    return m_TextureResources[filepath];
+}
+
 std::shared_ptr<SDL_Texture> ResourceManager::MakeSharedTexture(SDL_Renderer* renderer, SDL_Surface* surface) {
     SDL_Texture* pTexture = SDL_CreateTextureFromSurface(renderer, surface);
 
