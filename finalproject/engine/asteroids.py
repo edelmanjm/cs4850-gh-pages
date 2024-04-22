@@ -3,11 +3,28 @@ from enum import Enum
 import math
 from typing import List, NamedTuple
 import sys
+from xml.etree import ElementTree
 
 sys.path.append('./cmake-build-debug')
 import rose
 
 scaling = 2
+# Make the hitbox smaller to avoid "unfair" collisions
+hitbox_margin = 2 * scaling
+
+
+def rotate_svg(svg_string, center_x, center_y, angle):
+    # Namespace needs to be set first, see https://stackoverflow.com/questions/8983041/
+    ElementTree.register_namespace("", "http://www.w3.org/2000/svg")
+
+    root = ElementTree.fromstring(svg_string)
+    # Unsupported by https://github.com/memononen/nanosvg, which is the underlying library used by SDL_image.
+    # The center must therefore be passed manually
+    # root.set('transform-origin', 'center')
+    root.set('transform', f'rotate({angle} {center_x} {center_y})')
+    rotated_svg = ElementTree.tostring(root, encoding='unicode')
+
+    return rotated_svg
 
 
 class RockSizeData(NamedTuple):
@@ -16,7 +33,6 @@ class RockSizeData(NamedTuple):
 
 
 class Rock:
-
     sprites: List[str] = [f'assets/asteroids/asteroid-{i}.svg' for i in range(3)]
 
     class Size(Enum):
@@ -30,12 +46,13 @@ class Rock:
 
         dims, speed = size.value
 
-        bbox = rose.FRect(-dims / 2, -dims / 2, dims / 2, dims / 2)
-        self.underlying.add_required(bbox, False)
+        self.underlying.add_required(
+            rose.FRect(-dims / 2 + hitbox_margin, -dims / 2 + hitbox_margin, dims / 2 - hitbox_margin,
+                       dims / 2 - hitbox_margin), False)
         self.underlying.add_component(rose.TransformWrappingComponent(rose.FRect(0.0, 0.0, screen_w, screen_h)))
         sprite = random.choice(self.sprites)
         self.underlying.add_component(rose.TextureComponent(rose.ResourceManager.load_image(renderer.wrapped, sprite),
-                                                            bbox))
+                                                            rose.FRect(-dims / 2, -dims / 2, dims / 2, dims / 2)))
 
         angle = random.random() * math.pi * 2
         self.underlying.set_velocity(math.cos(angle) * speed, math.sin(angle) * speed)
@@ -43,7 +60,6 @@ class Rock:
 
 
 class Asteroids:
-
     projectiles: List[rose.CollidingRectangleEntity] = []
     rocks: List[Rock] = []
     initial_rock_count = 4
@@ -55,7 +71,7 @@ class Asteroids:
         self.renderer = rose.Renderer(self.w, self.h)
 
         self.player_speed = 100 * scaling
-        self.player_rotation_speed = math.radians(180)
+        self.player_rotation_speed = 180
 
         self.projectile_speed = 125 * scaling
         self.fire_debounce_time = 0.25
@@ -63,10 +79,26 @@ class Asteroids:
         self.time_since_last_fire = self.fire_debounce_time
 
         self.player = rose.CollidingRectangleEntity()
-        player_size = 5 * scaling
-        self.player.add_required(rose.FRect(-player_size / 2, -player_size / 2, player_size / 2, player_size / 2))
+        player_width = 24 * scaling
+        player_height = 16 * scaling
+        hitbox_width = player_width - hitbox_margin
+        hitbox_height = player_height
+        self.player.add_required(rose.FRect(-hitbox_width / 2, -hitbox_height / 2, hitbox_width / 2, hitbox_height /
+                                            2), False)
         self.player.add_component(rose.TransformWrappingComponent(rose.FRect(0, 0, self.w, self.h)))
         self.player.add_input_handler(lambda delta_time, keys: self.on_input(delta_time, keys))
+
+        print("Loading player textures... (this may take a bit)", flush=True)
+        with open("assets/asteroids/ship-firing.svg", "r") as f:
+            player_sprite: str = f.read()
+            self.rotated_player_textures = [
+                rose.ResourceManager.load_svg(self.renderer.wrapped, rotate_svg(player_sprite, 32, 32, degrees))
+                for degrees in range(360)]
+        print("Done!")
+        self.player_texture = rose.TextureComponent(self.rotated_player_textures[45],
+                                                    rose.FRect(-player_width / 2, -player_width / 2, player_width / 2,
+                                                               player_width / 2))
+        self.player.add_component(self.player_texture)
 
         self.scene = rose.PythonScene(self.renderer)
         self.scene.add_entity(self.player)
@@ -148,6 +180,13 @@ class Asteroids:
 
         self.add_projectile(projectile)
 
+    def rotate_player(self, degrees):
+        # Round it for sprite reasons
+        rounded_transformation = round(degrees)
+        self.player.rotate(math.radians(rounded_transformation))
+        rounded_new = round(math.degrees(self.player.get_rotation()))
+        self.player_texture.set_texture(self.rotated_player_textures[rounded_new % 360])
+
     def on_input(self, delta_time: float, keys: List[int]):
         # TODO either import the SDL_Scancode enum, or find an equivalent in python
         if keys[82]:
@@ -155,9 +194,9 @@ class Asteroids:
             self.player.set_velocity(velocity_x + math.cos(self.player.get_rotation()) * self.player_speed * delta_time,
                                      velocity_y + math.sin(self.player.get_rotation()) * self.player_speed * delta_time)
         if keys[79]:
-            self.player.rotate(self.player_rotation_speed * delta_time)
+            self.rotate_player(self.player_rotation_speed * delta_time)
         elif keys[80]:
-            self.player.rotate(-self.player_rotation_speed * delta_time)
+            self.rotate_player(-self.player_rotation_speed * delta_time)
 
         # Spacebar
         if keys[44]:

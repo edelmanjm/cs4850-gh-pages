@@ -121,7 +121,10 @@ PYBIND11_MODULE(rose, m) {
     py::class_<TextureComponent, Component, PYBIND11_SH_DEF(TextureComponent)>(m, "TextureComponent")
         .def(py::init([](const SDL_Texture_Wrapper& texture, h2d::FRect box) {
             return new TextureComponent(texture.ptr, box);
-        }));
+        }))
+        .def("set_texture", [](TextureComponent& self, SDL_Texture_Wrapper texture) {
+            self.SetTexture(texture.ptr);
+        });
     py::class_<TransformWrappingComponent, Component, PYBIND11_SH_DEF(TransformWrappingComponent)>(m, "TransformWrappingComponent")
         .def(py::init<h2d::FRect>());
 

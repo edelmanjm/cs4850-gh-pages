@@ -21,6 +21,8 @@ public:
 
     void Render(SDL_Renderer* renderer) override;
 
+    void SetTexture(std::shared_ptr<SDL_Texture> newTexture);
+
 private:
     h2d::FRect m_Box;
     std::shared_ptr<SDL_Texture> m_Texture;

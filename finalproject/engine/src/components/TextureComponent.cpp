@@ -17,12 +17,18 @@ void TextureComponent::Input(float deltaTime) {}
 void TextureComponent::Update(float deltaTime) {}
 void TextureComponent::Render(SDL_Renderer* renderer) {
     auto ge = GetGameEntity();
-    auto translated = (ge->GetTransform()->m_Transform * m_Box.getPts().first);
-    SDL_FRect bounded{static_cast<float>(translated.getX()), static_cast<float>(translated.getY()),
-                      static_cast<float>(m_Box.width()), static_cast<float>(m_Box.height())};
+    auto translated = (ge->GetTransform()->m_Transform * m_Box.getCenter());
+    SDL_FRect bounded{static_cast<float>(translated.getX() - m_Box.width() / 2),
+                      static_cast<float>(translated.getY() - m_Box.height() / 2),
+                      static_cast<float>(m_Box.width()),
+                      static_cast<float>(m_Box.height())};
     if (nullptr == m_Texture) {
         SDL_RenderRect(renderer, &bounded);
     } else {
         SDL_RenderTexture(renderer, m_Texture.get(), nullptr, &bounded);
     }
+}
+
+void TextureComponent::SetTexture(std::shared_ptr<SDL_Texture> newTexture) {
+    m_Texture = std::move(newTexture);
 }
