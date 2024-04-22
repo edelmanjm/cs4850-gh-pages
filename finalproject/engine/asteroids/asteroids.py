@@ -7,6 +7,7 @@ import sys
 from xml.etree import ElementTree
 
 sys.path.append('../cmake-build-debug')
+sys.path.append('../release')
 import rose
 
 scaling: float
