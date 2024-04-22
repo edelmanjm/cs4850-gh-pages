@@ -157,8 +157,13 @@ class Asteroids:
         self.projectiles = []
 
         for i in range(self.initial_rock_count):
-            x = random.randrange(0, self.w)
-            y = random.randrange(0, self.h)
+            keepout_size = 50 * scaling
+            x = self.w / 2
+            y = self.h / 2
+            while abs(x - self.w / 2) < keepout_size:
+                x = random.randrange(0, self.w)
+            while abs(y - self.h / 2) < keepout_size:
+                y = random.randrange(0, self.h)
             r = Rock(self.renderer, x, y, self.w, self.h, Rock.Size.BIG)
             self.add_rock(r)
 
