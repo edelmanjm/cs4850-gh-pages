@@ -5,7 +5,7 @@ from typing import List, NamedTuple
 import sys
 from xml.etree import ElementTree
 
-sys.path.append('./cmake-build-debug')
+sys.path.append('../cmake-build-debug')
 import rose
 
 scaling = 2
@@ -34,7 +34,7 @@ class RockSizeData(NamedTuple):
 
 
 class Rock:
-    sprites: List[str] = [f'assets/asteroids/asteroid-{i}.svg' for i in range(3)]
+    sprites: List[str] = [f'assets/asteroid-{i}.svg' for i in range(3)]
 
     class Size(Enum):
         SMALL = RockSizeData(dims=8 * scaling, speed=40 * scaling, score=100)
@@ -91,12 +91,12 @@ class Asteroids:
         self.player.add_input_handler(lambda delta_time, keys: self.on_input(delta_time, keys))
 
         print("Loading player textures... (this may take a bit)", flush=True)
-        with open("assets/asteroids/ship-firing.svg", "r") as f:
+        with open("assets/ship-firing.svg", "r") as f:
             player_sprite: str = f.read()
             self.rotated_player_textures_firing = [
                 rose.ResourceManager.load_svg(self.renderer.wrapped, rotate_svg(player_sprite, 32, 32, degrees))
                 for degrees in range(360)]
-        with open("assets/asteroids/ship-static.svg", "r") as f:
+        with open("assets/ship-static.svg", "r") as f:
             player_sprite: str = f.read()
             self.rotated_player_textures_static = [
                 rose.ResourceManager.load_svg(self.renderer.wrapped, rotate_svg(player_sprite, 32, 32, degrees))
