@@ -69,7 +69,7 @@ class Rock:
 class Asteroids:
     projectiles: List[rose.CollidingRectangleEntity] = []
     rocks: List[Rock] = []
-    scene_index = config['scene_index']
+    scene_index = config['scene_index_start']
     score = 0
 
     def __init__(self):
@@ -253,6 +253,12 @@ class Asteroids:
 
     def on_update(self, delta_time: float):
         if len(self.rocks) == 0:
+            self.scene_index += 1
+            if self.scene_index > config['scene_index_end']:
+                print("You won!")
+                exit(0)
+            else:
+                print(f"Advancing to level {self.scene_index}...")
             self.reset()
 
         if self.should_fire:
