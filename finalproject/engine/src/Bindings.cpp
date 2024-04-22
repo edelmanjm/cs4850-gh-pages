@@ -174,7 +174,7 @@ PYBIND11_MODULE(rose, m) {
         .def_static("load_svg", [](SDL_Renderer_Wrapper renderer, const std::string& svg, float scale = 1.0) {
             return SDL_Texture_Wrapper{ResourceManager::Instance().LoadSvg(renderer.ptr, svg, scale)};
         })
-        .def_static("load_image", [](SDL_Renderer_Wrapper renderer, const std::string& filepath) {
-            return SDL_Texture_Wrapper{ResourceManager::Instance().LoadImage(renderer.ptr, filepath)};
+        .def_static("load_image", [](SDL_Renderer_Wrapper renderer, const std::string& filepath, float scale = 1.0) {
+            return SDL_Texture_Wrapper{ResourceManager::Instance().LoadImage(renderer.ptr, filepath, scale)};
         });
 }

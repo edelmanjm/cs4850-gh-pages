@@ -36,7 +36,7 @@ public:
      * @param filepath The path to the image to load.
      * @return A shared pointer to the corresponding texture.
      */
-    std::shared_ptr<SDL_Texture> LoadImage(SDL_Renderer* renderer, const std::string& filepath);
+    std::shared_ptr<SDL_Texture> LoadImage(SDL_Renderer* renderer, const std::string& filepath, float scale = 1.0);
 
 private:
     // Functor

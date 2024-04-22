@@ -59,7 +59,8 @@ class Rock:
                        dims / 2 - hitbox_margin), False)
         self.underlying.add_component(rose.TransformWrappingComponent(rose.FRect(0.0, 0.0, screen_w, screen_h)))
         sprite = random.choice(self.sprites)
-        self.underlying.add_component(rose.TextureComponent(rose.ResourceManager.load_image(renderer.wrapped, sprite),
+        self.underlying.add_component(rose.TextureComponent(rose.ResourceManager.load_image(renderer.wrapped, sprite,
+                                                                                            scaling),
                                                             rose.FRect(-dims / 2, -dims / 2, dims / 2, dims / 2)))
 
         angle = random.random() * math.pi * 2
@@ -109,7 +110,8 @@ class Asteroids:
         with open("assets/ship-static.svg", "r") as f:
             player_sprite: str = f.read()
             self.rotated_player_textures_static = [
-                rose.ResourceManager.load_svg(self.renderer.wrapped, rotate_svg(player_sprite, 32, 32, degrees), scaling)
+                rose.ResourceManager.load_svg(self.renderer.wrapped, rotate_svg(player_sprite, 32, 32, degrees),
+                                              scaling)
                 for degrees in range(360)]
         print("Done!")
         self.player_texture = rose.TextureComponent(self.rotated_player_textures_static[0],

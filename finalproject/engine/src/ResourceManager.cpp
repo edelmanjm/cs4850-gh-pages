@@ -38,9 +38,16 @@ std::shared_ptr<SDL_Texture> ResourceManager::LoadSvg(SDL_Renderer* renderer, co
     return m_TextureResources[svg];
 }
 
-std::shared_ptr<SDL_Texture> ResourceManager::LoadImage(SDL_Renderer *renderer, const std::string &filepath) {
+std::shared_ptr<SDL_Texture> ResourceManager::LoadImage(SDL_Renderer *renderer, const std::string &filepath, float
+scale) {
     if (!m_TextureResources.contains(filepath)) {
-        SDL_Surface* surface = IMG_Load(filepath.c_str());
+        SDL_Surface* surface;
+        if (filepath.ends_with(".svg")) {
+            SDL_IOStream *src = SDL_IOFromFile(filepath.c_str(), "rb");
+            surface = LoadScaledSvg(src, scale);
+        } else {
+            surface = IMG_Load(filepath.c_str());
+        }
         std::shared_ptr<SDL_Texture> texture = MakeSharedTexture(renderer, surface);
         m_TextureResources.insert({filepath, texture});
 
