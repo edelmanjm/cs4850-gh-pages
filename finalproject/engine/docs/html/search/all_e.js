@@ -1,16 +1,4 @@
 var searchData=
 [
-  ['_7eapplication_0',['~Application',['../class_application.html#a748bca84fefb9c12661cfaa2f623748d',1,'Application']]],
-  ['_7ecollision2dcomponent_1',['~Collision2DComponent',['../class_collision2_d_component.html#ad799c340fbcc9ef94f23b7be9e0268ab',1,'Collision2DComponent']]],
-  ['_7ecomponent_2',['~Component',['../class_component.html#ab8378fa275af98e568a7e91d33d867af',1,'Component']]],
-  ['_7eenemyentity_3',['~EnemyEntity',['../class_enemy_entity.html#a02b013323b96c9ce3c8cb3195ee34893',1,'EnemyEntity']]],
-  ['_7egameentity_4',['~GameEntity',['../class_game_entity.html#a241238b29b5e440107a5b295edf24f9c',1,'GameEntity']]],
-  ['_7einputcomponent_5',['~InputComponent',['../class_input_component.html#aa09427187b3566f68ed4edacb7e0c73f',1,'InputComponent']]],
-  ['_7eplayergameentity_6',['~PlayerGameEntity',['../class_player_game_entity.html#a02b95976ad67f0d42adf4a3f8e108b6f',1,'PlayerGameEntity']]],
-  ['_7escene_7',['~Scene',['../class_scene.html#af6e09d91ebd10ae9cc7c12c39d06386c',1,'Scene']]],
-  ['_7espaceinvaders_8',['~SpaceInvaders',['../class_space_invaders.html#a8135c97f47405514f5adab8fb4a435f3',1,'SpaceInvaders']]],
-  ['_7etextentity_9',['~TextEntity',['../class_text_entity.html#ab23d59f245419e3fbd3397390de5ad0b',1,'TextEntity']]],
-  ['_7etexturecomponent_10',['~TextureComponent',['../class_texture_component.html#a139d8931939cfda2fe9be868fa0bac2c',1,'TextureComponent']]],
-  ['_7etransformcomponent_11',['~TransformComponent',['../class_transform_component.html#a2e735b504a3624c95c2f83e468f2c186',1,'TransformComponent']]],
-  ['_7etransformwrappingcomponent_12',['~TransformWrappingComponent',['../class_transform_wrapping_component.html#a6fde51c24a1175c22408be7b44943386',1,'TransformWrappingComponent']]]
+  ['update_0',['Update',['../class_application.html#acdac3e501d813a5316b5c3f620157235',1,'Application::Update()'],['../class_collision2_d_component.html#a4c2e6e053b5b88f42001b68e29d6da1b',1,'Collision2DComponent::Update()'],['../class_component.html#adb49d78084857d8a9f7773a102faa82a',1,'Component::Update()'],['../class_input_component.html#acb5de2a0a5b9304868136fbf9290661e',1,'InputComponent::Update()'],['../class_lifetime_component.html#a9457a9af8187c39a63750acb4a9ce47f',1,'LifetimeComponent::Update()'],['../class_texture_component.html#ac97e2ad41734e84e90daaccce835c3af',1,'TextureComponent::Update()'],['../class_transform_component.html#a7f61e8eea1e3d05a32653fa45bd10fe1',1,'TransformComponent::Update()'],['../class_transform_wrapping_component.html#ab1b429b30fbb03b2c6ecf6a972eee214',1,'TransformWrappingComponent::Update()'],['../class_colliding_rectangle_entity.html#a107e7eb494e197d6a74c8e40c2762abb',1,'CollidingRectangleEntity::Update()'],['../class_game_entity.html#a3b9627b94d084cc5546e0eee0189dd1d',1,'GameEntity::Update()'],['../class_enemy_entity.html#a4a99cc3f6d899d65e271c436d2a68b33',1,'EnemyEntity::Update()'],['../class_projectile_entity.html#aa80147d645f5e9f145342839e2d4c1d2',1,'ProjectileEntity::Update()'],['../class_python_scene.html#ab7c81b5bdb24ac4f75dd27abe3151d29',1,'PythonScene::Update()'],['../class_scene.html#aaede6346f58776bd40efffd55885ab02',1,'Scene::Update()'],['../class_space_invaders.html#a40b327303f0261e91a133439856fb946',1,'SpaceInvaders::Update()']]]
 ];
