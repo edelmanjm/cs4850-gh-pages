@@ -91,14 +91,21 @@ class Asteroids:
         print("Loading player textures... (this may take a bit)", flush=True)
         with open("assets/asteroids/ship-firing.svg", "r") as f:
             player_sprite: str = f.read()
-            self.rotated_player_textures = [
+            self.rotated_player_textures_firing = [
+                rose.ResourceManager.load_svg(self.renderer.wrapped, rotate_svg(player_sprite, 32, 32, degrees))
+                for degrees in range(360)]
+        with open("assets/asteroids/ship-static.svg", "r") as f:
+            player_sprite: str = f.read()
+            self.rotated_player_textures_static = [
                 rose.ResourceManager.load_svg(self.renderer.wrapped, rotate_svg(player_sprite, 32, 32, degrees))
                 for degrees in range(360)]
         print("Done!")
-        self.player_texture = rose.TextureComponent(self.rotated_player_textures[45],
+        self.player_texture = rose.TextureComponent(self.rotated_player_textures_static[0],
                                                     rose.FRect(-player_width / 2, -player_width / 2, player_width / 2,
                                                                player_width / 2))
         self.player.add_component(self.player_texture)
+        self.accelerating = False
+        self.rotate_player(-90)
 
         self.scene = rose.PythonScene(self.renderer)
         self.scene.add_entity(self.player)
@@ -181,11 +188,18 @@ class Asteroids:
         self.add_projectile(projectile)
 
     def rotate_player(self, degrees):
+        """
+        :param degrees: The amount of additional rotation to apply to the player, in degrees.
+        :return: Nothing
+        """
         # Round it for sprite reasons
         rounded_transformation = round(degrees)
         self.player.rotate(math.radians(rounded_transformation))
         rounded_new = round(math.degrees(self.player.get_rotation()))
-        self.player_texture.set_texture(self.rotated_player_textures[rounded_new % 360])
+        if self.accelerating:
+            self.player_texture.set_texture(self.rotated_player_textures_firing[rounded_new % 360])
+        else:
+            self.player_texture.set_texture(self.rotated_player_textures_static[rounded_new % 360])
 
     def on_input(self, delta_time: float, keys: List[int]):
         # TODO either import the SDL_Scancode enum, or find an equivalent in python
@@ -193,6 +207,13 @@ class Asteroids:
             velocity_x, velocity_y = self.player.get_velocity()
             self.player.set_velocity(velocity_x + math.cos(self.player.get_rotation()) * self.player_speed * delta_time,
                                      velocity_y + math.sin(self.player.get_rotation()) * self.player_speed * delta_time)
+            # Hacky way of switching sprites
+            self.accelerating = True
+            self.rotate_player(0)
+        else:
+            self.accelerating = False
+            self.rotate_player(0)
+
         if keys[79]:
             self.rotate_player(self.player_rotation_speed * delta_time)
         elif keys[80]:
